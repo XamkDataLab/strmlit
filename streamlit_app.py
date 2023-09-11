@@ -1,3 +1,5 @@
+import streamlit as st
+import plotly.graph_objects as go
 """
 # Aineettoman omaisuuden Suomi
 
@@ -6,9 +8,6 @@ Alueiden innovaatiotoiminnan kirjaamo
 
 """
 
-
-import streamlit as st
-import plotly.graph_objects as go
 
 def main():
     st.title("Crude Representation of Finland with Adjustable Borders")
