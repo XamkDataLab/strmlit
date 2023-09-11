@@ -3,8 +3,7 @@ import altair as alt
 import math
 import pandas as pd
 import streamlit as st
-import plotly
-import plotly.graph_objects as go
+
 
 """
 # Aineettoman omaisuuden Suomi
