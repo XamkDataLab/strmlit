@@ -6,34 +6,85 @@ import streamlit as st
 
 print("Hello World")
 """
-# Welcome to Streamlit!
+# Aineettoman omaisuuden Suomi
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart: ::P:
+Alueiden innovaatiotoiminnan kirjaamo
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
 
-In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+import streamlit as st
+import plotly.graph_objects as go
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+def main():
+    st.title("Crude Representation of Finland with Adjustable Borders")
 
-    points_per_turn = total_points / num_turns
+    # Function to bend the borders based on slider values
+    def update_coords(top_bend, bottom_bend):
+        return [0, 1+bottom_bend, 1+top_bend, 0, 0], [0, 0, 1, 1, 0]
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
+    # Initial coordinates for the crude representation of Finland
+    x = [0, 1, 1, 0, 0]
+    y = [0, 0, 1, 1, 0]
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+    # Create the plot
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(x=x, y=y, fill='toself', mode='lines'))
+
+    # Add sliders
+    sliders = [
+        # Slider for top bend
+        {
+            'active': 0,
+            'yanchor': 'top',
+            'xanchor': 'left',
+            'currentvalue': {
+                'font': {'size': 20},
+                'prefix': 'Top Bend: ',
+                'visible': True,
+                'xanchor': 'right'
+            },
+            'transition': {'duration': 300, 'easing': 'cubic-in-out'},
+            'pad': {'b': 10, 't': 50},
+            'len': 0.9,
+            'x': 0.1,
+            'y': 0,
+            'steps': [{
+                'args': [[x, *update_coords(val*0.1, (1-val)*0.1)], {'frame': {'duration': 300, 'redraw': True}, 'mode': 'immediate'}],
+                'label': str(val),
+                'method': 'restyle'
+            } for val in range(10)]
+        },
+        # Slider for bottom bend
+        {
+            'active': 0,
+            'yanchor': 'top',
+            'xanchor': 'left',
+            'currentvalue': {
+                'font': {'size': 20},
+                'prefix': 'Bottom Bend: ',
+                'visible': True,
+                'xanchor': 'right'
+            },
+            'transition': {'duration': 300, 'easing': 'cubic-in-out'},
+            'pad': {'b': 10, 't': 50},
+            'len': 0.9,
+            'x': 0.1,
+            'y': 0.1,
+            'steps': [{
+                'args': [[x, *update_coords((1-val)*0.1, val*0.1)], {'frame': {'duration': 300, 'redraw': True}, 'mode': 'immediate'}],
+                'label': str(val),
+                'method': 'restyle'
+            } for val in range(10)]
+        }
+    ]
+
+    fig.update_layout(sliders=sliders)
+    
+    # Display the plot in Streamlit
+    st.plotly_chart(fig)
+
+if __name__ == "__main__":
+    main()
