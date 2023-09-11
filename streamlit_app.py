@@ -16,7 +16,7 @@ Xamk, Dadalabra, Luovat Alat
 
 
 def main():
-    st.title("plotlyplot")
+    #st.title("plotlyplot")
 
     # Sample data
     df = {
