@@ -18,7 +18,7 @@ In the meantime, below is an example of what you can do with just a few lines of
 
 
 def main():
-    st.title("Simple Scatter Plot with Plotly and Streamlit")
+    st.title("plotlyplot")
 
     # Sample data
     df = {
