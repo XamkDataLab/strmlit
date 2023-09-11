@@ -16,7 +16,3 @@ Xamk, Dadalabra, Luovat Alat
 """
 
 
-
-# Display the plot in Streamlit
-st.plotly_chart(fig)
-
