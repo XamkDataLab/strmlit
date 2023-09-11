@@ -3,7 +3,8 @@ import altair as alt
 import math
 import pandas as pd
 import streamlit as st
-#import plotly.express as px
+import plotly
+import plotly.graph_objects as go
 
 """
 # Aineettoman omaisuuden Suomi
@@ -15,20 +16,14 @@ Xamk, Dadalabra, Luovat Alat
 """
 
 
-def main():
-    #st.title("plotlyplot")
 
-    # Sample data
-    df = {
-        'x': [1, 2, 3, 4, 5],
-        'y': [2, 3, 4, 5, 6]
-    }
 
-    # Create a scatter plot
-    fig = px.scatter(df, x='x', y='y', title='Simple Scatter Plot')
+# Create a simple scatter plot using Plotly
+fig = go.Figure(data=go.Scatter(x=[1, 2, 3, 4], y=[10, 11, 12, 13]))
 
-    # Display the plot in Streamlit
-    st.plotly_chart(fig)
+# Set title
+fig.update_layout(title='Simple Scatter Plot')
 
-if __name__ == "__main__":
-    main()
+# Display the plot in Streamlit
+st.plotly_chart(fig)
+
