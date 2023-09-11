@@ -6,14 +6,12 @@ import streamlit as st
 #import plotly.express as px
 
 """
-# Welcome to Streamlit!
+# Aineettoman omaisuuden Suomi
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart: ::P:
+Alueiden innovaatiotoiminnan kirjaamo
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+Xamk, Dadalabra, Luovat Alat
 
-In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
 
