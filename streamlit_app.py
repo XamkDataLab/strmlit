@@ -4,6 +4,7 @@ import math
 import streamlit as st
 import numpy as np
 import time
+import plotly
 import plotly.graph_objects as go
 
 """
