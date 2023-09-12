@@ -2,6 +2,7 @@ from collections import namedtuple
 import altair as alt
 import math
 import streamlit as st
+import numpy as np
 
 
 """
