@@ -85,7 +85,7 @@ def fetch_data(y_tunnus):
     """
     
     # Connect to the database and fetch the data into a Pandas DataFrame
-    with pyodbc.connect(f'SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+    with pyodbc.connect(f'DRIVER={ODBC Driver 17 for SQL Server};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
         
     return df
