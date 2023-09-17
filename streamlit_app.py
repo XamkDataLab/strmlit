@@ -83,15 +83,52 @@ def fetch_data(y_tunnus):
     WHERE 
         y.y_tunnus = ?;
     """
+    
+    # Connect to the database and fetch the data into a Pandas DataFrame
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
-
         
     return df
+# Define custom styles
+small_font_style = """
+<style>
+    .small-font {
+        font-size: 16px;
+    }
+</style>
+"""
+medium_font_style = """
+<style>
+    .medium-font {
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
+"""
 
-st.sidebar.text("sivubaarin teksti")
+large_font_style = """
+<style>
+    .large-font {
+        font-size: 38px;
+    }
+</style>
+"""
 
-st.title('Hae rahoitustiedot')
+large_number_style = """
+<style>
+    .large-number {
+        font-size: 32px;   
+    }
+</style>
+"""
+
+# Inject custom styles into the app
+st.markdown(small_font_style, unsafe_allow_html=True)
+st.markdown(medium_font_style, unsafe_allow_html=True)
+st.markdown(large_font_style, unsafe_allow_html=True)
+st.markdown(large_number_style, unsafe_allow_html=True)
+
+st.title('Hae yrityksen tiedot')
 
 # Input for Y_tunnus
 y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
@@ -99,45 +136,35 @@ y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
     data = fetch_data(y_tunnus)
-    st.write("Debug: Fetched data:")
-    st.write(data)
+    #st.write("Debug: Fetched data:")
+    #st.write(data)
 
     if not data.empty:
-        col1, col2, col3, col4 = st.columns(4)
+        #st.title(f"{data['yritys'].iloc[0]} {data['y_tunnus'].iloc[0]}")
+        st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
 
-        with col1:
-            st.subheader("Y-tunnus")
-            st.write(data['y_tunnus'].iloc[0])
-
-        with col2:
-            st.subheader("Yritys")
-            st.write(data['yritys'].iloc[0])
-
-        # Displaying Design Rights Count
-        with col3:
-            st.subheader("Design Rights Count")
-            st.write(data['Design_Rights_Count'].iloc[0]) 
-
-        # Displaying Trademarks Count
-        with col4:
-            st.subheader("Trademarks Count")
-            st.write(data['Trademarks_Count'].iloc[0])
-
-        # Card display below columns
-        card_style = """
-        background-color: #f5f5f5;
-        padding: 15px;
-        border-radius: 5px;
-        """
-        
-        st.markdown(f"""
-        <div style='{card_style}'>
-            <h4>Saadut EU-rahoitukset</h4>
-            <p>EURA 2014-2020: {data['Total_Funding'].iloc[0]} €</p>
-            <h4>Patent Applications Count</h4>
-            <p>{data['Patent_Applications_Count'].iloc[0]}</p>
+        card_content = f"""
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+        <div class="medium-font">EURA-rahoitus päätoteuttajana</div>
+        <div class="large-number">{data['Total_Funding'].iloc[0]} €</div>
+        <div class="small-font">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</div>
+        <hr>
+        <div class="medium-font">Patenttien määrä</div>
+        <div class="large-number">{data['Patent_Applications_Count'].iloc[0]}</div>
+        <div class="small-font">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</div>
+        <hr>
+        <div class="medium-font">Tavaramerkkien määrä</div>
+        <div class="large-number">{data['Trademarks_Count'].iloc[0]}</div>
+         <div class="small-font">linkki tarkempiin tietoihin (sanat & kuvat?)</div>
+        <hr>
+        <div class="medium-font">Mallioikeuksien määrä</div>
+        <div class="large-number">{data['Design_Rights_Count'].iloc[0]}</div>
+         <div class="small-font">linkki tarkempiin tietoihin</div>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        st.markdown(card_content, unsafe_allow_html=True)
 
     else:
-        st.write("Dataa ei löytynyt :(")
+       st.write("Dataa ei löytynyt :(")
+
+
