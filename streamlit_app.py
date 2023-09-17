@@ -1,69 +1,138 @@
-from collections import namedtuple
-import altair as alt
-import math
+import pandas as pd
+import pyodbc
 import streamlit as st
-import numpy as np
-import time
-import plotly
-import plotly.graph_objects as go
 
-"""
-# Aineettoman omaisuuden Suomi
-
-Alueiden innovaatiotoiminnan kirjaamo
-
-Xamk, Dadalabra, Luovat Alat
-
-"""
-
-# Load data (adjust paths as necessary)
-patents_df = pd.read_csv('patents.csv')
-patent_applicants_df = pd.read_csv('patent_applicants.csv')
-merged_df = patents_df.merge(patent_applicants_df, on='lens_id', how='inner')
-
-# Extract the year from the date_published column
-merged_df['year_published'] = pd.to_datetime(merged_df['date_published']).dt.year
-
-# Group the data by extracted_name, year_published, and jurisdiction
-grouped_df = merged_df.groupby(['extracted_name', 'year_published', 'jurisdiction']).size().reset_index(name='frequency')
-
-def create_heatmap(jurisdiction):
-    filtered_data = grouped_df[grouped_df['jurisdiction'] == jurisdiction]
-
-    fig = go.Figure(go.Heatmap(
-        x=filtered_data['year_published'],
-        y=filtered_data['extracted_name'],
-        z=filtered_data['frequency'],
-        colorscale='Viridis',
-        colorbar=dict(title='Frequency')
-    ))
-
-    fig.update_layout(
-        title=f"Patent Frequencies by Applicant and Year ({jurisdiction})",
-        xaxis_title="Year Published",
-        yaxis_title="Applicant Name"
+def fetch_data(y_tunnus):
+    # Define the SQL query
+    query = """
+    WITH Funding AS (
+        SELECT 
+            Y_tunnus,
+            SUM(Toteutunut_EU_ja_valtion_rahoitus) as Total_Funding
+        FROM 
+            eura2020
+        WHERE 
+            Y_tunnus = ?
+        GROUP BY 
+            Y_tunnus
+    ),
+    DesignRights AS (
+        SELECT 
+            m.applicant_basename,
+            COUNT(DISTINCT m.applicationNumber) as Design_Rights_Count
+        FROM 
+            mallioikeudet m
+        JOIN 
+            yritykset y ON y.yritys_basename = m.applicant_basename
+        WHERE 
+            y.y_tunnus = ?
+        GROUP BY 
+            m.applicant_basename
+    ),
+    Trademarks AS (
+        SELECT 
+            t.applicant_basename,
+            COUNT(DISTINCT t.applicationNumber) as Trademarks_Count
+        FROM 
+            tavaramerkit t
+        JOIN 
+            yritykset y ON y.yritys_basename = t.applicant_basename
+        WHERE 
+            y.y_tunnus = ?
+        GROUP BY 
+            t.applicant_basename
+    ),
+    Patents AS (
+        SELECT 
+            p.applicant_basename,
+            COUNT(DISTINCT p.lens_id) as Patent_Applications_Count
+        FROM 
+            applicants p
+        JOIN 
+            yritykset y ON y.yritys_basename = p.applicant_basename
+        WHERE 
+            y.y_tunnus = ?
+        GROUP BY 
+            p.applicant_basename
     )
 
-    return fig
+    SELECT 
+        y.y_tunnus,
+        y.yritys,
+        y.yritys_basename,
+        COALESCE(f.Total_Funding, 0) as Total_Funding,
+        COALESCE(d.Design_Rights_Count, 0) as Design_Rights_Count,
+        COALESCE(t.Trademarks_Count, 0) as Trademarks_Count,
+        COALESCE(p.Patent_Applications_Count, 0) as Patent_Applications_Count
+    FROM 
+        yritykset y
+    LEFT JOIN 
+        Funding f ON y.y_tunnus = f.Y_tunnus
+    LEFT JOIN 
+        DesignRights d ON y.yritys_basename = d.applicant_basename
+    LEFT JOIN 
+        Trademarks t ON y.yritys_basename = t.applicant_basename
+    LEFT JOIN 
+        Patents p ON y.yritys_basename = p.applicant_basename
+    WHERE 
+        y.y_tunnus = ?;
+    """
+    
+    # Connect to the database and fetch the data into a Pandas DataFrame
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
+        
+    return df
 
-# Streamlit app
-st.title("Patent Frequencies Heatmap")
-selected_jurisdiction = st.selectbox("Select Jurisdiction", grouped_df['jurisdiction'].unique())
-st.plotly_chart(create_heatmap(selected_jurisdiction))
+st.sidebar.text("sivubaarin teksti")
 
-#progress_bar = st.sidebar.progress(0)
-#status_text = st.sidebar.empty()
-#last_rows = np.random.randn(1, 1)
-#chart = st.line_chart(last_rows)
+st.title('Hae rahoitustiedot')
 
-#for i in range(1, 101):
-    #new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-    #status_text.text("%i%% Complete" % i)
-    #chart.add_rows(new_rows)
-    #progress_bar.progress(i)
-    #last_rows = new_rows
-    #time.sleep(0.05)
+# Input for Y_tunnus
+y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
 
-#progress_bar.empty()
+# If a Y_tunnus is given, fetch and display the data
+if y_tunnus:
+    data = fetch_data(y_tunnus)
+    st.write("Debug: Fetched data:")
+    st.write(data)
 
-#st.button("Re-run")
+    if not data.empty:
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
+            st.subheader("Y-tunnus")
+            st.write(data['y_tunnus'].iloc[0])
+
+        with col2:
+            st.subheader("Yritys")
+            st.write(data['yritys'].iloc[0])
+
+        # Displaying Design Rights Count
+        with col3:
+            st.subheader("Design Rights Count")
+            st.write(data['Design_Rights_Count'].iloc[0]) 
+
+        # Displaying Trademarks Count
+        with col4:
+            st.subheader("Trademarks Count")
+            st.write(data['Trademarks_Count'].iloc[0])
+
+        # Card display below columns
+        card_style = """
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 5px;
+        """
+        
+        st.markdown(f"""
+        <div style='{card_style}'>
+            <h4>Saadut EU-rahoitukset</h4>
+            <p>EURA 2014-2020: {data['Total_Funding'].iloc[0]} €</p>
+            <h4>Patent Applications Count</h4>
+            <p>{data['Patent_Applications_Count'].iloc[0]}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+        st.write("Dataa ei löytynyt :(")
