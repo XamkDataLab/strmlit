@@ -2,6 +2,12 @@ import pandas as pd
 import pyodbc
 import streamlit as st
 
+driver = st.secrets["driver"]
+server = st.secrets["server"]
+database = st.secrets["database"]
+username = st.secrets["username"]
+password = st.secrets["password"]
+
 def fetch_data(y_tunnus):
     # Define the SQL query
     query = """
