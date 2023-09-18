@@ -140,7 +140,7 @@ if y_tunnus:
     #st.write(data)
 
     if not data.empty:
-        #st.title(f"{data['yritys'].iloc[0]} {data['y_tunnus'].iloc[0]}")
+        st.title(f"{data['yritys_basename'].iloc[0]} {data['y_tunnus'].iloc[0]}")
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
 
         card_content = f"""
