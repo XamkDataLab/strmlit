@@ -1,5 +1,7 @@
 import pyodbc
 import streamlit as st
+import pandas as pd
+
 driver = st.secrets["driver"]
 server = st.secrets["server"]
 database = st.secrets["database"]
