@@ -1,5 +1,4 @@
-import pandas as pd
-import pyodbc
+
 import streamlit as st
 from queries import * 
 
