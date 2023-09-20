@@ -1,3 +1,5 @@
+import pyodbc
+
 def fetch_data(y_tunnus):
     # Define the SQL query
     query = """
