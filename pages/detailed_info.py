@@ -3,13 +3,14 @@ import streamlit as st
 st.title(f"Details for {y_tunnus}")
 # detailed_info.py
 
-import streamlit as st
 
 def app():
-    y_tunnus = st.session_state.get('y_tunnus', None)
-    query_type = st.session_state.get('type', None)
+    y_tunnus = st.session_state.get('y_tunnus', 'Unknown')  # Get y_tunnus from session state
+    query_type = st.session_state.get('type', 'Unknown')  # Get query type from session state
 
-    if y_tunnus and query_type:
+    st.title(f"Details for {y_tunnus}")
+
+    if y_tunnus != 'Unknown' and query_type != 'Unknown':
         data = another_fetch_data_function(y_tunnus, query_type)
         
         if not data.empty:
@@ -17,4 +18,7 @@ def app():
             ...
         else:
             st.write("No data found.")
+    else:
+        st.write("Invalid or missing parameters.")
+
 
