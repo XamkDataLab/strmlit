@@ -62,10 +62,10 @@ if y_tunnus:
         <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
         <div class="large-number">{int(data['Total_EU_Horizon_Funding'].iloc[0]):,}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
-        <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
         <hr>
         <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
         <div class="large-number">{int(data['Total_Funding'].iloc[0]):,} €</div>
+        <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
         <hr>
         <div class="medium-font">Business Finland tuet</div>
