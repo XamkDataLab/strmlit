@@ -59,17 +59,20 @@ if y_tunnus:
         # Content for the first column
         card_content1 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">EURA-rahoitus päätoteuttajana</div>
-        <div class="large-number">{int(data['Total_Funding'].iloc[0]):,} €</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
-        <hr>
-        <div class="medium-font">EU Horizon tuet</div>
+        <div class="medium-font">EU Horizon tuet 2013-2030</div>
         <div class="large-number">{int(data['Total_EU_Horizon_Funding'].iloc[0]):,}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
+        <hr>
+        <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
+        <div class="large-number">{int(data['Total_Funding'].iloc[0]):,} €</div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
         <hr>
         <div class="medium-font">Business Finland tuet</div>
         <div class="large-number">{int(data['Total_Business_Finland_Funding'].iloc[0]):,}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Business_Finland_Funding">linkki tarkempiin tietoihin</a></div>
+        <hr>
+        <div class="medium-font">EURA 2021-2027 ohjelmakausi</div>
+        <div class="medium-font">Uuden ohjelmakauden tietopalvelu julkaistaan lokakuun alussa</div>
         </div>
         """
         col1.markdown(card_content1, unsafe_allow_html=True)
