@@ -53,42 +53,25 @@ if y_tunnus:
         
         # Card 1
         with st.container():
-            card_content1 = f"""
-            <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-            <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
-            <div class="large-number">{int(data['Total_EU_Horizon_Funding'].iloc[0]):,}</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
-            <hr>
-            <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
-            <div class="large-number">{int(data['Total_Funding'].iloc[0]):,} €</div>
-            <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
-            <hr>
-            <div class="medium-font">Business Finland tuet</div>
-            <div class="large-number">{int(data['Total_Business_Finland_Funding'].iloc[0]):,}</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Business_Finland_Funding">linkki tarkempiin tietoihin</a></div>
-            </div>
-            """
-            st.markdown(card_content1, unsafe_allow_html=True)
+            st.markdown("<div class='medium-font'>EU Horizon rahoitus 2013-2030</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='large-number'>{int(data['Total_EU_Horizon_Funding'].iloc[0]):,}</div>", unsafe_allow_html=True)
+            
+            cols1 = st.columns(3)
+            cols1[0].markdown("<div class='small-font'>EURA-rahoitus 2014-2020 ohjelmakausi</div>", unsafe_allow_html=True)
+            cols1[1].markdown(f"<div class='large-number'>{int(data['Total_Funding'].iloc[0]):,} €</div>", unsafe_allow_html=True)
+            cols1[2].markdown("<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
 
+        st.write("")  # Add space between the cards
+        
         # Card 2
         with st.container():
-            card_content2 = f"""
-            <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-            <div class="medium-font">Patenttien määrä</div>
-            <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0]):,}</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Patent_Applications_Count">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</a></div>
-            <hr>
-            <div class="medium-font">Tavaramerkkien määrä</div>
-            <div class="large-number">{int(data['Trademarks_Count'].iloc[0]):,}</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count">linkki tarkempiin tietoihin (sanat & kuvat?)</a></div>
-            <hr>
-            <div class="medium-font">Mallioikeuksien määrä</div>
-            <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
-            <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Design_Rights_Count">linkki tarkempiin tietoihin</a></div>
-            </div>
-            """
-            st.markdown(card_content2, unsafe_allow_html=True)
+            st.markdown("<div class='medium-font'>Patenttien määrä</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='large-number'>{int(data['Patent_Applications_Count'].iloc[0]):,}</div>", unsafe_allow_html=True)
+            
+            cols2 = st.columns(3)
+            cols2[0].markdown("<div class='small-font'>Tavaramerkkien määrä</div>", unsafe_allow_html=True)
+            cols2[1].markdown(f"<div class='large-number'>{int(data['Trademarks_Count'].iloc[0]):,}</div>", unsafe_allow_html=True)
+            cols2[2].markdown("<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
 
     else:
         st.write("Dataa ei löytynyt :(")
