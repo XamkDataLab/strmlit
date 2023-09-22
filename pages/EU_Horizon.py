@@ -1,6 +1,6 @@
 import streamlit as st
 y_tunnus = st.session_state.get('y_tunnus')
-st.title(f"Details for {y_tunnus}")
+st.title(f"EU Horizon funding for {y_tunnus}")
 # detailed_info.py
 
 
