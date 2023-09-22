@@ -52,49 +52,74 @@ def format_currency(number):
 
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
+    st.session_state['y_tunnus'] = y_tunnus
     data = fetch_data(y_tunnus)
 
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
-        
-        col1, col2 = st.columns(2)  # Create two columns
-    
+        col1, col2 = st.columns(2)
+
         # Content for the first column
-        card_content1 = f"""
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
-        <div class="large-number">{format_currency(int(data['Total_EU_Horizon_Funding'].iloc[0]))}</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
-        <hr>
-        <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
-        <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
-        <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
-        <hr>
-        <div class="medium-font">Business Finland tuet</div>
-        <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Business_Finland_Funding">linkki tarkempiin tietoihin</a></div>
-        </div>
-        """
-        col1.markdown(card_content1, unsafe_allow_html=True)
+        col1.write("EU Horizon rahoitus 2013-2030")
+        col1.write(format_currency(int(data['Total_EU_Horizon_Funding'].iloc[0])))
+        if col1.button("linkki tarkempiin tietoihin (hankkeet ja ohjelmat) - EU Horizon"):
+            st.session_state.page = "Total_EU_Horizon_Funding"
+
+        col1.write("EURA-rahoitus 2014-2020 ohjelmakausi")
+        col1.write(format_currency(int(data['Total_Funding'].iloc[0])))
+        if col1.button("linkki tarkempiin tietoihin (esim. isoimmat hankkeet) - EURA-rahoitus"):
+            st.session_state.page = "Total_Funding"
+
+        col1.write("Business Finland tuet")
+        col1.write(format_currency(int(data['Total_Business_Finland_Funding'].iloc[0])))
+        if col1.button("linkki tarkempiin tietoihin - Business Finland"):
+            st.session_state.page = "Total_Business_Finland_Funding"
 
         # Content for the second column
-        card_content2 = f"""
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">Patenttien määrä</div>
-        <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0])}</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Patent_Applications_Count">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</a></div>
-        <hr>
-        <div class="medium-font">Tavaramerkkien määrä</div>
-        <div class="large-number">{int(data['Trademarks_Count'].iloc[0])}</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count">linkki tarkempiin tietoihin (sanat & kuvat?)</a></div>
-        <hr>
-        <div class="medium-font">Mallioikeuksien määrä</div>
-        <div class="large-number">{int(data['Design_Rights_Count'].iloc[0])}</div>
-        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Design_Rights_Count">linkki tarkempiin tietoihin</a></div>
-        </div>
-        """
-        col2.markdown(card_content2, unsafe_allow_html=True)
+        col2.write("Patenttien määrä")
+        col2.write(data['Patent_Applications_Count'].iloc[0])
+        if col2.button("linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)"):
+            st.session_state.page = "Patent_Applications_Count"
+
+        col2.write("Tavaramerkkien määrä")
+        col2.write(data['Trademarks_Count'].iloc[0])
+        if col2.button("linkki tarkempiin tietoihin (sanat & kuvat?) - Tavaramerkit"):
+            st.session_state.page = "Trademarks_Count"
+
+        col2.write("Mallioikeuksien määrä")
+        col2.write(data['Design_Rights_Count'].iloc[0])
+        if col2.button("linkki tarkempiin tietoihin - Mallioikeudet"):
+            st.session_state.page = "Design_Rights_Count"
 
     else:
         st.write("Dataa ei löytynyt :(")
+
+# Check the session state to display the correct page
+if 'page' in st.session_state:
+    y_tunnus_from_state = st.session_state.y_tunnus
+
+    if st.session_state.page == "Total_EU_Horizon_Funding":
+        # Display the detailed info for Total EU Horizon Funding
+        st.write(f"Details for EU Horizon with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
+    elif st.session_state.page == "Total_Funding":
+        st.write(f"Details for EURA-rahoitus with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
+    elif st.session_state.page == "Total_Business_Finland_Funding":
+        st.write(f"Details for Business Finland with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
+    elif st.session_state.page == "Patent_Applications_Count":
+        st.write(f"Details for Patenttien määrä with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
+    elif st.session_state.page == "Trademarks_Count":
+        st.write(f"Details for Tavaramerkkien määrä with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
+    elif st.session_state.page == "Design_Rights_Count":
+        st.write(f"Details for Mallioikeuksien määrä with Y-tunnus: {y_tunnus_from_state}")
+        # Fetch and display the relevant details using y_tunnus_from_state if needed
+
