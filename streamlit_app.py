@@ -44,6 +44,7 @@ st.title('Hae yrityksen tiedot')
 # Input for Y_tunnus
 y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
 st.session_state['y_tunnus'] = y_tunnus
+
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
     data = fetch_data(y_tunnus)
@@ -55,24 +56,20 @@ if y_tunnus:
         with st.container():
             st.markdown("<div class='medium-font'>EU Horizon rahoitus 2013-2030</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='large-number'>{int(data['Total_EU_Horizon_Funding'].iloc[0]):,}</div>", unsafe_allow_html=True)
-            
-            cols1 = st.columns(3)
-            cols1[0].markdown("<div class='small-font'>EURA-rahoitus 2014-2020 ohjelmakausi</div>", unsafe_allow_html=True)
-            cols1[1].markdown(f"<div class='large-number'>{int(data['Total_Funding'].iloc[0]):,} €</div>", unsafe_allow_html=True)
-            cols1[2].markdown("<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
-
-        st.write("")  # Add space between the cards
+        
+        with st.container():
+            st.markdown("<div class='medium-font'>EURA-rahoitus 2014-2020 ohjelmakausi</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='large-number'>{int(data['Total_Funding'].iloc[0]):,} €</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
         
         # Card 2
         with st.container():
             st.markdown("<div class='medium-font'>Patenttien määrä</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='large-number'>{int(data['Patent_Applications_Count'].iloc[0]):,}</div>", unsafe_allow_html=True)
-            
-            cols2 = st.columns(3)
-            cols2[0].markdown("<div class='small-font'>Tavaramerkkien määrä</div>", unsafe_allow_html=True)
-            cols2[1].markdown(f"<div class='large-number'>{int(data['Trademarks_Count'].iloc[0]):,}</div>", unsafe_allow_html=True)
-            cols2[2].markdown("<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
-
+        
+        with st.container():
+            st.markdown("<div class='medium-font'>Tavaramerkkien määrä</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='large-number'>{int(data['Trademarks_Count'].iloc[0]):,}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='small-font'><a href='/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count'>linkki tarkempiin tietoihin</a></div>", unsafe_allow_html=True)
     else:
         st.write("Dataa ei löytynyt :(")
-
