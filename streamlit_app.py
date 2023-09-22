@@ -63,16 +63,16 @@ if y_tunnus:
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
         <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
         <div class="large-number">{format_currency(int(data['Total_EU_Horizon_Funding'].iloc[0]))}</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_EU_Horizon_Funding">linkki tarkempiin tietoihin (hankkeet ja ohjelmat)</a></div>
         <hr>
         <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
         <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
         <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Funding">linkki tarkempiin tietoihin (esim. isoimmat hankkeet)</a></div>
         <hr>
         <div class="medium-font">Business Finland tuet</div>
         <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Business_Finland_Funding">linkki tarkempiin tietoihin</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Total_Business_Finland_Funding">linkki tarkempiin tietoihin</a></div>
         </div>
         """
         col1.markdown(card_content1, unsafe_allow_html=True)
@@ -82,15 +82,15 @@ if y_tunnus:
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
         <div class="medium-font">Patenttien määrä</div>
         <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0]):,}</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Patent_Applications_Count">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Patent_Applications_Count">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</a></div>
         <hr>
         <div class="medium-font">Tavaramerkkien määrä</div>
         <div class="large-number">{int(data['Trademarks_Count'].iloc[0]):,}</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count">linkki tarkempiin tietoihin (sanat & kuvat?)</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count">linkki tarkempiin tietoihin (sanat & kuvat?)</a></div>
         <hr>
         <div class="medium-font">Mallioikeuksien määrä</div>
         <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
-        #<div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Design_Rights_Count">linkki tarkempiin tietoihin</a></div>
+        <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Design_Rights_Count">linkki tarkempiin tietoihin</a></div>
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
