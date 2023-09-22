@@ -92,7 +92,7 @@ def fetch_data(y_tunnus):
     SELECT 
     y.y_tunnus,
     y.yritys,
-    y.yritys_basename,
+    y.yritys_basename2,
     COALESCE(f.Total_Funding, 0) as Total_Funding,
     COALESCE(d.Design_Rights_Count, 0) as Design_Rights_Count,
     COALESCE(t.Trademarks_Count, 0) as Trademarks_Count,
@@ -108,9 +108,9 @@ def fetch_data(y_tunnus):
     LEFT JOIN 
     Trademarks t ON y.yritys_basename = t.applicant_basename
     LEFT JOIN 
-    Patents p ON y.yritys_basename = p.applicant_basename
+    Patents p ON y.yritys_basename2 = p.applicant_basename
     LEFT JOIN 
-    EUHorizon eh ON y.yritys_basename = eh.beneficiary_basename
+    EUHorizon eh ON y.yritys_basename2 = eh.beneficiary_basename
     LEFT JOIN 
     BusinessFinland bf ON y.y_tunnus = bf.Y_tunnus
     WHERE 
