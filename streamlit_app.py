@@ -98,7 +98,7 @@ if y_tunnus:
 if 'page' in st.session_state:
     y_tunnus_from_state = st.session_state.y_tunnus
 
-    if st.session_state.page == "Total_EU_Horizon_Funding":
+    if st.session_state.page == "detailed_info":
         # Display the detailed info for Total EU Horizon Funding
         st.write(f"Details for EU Horizon with Y-tunnus: {y_tunnus_from_state}")
         # Fetch and display the relevant details using y_tunnus_from_state if needed
