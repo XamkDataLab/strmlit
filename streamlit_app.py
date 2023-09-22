@@ -82,15 +82,15 @@ if y_tunnus:
         card_content2 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
         <div class="medium-font">Patenttien määrä</div>
-        <div class="large-number">{format_currency(int(data['Patent_Applications_Count'].iloc[0]))}</div>
+        <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0])}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Patent_Applications_Count">linkki tarkempiin tietoihin (patenttilistaus + visualisoinnit)</a></div>
         <hr>
         <div class="medium-font">Tavaramerkkien määrä</div>
-        <div class="large-number">{format_currency(int(data['Trademarks_Count'].iloc[0]))}</div>
+        <div class="large-number">{int(data['Trademarks_Count'].iloc[0])}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Trademarks_Count">linkki tarkempiin tietoihin (sanat & kuvat?)</a></div>
         <hr>
         <div class="medium-font">Mallioikeuksien määrä</div>
-        <div class="large-number">{format_currency(int(data['Design_Rights_Count'].iloc[0]))}</div>
+        <div class="large-number">{int(data['Design_Rights_Count'].iloc[0])}</div>
         <div class="small-font"><a href="/detailed_info?y_tunnus={y_tunnus}&type=Design_Rights_Count">linkki tarkempiin tietoihin</a></div>
         </div>
         """
