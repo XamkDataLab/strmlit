@@ -55,7 +55,7 @@ def fetch_data(y_tunnus):
         FROM 
             applicants p
         JOIN 
-            yritykset y ON y.yritys_basename = p.applicant_basename
+            yritykset y ON y.yritys_basename2 = p.applicant_basename
         WHERE 
             y.y_tunnus = ?
         GROUP BY 
@@ -68,7 +68,7 @@ def fetch_data(y_tunnus):
     FROM 
         EU_Horizon
 
-    JOIN yritykset y on y.yritys_basename = EU_Horizon.beneficiary_basename
+    JOIN yritykset y on y.yritys_basename2 = EU_Horizon.beneficiary_basename
 
     WHERE 
         y.y_tunnus = ?
