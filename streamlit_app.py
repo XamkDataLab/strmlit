@@ -1,8 +1,38 @@
 import streamlit as st
 from queries import *
 
-# Define custom styles
-# ... [your existing custom styles]
+small_font_style = """
+<style>
+    .small-font {
+        font-size: 16px;
+    }
+</style>
+"""
+medium_font_style = """
+<style>
+    .medium-font {
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
+"""
+
+large_font_style = """
+<style>
+    .large-font {
+        font-size: 38px;
+    }
+</style>
+"""
+
+large_number_style = """
+<style>
+    .large-number {
+        font-size: 32px;   
+    }
+</style>
+"""
+
 
 st.markdown(small_font_style, unsafe_allow_html=True)
 st.markdown(medium_font_style, unsafe_allow_html=True)
