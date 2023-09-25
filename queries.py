@@ -127,4 +127,4 @@ def fetch_horizon_data(yritys_basename)
     """SELECT * FROM EU_Horizoz WHERE beneficiary_basename = ?;"""
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(yritys_basename))
-        return df
+    return df
