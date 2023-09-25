@@ -58,7 +58,8 @@ if y_tunnus:
         
         yritys_basename = data['yritys_basename2'].iloc[0]
         st.session_state['yritys_basename2'] = yritys_basename
-        
+        st.write(f"Debug: yritys_basename = {yritys_basename}")
+
         col1, col2 = st.columns(2)  # Create two columns
     
         # Content for the first column
