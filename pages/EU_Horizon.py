@@ -53,7 +53,8 @@ st.title(f"EU Horizon funding for {yritys_basename}")
 if 'filter_ended' not in st.session_state:
     st.session_state.filter_ended = False
 
-button_text = "Hide Ended Projects" if not st.session_state.filter_ended else "Show Ended Projects"
+if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
+    st.session_state.filter_ended = not st.session_state.filter_ended
 
 if st.button(button_text):
     st.session_state.filter_ended = not st.session_state.filter_ended
