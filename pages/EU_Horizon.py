@@ -56,9 +56,6 @@ if 'filter_ended' not in st.session_state:
 if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
     st.session_state.filter_ended = not st.session_state.filter_ended
 
-if st.button(button_text):
-    st.session_state.filter_ended = not st.session_state.filter_ended
-
 # Fetch the data and generate the visualization
 if yritys_basename:
     data = fetch_horizon_data(yritys_basename)
