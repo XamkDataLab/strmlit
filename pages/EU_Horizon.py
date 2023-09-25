@@ -11,27 +11,32 @@ def generate_project_viz(df):
     df['Project start date'] = pd.to_datetime(df['Project start date'])
     df['Project end date'] = pd.to_datetime(df['Project end date'])
 
-    max_length = 30
-    df['Subject of grant or contract'] = df['Subject of grant or contract'].apply(lambda x: truncate_text(x, max_length))
+    # Add a truncated name column
+    max_length = 50
+    df['Truncated Name'] = df['Subject of grant or contract'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
     df['Hover Info'] = 'Budget: ' + df['Beneficiary’s contracted amount (EUR)'].astype(str)
 
     # Create the Gantt chart using plotly
-    fig = px.timeline(df, x_start="Project start date", x_end="Project end date", y="Subject of grant or contract", 
-                      color="Subject of grant or contract", 
+    fig = px.timeline(df, x_start="Project start date", x_end="Project end date", y="Truncated Name", 
+                      color="Truncated Name", 
                       hover_name="Subject of grant or contract", 
                       hover_data=["Hover Info"], 
-                      title="Hankkeet")
+                      title="Projects Time Ranges and Budgets")
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     fig.update_traces(marker_line_width=df['Beneficiary’s contracted amount (EUR)']/500000)  # Set line width based on budget
-    
+
+    # Remove the color legend
     fig.update_layout(showlegend=False)
+    
+    # Hide the y-axis label
     fig.update_layout(yaxis_title_text="")
 
     # Display the plot in Streamlit
     st.plotly_chart(fig)
+
 
 # Retrieve the yritys_basename from session state
 yritys_basename = st.session_state.get('yritys_basename2')
