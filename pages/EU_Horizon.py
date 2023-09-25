@@ -1,10 +1,4 @@
 import streamlit as st
-from queries import *
-import plotly
-
-
-
-import streamlit as st
 import pandas as pd
 import plotly.express as px
 from queries import *
@@ -32,7 +26,7 @@ def generate_project_viz(df):
 
 # Retrieve the yritys_basename from session state
 yritys_basename = st.session_state.get('yritys_basename2')
-st.title(f"EU Horizon funding for {yritys_basename}")
+st.title(f"EU Horizon hankkeet yrityksessä {yritys_basename}")
 
 # Fetch the data and generate the visualization
 if yritys_basename:
@@ -45,8 +39,8 @@ else:
     st.write("Invalid or missing parameters.")
 
 
-yritys_basename = st.session_state.get('yritys_basename2')
-st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
+#yritys_basename = st.session_state.get('yritys_basename2')
+#st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
 #st.write(f"Debug: yritys_basename = {yritys_basename}")
 
 #if yritys_basename:
