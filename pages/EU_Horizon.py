@@ -1,18 +1,24 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import datetime
 from queries import *
 
 def truncate_text(text, max_length):
     return text if len(text) <= max_length else text[:max_length] + "..."
 
-def generate_project_viz(df):
+def generate_project_viz(df, filter_ended=True):
     # Convert the start and end date columns to datetime format
     df['Project start date'] = pd.to_datetime(df['Project start date'])
     df['Project end date'] = pd.to_datetime(df['Project end date'])
 
+    # Filter only ongoing projects if required
+    if filter_ended:
+        today = datetime.date.today()
+        df = df[df['Project end date'] > today]
+
     # Add a truncated name column
-    max_length = 50
+    max_length = 30
     df['Truncated Name'] = df['Subject of grant or contract'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
@@ -40,30 +46,22 @@ def generate_project_viz(df):
 
 # Retrieve the yritys_basename from session state
 yritys_basename = st.session_state.get('yritys_basename2')
-st.title(f"EU Horizon hankkeet yrityksessä {yritys_basename}")
+st.title(f"EU Horizon funding for {yritys_basename}")
+
+# Check if 'filter_ended' is in session state, if not initialize it
+if 'filter_ended' not in st.session_state:
+    st.session_state.filter_ended = True
+
+# Button to toggle the filter
+if st.button('Toggle Ended Projects Filter'):
+    st.session_state.filter_ended = not st.session_state.filter_ended
 
 # Fetch the data and generate the visualization
 if yritys_basename:
     data = fetch_horizon_data(yritys_basename)
     if not data.empty:
-        generate_project_viz(data)
+        generate_project_viz(data, st.session_state.filter_ended)
     else:
         st.write("No data found.")
 else:
     st.write("Invalid or missing parameters.")
-
-
-#yritys_basename = st.session_state.get('yritys_basename2')
-#st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
-#st.write(f"Debug: yritys_basename = {yritys_basename}")
-
-#if yritys_basename:
- #   data = fetch_horizon_data(yritys_basename)
-  #  if not data.empty:
-   #     st.dataframe(data)
-    #else:
-     #   st.write("No data found.")
-#else:
- #   st.write("Invalid or missing parameters.")
-
-
