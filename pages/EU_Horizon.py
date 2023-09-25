@@ -14,7 +14,8 @@ def generate_project_viz(df, filter_ended=True):
 
     # Filter only ongoing projects if required
     if filter_ended:
-        today = datetime.date.today()
+        today = pd.Timestamp(datetime.date.today())
+
         df = df[df['Project end date'] > today]
 
     # Add a truncated name column
