@@ -1,13 +1,13 @@
 import streamlit as st
 from queries import *
 
-y_tunnus = st.session_state.get('y_tunnus')
-st.title(f"EU Horizon funding for {y_tunnus}")
+yritys_basename = st.session_state.get('yritys_basename')
+st.title(f"EU Horizon funding for {yritys_basename}")
 
-if y_tunnus:
-    data = fetch_horizon_data(y_tunnus)
+if yritys_basename:
+    data = fetch_horizon_data(yritys_basename)
     if not data.empty:
-         st.dataframe(data)
+        st.dataframe(data)
     else:
         st.write("No data found.")
 else:
