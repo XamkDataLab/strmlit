@@ -47,7 +47,20 @@ def generate_project_viz(df, filter_ended=True):
 
 # Retrieve the yritys_basename from session state
 yritys_basename = st.session_state.get('yritys_basename2')
-st.title(f"EU Horizon funding for {yritys_basename}")
+st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
+
+if yritys_basename:
+    data = fetch_horizon_data(yritys_basename)
+else:
+    st.write("Invalid or missing parameters.")
+    data = pd.DataFrame()
+
+programme_options = ["All"] + sorted(data["Programme name"].unique().tolist())
+selected_programme = st.selectbox("Select Programme", programme_options)
+
+# Filter Data based on selected programme
+if selected_programme != "All":
+    data = data[data["Programme name"] == selected_programme]
 
 # Check if 'filter_ended' is in session state, if not initialize it
 if 'filter_ended' not in st.session_state:
@@ -56,12 +69,8 @@ if 'filter_ended' not in st.session_state:
 if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
     st.session_state.filter_ended = not st.session_state.filter_ended
 
-# Fetch the data and generate the visualization
-if yritys_basename:
-    data = fetch_horizon_data(yritys_basename)
-    if not data.empty:
-        generate_project_viz(data, st.session_state.filter_ended)
-    else:
-        st.write("No data found.")
+# Generate the visualization
+if not data.empty:
+    generate_project_viz(data, st.session_state.filter_ended)
 else:
-    st.write("Invalid or missing parameters.")
+    st.write("No data found.")
