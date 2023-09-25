@@ -51,10 +51,11 @@ st.title(f"EU Horizon funding for {yritys_basename}")
 
 # Check if 'filter_ended' is in session state, if not initialize it
 if 'filter_ended' not in st.session_state:
-    st.session_state.filter_ended = True
+    st.session_state.filter_ended = False
 
-# Button to toggle the filter
-if st.button('Toggle Ended Projects Filter'):
+button_text = "Hide Ended Projects" if not st.session_state.filter_ended else "Show Ended Projects"
+
+if st.button(button_text):
     st.session_state.filter_ended = not st.session_state.filter_ended
 
 # Fetch the data and generate the visualization
