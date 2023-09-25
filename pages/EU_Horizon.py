@@ -19,7 +19,7 @@ def generate_project_viz(df, filter_ended=True):
         df = df[df['Project end date'] > today]
 
     # Add a truncated name column
-    max_length = 30
+    max_length = 60
     df['Truncated Name'] = df['Subject of grant or contract'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
@@ -30,7 +30,7 @@ def generate_project_viz(df, filter_ended=True):
                       color="Truncated Name", 
                       hover_name="Subject of grant or contract", 
                       hover_data=["Hover Info"], 
-                      title="Projects Time Ranges and Budgets")
+                      title="Hankkeet")
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     fig.update_traces(marker_line_width=df['Beneficiary’s contracted amount (EUR)']/500000)  # Set line width based on budget
