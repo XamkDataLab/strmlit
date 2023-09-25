@@ -1,5 +1,7 @@
 import streamlit as st
 from queries import *
+import plotly
+
 
 yritys_basename = st.session_state.get('yritys_basename2')
 st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
