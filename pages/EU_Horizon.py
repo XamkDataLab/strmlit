@@ -20,7 +20,8 @@ def generate_project_viz(df):
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     fig.update_traces(marker_line_width=df['Beneficiary’s contracted amount (EUR)']/500000)  # Set line width based on budget
-
+    
+    fig.update_layout(showlegend=False)
     # Display the plot in Streamlit
     st.plotly_chart(fig)
 
