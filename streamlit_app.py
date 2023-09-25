@@ -56,6 +56,9 @@ if y_tunnus:
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         
+        yritys_basename = data['yritys_basename2'].iloc[0]
+        st.session_state['yritys_basename2'] = yritys_basename
+        
         col1, col2 = st.columns(2)  # Create two columns
     
         # Content for the first column
