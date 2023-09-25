@@ -3,10 +3,16 @@ import pandas as pd
 import plotly.express as px
 from queries import *
 
+def truncate_text(text, max_length):
+    return text if len(text) <= max_length else text[:max_length] + "..."
+
 def generate_project_viz(df):
     # Convert the start and end date columns to datetime format
     df['Project start date'] = pd.to_datetime(df['Project start date'])
     df['Project end date'] = pd.to_datetime(df['Project end date'])
+
+    max_length = 30
+    df['Subject of grant or contract'] = df['Subject of grant or contract'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
     df['Hover Info'] = 'Budget: ' + df['Beneficiary’s contracted amount (EUR)'].astype(str)
