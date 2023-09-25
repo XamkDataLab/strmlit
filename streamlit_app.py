@@ -58,7 +58,7 @@ if y_tunnus:
         
         yritys_basename = data['yritys_basename2'].iloc[0]
         st.session_state['yritys_basename2'] = yritys_basename
-        st.write(st.session_state)
+        #st.write(st.session_state)
 
         col1, col2 = st.columns(2)  # Create two columns
     
@@ -72,7 +72,7 @@ if y_tunnus:
         <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
         <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
         <hr>
-        <div class="medium-font">Business Finland tuet</div>
+        <div class="medium-font">Business Finland avustukset</div>
         <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
         </div>
         """
