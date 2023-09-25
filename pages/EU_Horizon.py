@@ -14,9 +14,9 @@ def generate_project_viz(df):
     # Create the Gantt chart using plotly
     fig = px.timeline(df, x_start="Project start date", x_end="Project end date", y="Subject of grant or contract", 
                       color="Subject of grant or contract", 
-                      hover_name="", 
+                      #hover_name="", 
                       hover_data=["Hover Info"], 
-                      title="")
+                      #title="")
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     fig.update_traces(marker_line_width=df['Beneficiary’s contracted amount (EUR)']/500000)  # Set line width based on budget
