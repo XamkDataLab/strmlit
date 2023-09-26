@@ -42,6 +42,7 @@ def generate_eura_project_viz(df, filter_ended=True):
     
 # Retrieve the yritys_basename from session state
 y_tunnus = st.session_state.get('y_tunnus')
+yritys_basename = st.session_state.get('yritys_basename')
 st.title(f"EURA rahoitus yritykselle {yritys_basename}")
 
 if yritys_basename:
