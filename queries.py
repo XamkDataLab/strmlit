@@ -131,3 +131,10 @@ def fetch_horizon_data(yritys_basename):
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(yritys_basename,))
     return df
+    
+def fetch_eura_data(yritys_basename):
+    query = """SELECT * FROM EURA2020 WHERE Y_tunnus = ?;"""
+    
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn, params=(y_tunnus,))
+    return df
