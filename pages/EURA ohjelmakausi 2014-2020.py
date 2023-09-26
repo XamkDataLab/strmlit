@@ -38,9 +38,34 @@ def generate_eura_project_viz(df, filter_ended=True):
     fig.update_layout(yaxis_title_text="")
 
     # In a real Streamlit app, we would display the plot using st.plotly_chart(fig)
-    return fig
+    st.plotly_chart(fig)
+    
+# Retrieve the yritys_basename from session state
+yritys_basename = st.session_state.get('y_tunnus')
+st.title(f"EURA rahoitus yritykselle {yritys_basename}")
 
-# Mock the Streamlit app using a hypothetical filter value (for demonstration purposes)
-toteuttaja_name = "Kainuun Liikunta ry"
-eura_data_filtered = fetch_eura_data(toteuttaja_name)
-generate_eura_project_viz(eura_data_filtered, filter_ended=True)
+if yritys_basename:
+    data = fetch_eura_data(y_tunnus)
+else:
+    st.write("Invalid or missing parameters.")
+    data = pd.DataFrame()
+
+programme_options = ["All"] + sorted(data["Programme name"].unique().tolist())
+selected_programme = st.selectbox("Select Programme", programme_options)
+
+# Filter Data based on selected programme
+if selected_programme != "All":
+    data = data[data["Programme name"] == selected_programme]
+
+# Check if 'filter_ended' is in session state, if not initialize it
+#if 'filter_ended' not in st.session_state:
+#    st.session_state.filter_ended = False
+
+#if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
+#    st.session_state.filter_ended = not st.session_state.filter_ended
+
+# Generate the visualization
+#if not data.empty:
+#    generate_project_viz(data, st.session_state.filter_ended)
+#else:
+#    st.write("No data found.")
