@@ -51,12 +51,12 @@ else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
 
-programme_options = ["All"] + sorted(data["Programme name"].unique().tolist())
-selected_programme = st.selectbox("Select Programme", programme_options)
+#programme_options = ["All"] + sorted(data["Programme name"].unique().tolist())
+#selected_programme = st.selectbox("Select Programme", programme_options)
 
 # Filter Data based on selected programme
-if selected_programme != "All":
-    data = data[data["Programme name"] == selected_programme]
+#if selected_programme != "All":
+#    data = data[data["Programme name"] == selected_programme]
 
 # Check if 'filter_ended' is in session state, if not initialize it
 #if 'filter_ended' not in st.session_state:
@@ -66,7 +66,7 @@ if selected_programme != "All":
 #    st.session_state.filter_ended = not st.session_state.filter_ended
 
 # Generate the visualization
-#if not data.empty:
-#    generate_project_viz(data, st.session_state.filter_ended)
-#else:
-#    st.write("No data found.")
+if not data.empty:
+     generate_project_viz(data, st.session_state.filter_ended)
+else:
+     st.write("No data found.")
