@@ -41,7 +41,7 @@ def generate_eura_project_viz(df, filter_ended=True):
     st.plotly_chart(fig)
     
 # Retrieve the yritys_basename from session state
-yritys_basename = st.session_state.get('y_tunnus')
+y_tunnus = st.session_state.get('y_tunnus')
 st.title(f"EURA rahoitus yritykselle {yritys_basename}")
 
 if yritys_basename:
