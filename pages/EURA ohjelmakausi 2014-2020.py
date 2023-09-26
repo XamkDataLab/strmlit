@@ -4,6 +4,10 @@ import plotly.express as px
 import datetime
 from queries import *
 
+
+def truncate_text(text, max_length):
+    return text if len(text) <= max_length else text[:max_length] + "..."
+
 def generate_eura_project_viz(df, filter_ended=True):
     # Convert the start and end date columns to datetime format
     df['Aloituspvm'] = pd.to_datetime(df['Aloituspvm'])
