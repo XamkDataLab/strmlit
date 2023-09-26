@@ -1,4 +1,4 @@
-import streamlit as st
+_import streamlit as st
 import pandas as pd
 import plotly.express as px
 import datetime
@@ -68,6 +68,6 @@ else:
 
 # Generate the visualization
 if not data.empty:
-     generate_project_viz(data, st.session_state.filter_ended)
+     generate_eura_project_viz(data, st.session_state.filter_ended)
 else:
      st.write("No data found.")
