@@ -1,6 +1,8 @@
-import datetime
+import streamlit as st
+import pandas as pd
 import plotly.express as px
-
+import datetime
+from queries import *
 
 def generate_eura_project_viz(df, filter_ended=True):
     # Convert the start and end date columns to datetime format
