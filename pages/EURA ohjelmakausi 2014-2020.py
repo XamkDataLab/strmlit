@@ -20,7 +20,7 @@ def generate_eura_project_viz(df, filter_ended=True):
 
     # Add a truncated name column
     max_length = 60
-    df['Truncated Name'] = df['Hankekoodi'].apply(lambda x: truncate_text(x, max_length))
+    df['Truncated Name'] = df['Hankkeen_nimi'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
     df['Hover Info'] = 'Budget: ' + df['Myönnetty_EU_ja_valtion_rahoitus'].astype(str)
@@ -56,19 +56,19 @@ else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
 
-#programme_options = ["All"] + sorted(data["Programme name"].unique().tolist())
-#selected_programme = st.selectbox("Select Programme", programme_options)
+toimintalinja_options = ["All"] + sorted(data["Toimintalinja"].unique().tolist())
+selected_toimintalinja = st.selectbox("Valitse toimintalinja", toimintalinja_options)
 
 # Filter Data based on selected programme
-#if selected_programme != "All":
-#    data = data[data["Programme name"] == selected_programme]
+if selected_toimintalinja != "All":
+#    data = data[data["Toimintalinja"] == selected_toimintalinja]
 
 # Check if 'filter_ended' is in session state, if not initialize it
-#if 'filter_ended' not in st.session_state:
-#    st.session_state.filter_ended = False
+if 'filter_ended' not in st.session_state:
+    st.session_state.filter_ended = False
 
-#if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
-#    st.session_state.filter_ended = not st.session_state.filter_ended
+if st.button("Piilota loppuneet projektit" if not st.session_state.filter_ended else "Näytä loppuneet projektit"):
+    st.session_state.filter_ended = not st.session_state.filter_ended
 
 # Generate the visualization
 if not data.empty:
