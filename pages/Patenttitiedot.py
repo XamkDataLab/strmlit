@@ -33,4 +33,4 @@ filtered_df = expiring_df[expiring_df['extracted_name'] == selected_applicant]
 
 # Display the filtered data
 st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotke erääntyvät seuraavan {option}:")
-st.table(filtered_df[['lens_id', 'invention_title', 'legal_status_anticipated_term_date']])
+st.table(filtered_df[['lens_id', 'invention_title', 'yritys', 'extracted_name', 'legal_status_anticipated_term_date']])
