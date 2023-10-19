@@ -16,7 +16,7 @@ selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
 
 applicant_df = df[df['extracted_name'] == selected_applicant]
 
-option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
+#option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
 if option == '3 months':
     max_date = datetime.today() + timedelta(days=90)
