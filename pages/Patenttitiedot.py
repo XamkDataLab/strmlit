@@ -8,24 +8,7 @@ def transform_text(text):
         return None
     return ' '.join([word.capitalize() for word in text.split()])
 
-def choose_yritys(group):
-    
-    with_yhtiömuoto = group[group['yhtiömuoto'].notna()]
-    if not with_yhtiömuoto.empty:
-        return with_yhtiömuoto['yritys'].iloc[0]
-
-    return group['yritys'].iloc[0]
-
-
-
-
 df = fetch_legal_status_data()
-
-preferred_yritys = df.groupby('applicant_basename').apply(choose_yritys).reset_index()
-preferred_yritys.columns = ['applicant_basename', 'preferred_yritys']
-
-df = df.merge(preferred_yritys, on='applicant_basename', how='left')
-df['Hakija'] = df['preferred_yritys'].where(df['preferred_yritys'].notna(), df['extracted_name'].apply(transform_text))
 
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
@@ -33,7 +16,7 @@ df = df[df['legal_status_anticipated_term_date'].notna()]
 current_date = datetime.today().strftime('%Y-%m-%d')
 st.title(f"Yritysten erääntyviä patentteja {current_date}")
 st.write(df.head(300))
-#df['Hakija'] = df['yritys'].where(df['yritys'].notna(), df['extracted_name'].apply(transform_text))
+df['Hakija'] = df['yritys'].where(df['yritys'].notna(), df['extracted_name'].apply(transform_text))
 
 option = st.selectbox('Näytä patentit jotka eräänyvät', ['3 kuukauden kuluessa', '6 kuukauden kuluessa', '12 kuukauden kuluessa'])
 
