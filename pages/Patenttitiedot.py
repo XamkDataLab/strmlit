@@ -9,11 +9,6 @@ def transform_text(text):
         return None
     return ' '.join([word.capitalize() for word in text.split()])
 
-
-render_mpl_table(filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date', 'Link']], header_columns=0, col_width=2.0)
-
-
-
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
