@@ -145,9 +145,13 @@ def fetch_legal_status_data():
         p.invention_title, 
         p.legal_status_anticipated_term_date,
         a.extracted_name,
-        a.applicant_basename
+        a.applicant_basename,
+        y.yritys,
+        y.yhtiömuoto,
+        y.y_tunnus
     FROM patents p
     LEFT JOIN applicants a ON p.lens_id = a.lens_id
+    LEFT JOIN yritykset y ON a.applicant_basename = y.yritys_basename2
     WHERE p.legal_status_patent_status IS NOT NULL
     ORDER BY p.legal_status_anticipated_term_date ASC;
     """
@@ -155,4 +159,5 @@ def fetch_legal_status_data():
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn)
     return df
+
 
