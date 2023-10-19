@@ -31,7 +31,7 @@ else:  # 12 kuukauden kuluessa
 expiring_df = df[(df['legal_status_anticipated_term_date'] >= min_date) & (df['legal_status_anticipated_term_date'] <= max_date)]
 
 unique_applicants = expiring_df['Hakija'].dropna().unique().tolist()
-selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
+#selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
 
 # ... [previous code]
