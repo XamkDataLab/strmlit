@@ -4,8 +4,9 @@ import plotly.express as px
 from datetime import datetime, timedelta
 from queries import *
 
-st.title("Yritysten erääntyviä patentteja")
 
+current_date = datetime.today().strftime('%Y-%m-%d')  
+st.title(f"Yritysten erääntyviä patentteja - {current_date}")
 
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
