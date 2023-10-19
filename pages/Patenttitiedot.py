@@ -10,13 +10,7 @@ df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
 
-unique_applicants = df['extracted_name'].dropna().unique().tolist()
-
-selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
-
-applicant_df = df[df['extracted_name'] == selected_applicant]
-
-#option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
+option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
 if option == '3 months':
     max_date = datetime.today() + timedelta(days=90)
@@ -25,10 +19,10 @@ elif option == '6 months':
 else:
     max_date = datetime.today() + timedelta(days=365)
 
+
 expiring_df = df[df['legal_status_anticipated_term_date'] <= max_date]
 
 unique_applicants = expiring_df['extracted_name'].dropna().unique().tolist()
-
 selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
 
 filtered_df = expiring_df[expiring_df['extracted_name'] == selected_applicant]
@@ -36,5 +30,3 @@ filtered_df = expiring_df[expiring_df['extracted_name'] == selected_applicant]
 # Display the filtered data
 st.write(f"Active Patents from {selected_applicant} Expiring in the Next {option}:")
 st.table(filtered_df[['lens_id', 'invention_title', 'legal_status_anticipated_term_date']])
-
-
