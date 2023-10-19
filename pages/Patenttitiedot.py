@@ -15,7 +15,6 @@ df = df[df['legal_status_anticipated_term_date'].notna()]
 
 current_date = datetime.today().strftime('%Y-%m-%d')
 st.title(f"Yritysten erääntyviä patentteja {current_date}")
-st.write(df.head(300))
 df['Hakija'] = df['yritys'].where(df['yritys'].notna(), df['extracted_name'].apply(transform_text))
 
 option = st.selectbox('Näytä patentit jotka eräänyvät', ['3 kuukauden kuluessa', '6 kuukauden kuluessa', '12 kuukauden kuluessa'])
@@ -34,9 +33,6 @@ expiring_df = df[(df['legal_status_anticipated_term_date'] >= min_date) & (df['l
 unique_applicants = expiring_df['Hakija'].dropna().unique().tolist()
 #selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
-
-# ... [previous code]
-
 unique_applicants = [''] + sorted(expiring_df['Hakija'].dropna().unique().tolist())  # Add a blank option at the beginning
 selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
@@ -44,12 +40,6 @@ if selected_applicant:  # Only filter by applicant if one is selected
     filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
 else:
     filtered_df = expiring_df
-
-# ... [rest of the code]
-
-
-
-
 
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
 filtered_df = filtered_df.rename(columns={"invention_title": "Keksintö"})
