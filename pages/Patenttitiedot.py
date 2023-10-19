@@ -14,7 +14,7 @@ df = df[df['legal_status_anticipated_term_date'].notna()]
 
 current_date = datetime.today().strftime('%Y-%m-%d')
 st.title(f"Yritysten erääntyviä patentteja {current_date}")
-
+df.head(300)
 df['Hakija'] = df['yritys'].where(df['yritys'].notna(), df['extracted_name'].apply(transform_text))
 
 option = st.selectbox('Näytä patentit jotka eräänyvät', ['3 kuukauden kuluessa', '6 kuukauden kuluessa', '12 kuukauden kuluessa'])
