@@ -25,9 +25,16 @@ elif option == '6 months':
 else:
     max_date = datetime.today() + timedelta(days=365)
 
-filtered_df = applicant_df[applicant_df['legal_status_anticipated_term_date'] <= max_date]
+expiring_df = df[df['legal_status_anticipated_term_date'] <= max_date]
+
+unique_applicants = expiring_df['extracted_name'].dropna().unique().tolist()
+
+selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
+
+filtered_df = expiring_df[expiring_df['extracted_name'] == selected_applicant]
 
 # Display the filtered data
 st.write(f"Active Patents from {selected_applicant} Expiring in the Next {option}:")
 st.table(filtered_df[['lens_id', 'invention_title', 'legal_status_anticipated_term_date']])
+
 
