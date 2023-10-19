@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import datetime
+from datetime import datetime, timedelta
 from queries import *
 st.title("Patents Expiring Soon")
 
