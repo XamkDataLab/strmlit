@@ -37,8 +37,8 @@ selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
 filtered_df = filtered_df.rename(columns={"invention_title": "Keksintö"})
-filtered_df = filtered_df.rename(columns={"legal_status_anticipated_term_date": "Erääntymispäivä"})
 filtered_df['legal_status_anticipated_term_date'] = filtered_df['legal_status_anticipated_term_date'].dt.strftime('%Y-%m-%d')
+filtered_df = filtered_df.rename(columns={"legal_status_anticipated_term_date": "Erääntymispäivä"})
 filtered_df['Link'] = "https://www.lens.org/lens/patent/" + filtered_df['lens_id'].astype(str)
 filtered_df['Link'] = '<a href="' + filtered_df['Link'] + '" target="_blank">' + "Link" + '</a>'
 
