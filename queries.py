@@ -146,7 +146,7 @@ def fetch_legal_status_data():
     query = """
     SELECT lens_id, invention_title, legal_status_anticipated_term_date
     FROM patents
-    WHERE legal_status_patent_status = 'ACTIVE'
+    WHERE legal_status_patent_status IS NOT NULL
     ORDER BY legal_status_anticipated_term_date ASC;
     """
     
