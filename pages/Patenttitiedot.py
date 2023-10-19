@@ -8,7 +8,6 @@ from queries import *
 current_date = datetime.today().strftime('%Y-%m-%d')  
 st.title(f"Yritysten erääntyviä patentteja {current_date}")
 
-@st.cache(allow_output_mutation=True)
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
