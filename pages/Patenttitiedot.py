@@ -6,21 +6,24 @@ from queries import *
 
 st.title("Yritysten erääntyviä patentteja")
 
+
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
 
 option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
+# Set the minimum date as the current date
+min_date = datetime.today()
+
 if option == '3 months':
-    max_date = datetime.today() + timedelta(days=90)
+    max_date = min_date + timedelta(days=90)
 elif option == '6 months':
-    max_date = datetime.today() + timedelta(days=180)
-else:
-    max_date = datetime.today() + timedelta(days=365)
+    max_date = min_date + timedelta(days=180)
+else:  # 12 months
+    max_date = min_date + timedelta(days=365)
 
-
-expiring_df = df[df['legal_status_anticipated_term_date'] <= max_date]
+expiring_df = df[(df['legal_status_anticipated_term_date'] >= min_date) & (df['legal_status_anticipated_term_date'] <= max_date)]
 
 unique_applicants = expiring_df['extracted_name'].dropna().unique().tolist()
 selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
