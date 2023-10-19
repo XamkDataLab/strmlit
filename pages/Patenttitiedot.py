@@ -36,7 +36,11 @@ unique_applicants = expiring_df['Hakija'].dropna().unique().tolist()
 selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
-filtered_df
-# Display the filtered data
+filtered_df = filtered_df.rename(columns={"invention_title": "Keksintö"})
+filtered_df['legal_status_anticipated_term_date'] = filtered_df['legal_status_anticipated_term_date'].dt.strftime('%Y-%m-%d')
+
 st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
-st.table(filtered_df[['publication_type', 'invention_title', 'Hakija', 'legal_status_anticipated_term_date']])
+st.table(filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date']])
+
+#st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
+#st.table(filtered_df[['publication_type', 'invention_title', 'Hakija', 'legal_status_anticipated_term_date']])
