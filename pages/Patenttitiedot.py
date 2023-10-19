@@ -37,6 +37,7 @@ selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
 filtered_df = filtered_df.rename(columns={"invention_title": "Keksintö"})
+filtered_df = filtered_df.rename(columns={"legal_status_anticipated_term_date": "Erääntymispäivä"})
 filtered_df['legal_status_anticipated_term_date'] = filtered_df['legal_status_anticipated_term_date'].dt.strftime('%Y-%m-%d')
 filtered_df['Link'] = "https://www.lens.org/lens/patent/" + filtered_df['lens_id'].astype(str)
 filtered_df['Link'] = '<a href="' + filtered_df['Link'] + '" target="_blank">' + "Link" + '</a>'
@@ -44,7 +45,7 @@ filtered_df['Link'] = '<a href="' + filtered_df['Link'] + '" target="_blank">' +
 st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
 # Convert the DataFrame to an HTML table and display it using st.markdown
 # Convert the DataFrame to an HTML table and display it using st.markdown
-html_table = filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date', 'Link']].to_html(escape=False, index=False)
+html_table = filtered_df[['publication_type', 'Keksintö', 'Hakija', 'Erääntymispäivä', 'Link']].to_html(escape=False, index=False)
 st.markdown(html_table, unsafe_allow_html=True)
 
 
