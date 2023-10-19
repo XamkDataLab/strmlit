@@ -137,7 +137,8 @@ def fetch_eura_data(y_tunnus):
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(y_tunnus,))
     return df
-
+    
+@st.cache(allow_output_mutation=True)
 def fetch_legal_status_data():
     query = """
     SELECT 
