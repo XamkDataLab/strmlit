@@ -138,3 +138,19 @@ def fetch_eura_data(y_tunnus):
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(y_tunnus,))
     return df
+
+import pyodbc
+import pandas as pd
+
+def fetch_legal_status_data():
+    query = """
+    SELECT lens_id, invention_title, legal_status_anticipated_term_date
+    FROM patents
+    WHERE legal_status_patent_status = 'ACTIVE'
+    ORDER BY legal_status_anticipated_term_date ASC;
+    """
+    
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn)
+    return df
+
