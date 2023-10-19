@@ -12,7 +12,7 @@ def transform_text(text):
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
 df = df[df['legal_status_anticipated_term_date'].notna()]
-df
+
 current_date = datetime.today().strftime('%Y-%m-%d')
 st.title(f"Yritysten erääntyviä patentteja {current_date}")
 
@@ -36,7 +36,7 @@ unique_applicants = expiring_df['Hakija'].dropna().unique().tolist()
 selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
-
+filtered_df
 # Display the filtered data
 st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
 st.table(filtered_df[['publication_type', 'invention_title', 'Hakija', 'legal_status_anticipated_term_date']])
