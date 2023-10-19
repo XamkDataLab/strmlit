@@ -5,7 +5,7 @@ import datetime
 from queries import *
 st.title("Patents Expiring Soon")
 
-df = fetch_patent_data()
+df = fetch_legal_status_data()
 
 option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
