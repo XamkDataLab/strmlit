@@ -38,5 +38,5 @@ selected_applicant = st.selectbox('Valitse hakija:', unique_applicants)
 filtered_df = expiring_df[expiring_df['Hakija'] == selected_applicant]
 
 # Display the filtered data
-st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotke erääntyvät seuraavan {option}:")
+st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
 st.table(filtered_df[['lens_id', 'invention_title', 'Hakija', 'legal_status_anticipated_term_date']])
