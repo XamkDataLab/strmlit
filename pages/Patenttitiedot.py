@@ -6,6 +6,9 @@ from queries import *
 st.title("Patents Expiring Soon")
 
 df = fetch_legal_status_data()
+df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
+# Filter out NaN values
+df = df[df['legal_status_anticipated_term_date'].notna()]
 
 option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
