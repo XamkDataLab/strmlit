@@ -42,7 +42,9 @@ filtered_df['Link'] = "https://www.lens.org/lens/patent/" + filtered_df['lens_id
 filtered_df['Link'] = '<a href="' + filtered_df['Link'] + '" target="_blank">' + "Link" + '</a>'
 
 st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
-st.table(filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date', 'Link']])
+st.write(filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date', 'Link']], unsafe_allow_html=True)
+
+#st.table(filtered_df[['publication_type', 'Keksintö', 'Hakija', 'legal_status_anticipated_term_date', 'Link']])
 
 #st.write(f"Aktiiviset patentit hakijalta {selected_applicant} jotka erääntyvät seuraavan {option}:")
 #st.table(filtered_df[['publication_type', 'invention_title', 'Hakija', 'legal_status_anticipated_term_date']])
