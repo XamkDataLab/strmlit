@@ -3,12 +3,18 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
 from queries import *
-st.title("Patents Expiring Soon")
+
+st.title("Yritysten erääntyviä patentteja")
 
 df = fetch_legal_status_data()
 df['legal_status_anticipated_term_date'] = pd.to_datetime(df['legal_status_anticipated_term_date'])
-# Filter out NaN values
 df = df[df['legal_status_anticipated_term_date'].notna()]
+
+unique_applicants = df['extracted_name'].dropna().unique().tolist()
+
+selected_applicant = st.selectbox('Select an applicant:', unique_applicants)
+
+applicant_df = df[df['extracted_name'] == selected_applicant]
 
 option = st.selectbox('Show patents expiring in the next:', ['3 months', '6 months', '12 months'])
 
@@ -19,9 +25,9 @@ elif option == '6 months':
 else:
     max_date = datetime.today() + timedelta(days=365)
 
-filtered_df = df[df['legal_status_anticipated_term_date'] <= max_date]
+filtered_df = applicant_df[applicant_df['legal_status_anticipated_term_date'] <= max_date]
 
 # Display the filtered data
-st.write(f"Active Patents Expiring in the Next {option}:")
-st.table(filtered_df[['lens_id', 'invention_title']])
+st.write(f"Active Patents from {selected_applicant} Expiring in the Next {option}:")
+st.table(filtered_df[['lens_id', 'invention_title', 'legal_status_anticipated_term_date']])
 
