@@ -146,6 +146,7 @@ def fetch_legal_status_data():
         p.invention_title, 
         p.legal_status_anticipated_term_date,
         a.extracted_name,
+        p.publication_type,
         a.applicant_basename,
         y.yritys,
         y.yhtiömuoto,
