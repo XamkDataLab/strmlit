@@ -3,7 +3,7 @@ import pandas as pd
 from queries import *
 
 def get_emblem_url_from_github(maakunta_name):
-    base_url = "https://github.com/XamkDataLab/strmlit/blob/main/vaakunat/"
+    base_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/vaakunat"
     return f"{base_url}/{maakunta_name}.svg"
 
 
