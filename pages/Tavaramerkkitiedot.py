@@ -9,7 +9,7 @@ def get_emblem_url_from_github(maakunta_name):
     return f"{base_url}/{maakunta_name}.svg"
 
 df = fetch_aggregated_data()
-
+df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 
