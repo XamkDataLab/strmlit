@@ -16,7 +16,7 @@ selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_
 col1, col2 = st.columns([1,6])  # Adjust the numbers for desired column widths
 if selected_maakunnan_nimi != "All":
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
-    col1.image(emblem_url, caption=f"Emblem for {selected_maakunnan_nimi}", width=100)
+    col1.image(emblem_url, width=100)
    #st.write(emblem_url)
 
     df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
