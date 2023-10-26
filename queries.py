@@ -138,7 +138,7 @@ def fetch_eura_data(y_tunnus):
         df = pd.read_sql(query, conn, params=(y_tunnus,))
     return df
     
-@st.cache_data(allow_output_mutation=False)
+@st.cache_data
 def fetch_legal_status_data():
     query = """
     SELECT 
