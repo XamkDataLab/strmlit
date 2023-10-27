@@ -9,9 +9,6 @@ def get_emblem_url_from_github(maakunta_name):
     return f"{base_url}/{maakunta_name}.svg"
 
 def get_innovative_companies(data, maakunta):
-    """
-    Returns companies from the given maakunta that were founded in the last two years and have patents.
-    """
     current_year = datetime.now().year
     innovative_companies = data[
         (data['Maakunnan_nimi'] == maakunta) &
@@ -20,30 +17,29 @@ def get_innovative_companies(data, maakunta):
     ]
     return innovative_companies
 
-def enhanced_normalize_registration_date(dataframe, date_format=None): 
-    """
-    Normalize the 'yrityksen_rekisteröimispäivä' column of the provided dataframe
-    to datetime format. If a specific date format is known, it can be provided for
-    more accurate parsing.
-    """
+def versatile_normalize_registration_date_v2(dataframe): 
+    invalid_dates = []
+
     def convert_to_datetime(date_str):
-        """Helper function to convert a date string to a datetime object."""
         if pd.isnull(date_str):
             return date_str
         try:
-            if date_format:
-                return pd.to_datetime(date_str, format=date_format)
-            else:
-                return pd.to_datetime(date_str)
+            return pd.to_datetime(date_str, format='%Y-%m-%d')
         except ValueError:
-            st.write(f"Failed to convert date string: {date_str}")
-            return date_str
+            try:
+                return pd.to_datetime(date_str, format='%d-%m-%Y')
+            except ValueError:
+                try:
+                    return pd.to_datetime(date_str, format='%d.%m.%Y')
+                except ValueError:
+                    st.write(f"Failed to convert date string: {date_str}")
+                    return date_str
     
     dataframe['yrityksen_rekisteröimispäivä'] = dataframe['yrityksen_rekisteröimispäivä'].apply(convert_to_datetime)
     return dataframe
 
 df = fetch_aggregated_data()
-df = enhanced_normalize_registration_date(df)
+df = versatile_normalize_registration_date_v2(df)
 df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
