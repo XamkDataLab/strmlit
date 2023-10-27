@@ -16,7 +16,7 @@ maakunnan_nimi_list.insert(0, "All")
 # Display the maakunta selectbox first
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
 
-# If a specific maakunta is selected, display the emblem
+# If a specific maakunta is selected, display the emblem on top
 if selected_maakunnan_nimi != "All":
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
     st.image(emblem_url, width=100)
