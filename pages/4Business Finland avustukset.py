@@ -13,46 +13,42 @@ def get_innovative_companies(data, maakunta):
     Returns companies from the given maakunta that were founded in the last two years and have patents.
     """
     current_year = datetime.now().year
-
-    # Filter based on maakunta, foundation year, and patents
     innovative_companies = data[
         (data['Maakunnan_nimi'] == maakunta) &
         (data['yrityksen_rekisteröimispäivä'].dt.year > current_year - 2) &
         (data['Patent_Applications_Count'] > 0)
     ]
     return innovative_companies
-    
-def normalize_registration_date(dataframe): 
+
+def enhanced_normalize_registration_date(dataframe, date_format=None): 
     """
     Normalize the 'yrityksen_rekisteröimispäivä' column of the provided dataframe
-    to datetime format.
+    to datetime format. If a specific date format is known, it can be provided for
+    more accurate parsing.
     """
     def convert_to_datetime(date_str):
         """Helper function to convert a date string to a datetime object."""
         if pd.isnull(date_str):
             return date_str
         try:
-            # Convert the string to a datetime object
-            return pd.to_datetime(date_str)
+            if date_format:
+                return pd.to_datetime(date_str, format=date_format)
+            else:
+                return pd.to_datetime(date_str)
         except ValueError:
-            return date_str  # return the original string if it's not a valid date
+            st.write(f"Failed to convert date string: {date_str}")
+            return date_str
     
-    # Apply the conversion function to the 'yrityksen_rekisteröimispäivä' column
     dataframe['yrityksen_rekisteröimispäivä'] = dataframe['yrityksen_rekisteröimispäivä'].apply(convert_to_datetime)
-    
     return dataframe
 
-
-
 df = fetch_aggregated_data()
-df = normalize_registration_date(df)
+df = enhanced_normalize_registration_date(df)
 df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
-
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
 
-# Funding sources for the Sankey diagram
 sources = ['Total_Funding', 'Total_EU_Horizon_Funding', 'Total_Business_Finland_Funding', 'Total_Tutkimusrahoitus']
 selected_source = st.selectbox('Select Source:', ["All"] + sources)
 
