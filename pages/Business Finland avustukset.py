@@ -60,8 +60,8 @@ else:
     col1.image(emblem_url, width=100)
     filtered_df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
     filtered_df['toimiala'].fillna('unknown', inplace=True)
-
-    toimiala_values = filtered_df['toimiala'].unique().tolist()
+    filtered_df['yhtiömuoto'].fillna('unknown', inplace=True)
+    ymuoto_values = filtered_df['yhtiömuoto'].unique().tolist()
 
     # Prepare data for the Sankey diagram
     source_indices = []
@@ -69,11 +69,11 @@ else:
     values = []
 
     for idx, source in enumerate(sources):
-        grouped = filtered_df.groupby('toimiala')[source].sum()
-        for toimiala_idx, toimiala in enumerate(toimiala_values):
+        grouped = filtered_df.groupby('yhtiömuoto')[source].sum()
+        for ymuoto_idx, toimiala in enumerate(ymuoto_values):
             source_indices.append(idx)
-            target_indices.append(len(sources) + toimiala_idx)
-            values.append(grouped[toimiala])
+            target_indices.append(len(sources) + ymuoto_idx)
+            values.append(grouped[yhtiömuoto])
 
     # Create the Sankey diagram
     fig = go.Figure(go.Sankey(
