@@ -13,17 +13,22 @@ df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 
-# Display the maakunta selectbox first
+# Create a placeholder for the emblem at the top
+emblem_placeholder = st.empty()
+
+# Display the maakunta selectbox
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
 
-# If a specific maakunta is selected, display the emblem on top
+# If a specific maakunta is selected, display the emblem at the placeholder's position
 if selected_maakunnan_nimi != "All":
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
-    st.image(emblem_url, width=100)
+    emblem_placeholder.image(emblem_url, width=100)
 
 # Funding sources for the Sankey diagram
 sources = ['Total_Funding', 'Total_EU_Horizon_Funding', 'Total_Business_Finland_Funding', 'Total_Tutkimusrahoitus']
 selected_source = st.selectbox('Select Source:', ["All"] + sources)
+
+if selected_maakunnan_nimi == "All":
 
 if selected_maakunnan_nimi == "All":
     
