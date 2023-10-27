@@ -22,7 +22,7 @@ if selected_maakunnan_nimi != "All":
     df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
 
 # Display the filtered dataframe
-st.write(df)
+st.dataframe(df)
 # Create columns
 
 
