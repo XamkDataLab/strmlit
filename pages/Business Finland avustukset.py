@@ -59,6 +59,7 @@ else:
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
     col1.image(emblem_url, width=100)
     filtered_df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
+    filtered_df['toimiala'].fillna('unknown', inplace=True)
 
     toimiala_values = filtered_df['toimiala'].unique().tolist()
 
