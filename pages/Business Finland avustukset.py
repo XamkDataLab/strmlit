@@ -59,17 +59,20 @@ else:
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
     col1.image(emblem_url, width=100)
     filtered_df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
-    
+
+    toimiala_values = filtered_df['toimiala'].unique().tolist()
+
     # Prepare data for the Sankey diagram
     source_indices = []
     target_indices = []
     values = []
 
     for idx, source in enumerate(sources):
-        total_value = filtered_df[source].sum()
-        source_indices.append(idx)
-        target_indices.append(len(sources))  # Single target, which is the selected Maakunnan_nimi
-        values.append(total_value)
+        grouped = filtered_df.groupby('toimiala')[source].sum()
+        for toimiala_idx, toimiala in enumerate(toimiala_values):
+            source_indices.append(idx)
+            target_indices.append(len(sources) + toimiala_idx)
+            values.append(grouped[toimiala])
 
     # Create the Sankey diagram
     fig = go.Figure(go.Sankey(
@@ -77,7 +80,7 @@ else:
             pad=15,
             thickness=20,
             line=dict(color="black", width=0.5),
-            label=sources + [selected_maakunnan_nimi]
+            label=sources + toimiala_values
         ),
         link=dict(
             source=source_indices,
@@ -88,4 +91,3 @@ else:
     
     # Display the Sankey diagram in Streamlit
     st.plotly_chart(fig)
-
