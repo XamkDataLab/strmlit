@@ -30,7 +30,7 @@ selected_source = st.selectbox('Select Source:', ["All"] + sources)
 
 if selected_maakunnan_nimi == "All":
 
-if selected_maakunnan_nimi == "All":
+
     
     maakunta_values = df['Maakunnan_nimi'].unique().tolist()
 
