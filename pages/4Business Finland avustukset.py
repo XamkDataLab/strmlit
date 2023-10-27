@@ -23,21 +23,22 @@ def get_innovative_companies(data, maakunta):
     return innovative_companies
     
 def normalize_registration_date(dataframe): 
-    
-    def convert_to_ymd_format(date_str):
-        
+    """
+    Normalize the 'yrityksen_rekisteröimispäivä' column of the provided dataframe
+    to datetime format.
+    """
+    def convert_to_datetime(date_str):
+        """Helper function to convert a date string to a datetime object."""
         if pd.isnull(date_str):
             return date_str
         try:
             # Convert the string to a datetime object
-            date_obj = pd.to_datetime(date_str)
-            # Format the datetime object to 'YYYY-MM-DD'
-            return date_obj.strftime('%Y-%m-%d')
+            return pd.to_datetime(date_str)
         except ValueError:
             return date_str  # return the original string if it's not a valid date
     
-    
-    dataframe['yrityksen_rekisteröimispäivä'] = dataframe['yrityksen_rekisteröimispäivä'].apply(convert_to_ymd_format)
+    # Apply the conversion function to the 'yrityksen_rekisteröimispäivä' column
+    dataframe['yrityksen_rekisteröimispäivä'] = dataframe['yrityksen_rekisteröimispäivä'].apply(convert_to_datetime)
     
     return dataframe
 
