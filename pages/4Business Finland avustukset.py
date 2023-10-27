@@ -20,11 +20,31 @@ def get_innovative_companies(data, maakunta):
         (data['yrityksen_rekisteröimispäivä'].dt.year > current_year - 2) &
         (data['Patent_Applications_Count'] > 0)
     ]
-
     return innovative_companies
+    
+def normalize_registration_date(dataframe): 
+    
+    def convert_to_ymd_format(date_str):
+        
+        if pd.isnull(date_str):
+            return date_str
+        try:
+            # Convert the string to a datetime object
+            date_obj = pd.to_datetime(date_str)
+            # Format the datetime object to 'YYYY-MM-DD'
+            return date_obj.strftime('%Y-%m-%d')
+        except ValueError:
+            return date_str  # return the original string if it's not a valid date
+    
+    
+    dataframe['yrityksen_rekisteröimispäivä'] = dataframe['yrityksen_rekisteröimispäivä'].apply(convert_to_ymd_format)
+    
+    return dataframe
+
+
 
 df = fetch_aggregated_data()
-df['yrityksen_rekisteröimispäivä'] = pd.to_datetime(df['yrityksen_rekisteröimispäivä'], errors='coerce')
+df = normalize_registration_date(df)
 df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
