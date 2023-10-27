@@ -12,7 +12,7 @@ def get_innovative_companies(data, maakunta):
     current_year = datetime.now().year
     innovative_companies = data[
         (data['Maakunnan_nimi'] == maakunta) &
-        (data['yrityksen_rekisteröimispäivä'].dt.year > current_year - 2) &
+        (data['yrityksen_rekisteröimispäivä'].dt.year > current_year - 3) &
         (data['Patent_Applications_Count'] > 0)
     ]
     return innovative_companies
