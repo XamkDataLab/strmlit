@@ -13,16 +13,23 @@ df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 
-selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
+col1, col2 = st.columns([1, 6])  # Adjust the numbers for desired column widths
+selected_maakunnan_nimi = col1.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
+if selected_maakunnan_nimi != "All":
+    emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
+    col1.image(emblem_url, width=100)
 
 # Funding sources for the Sankey diagram
 sources = ['Total_Funding', 'Total_EU_Horizon_Funding', 'Total_Business_Finland_Funding', 'Total_Tutkimusrahoitus']
-
-col1, col2 = st.columns([1, 6])  # Adjust the numbers for desired column widths
+selected_source = col1.selectbox('Select Source:', ["All"] + sources)
 
 if selected_maakunnan_nimi == "All":
     
     maakunta_values = df['Maakunnan_nimi'].unique().tolist()
+
+    # Filter by the selected source if it's not "All"
+    if selected_source != "All":
+        sources = [selected_source]
 
     # Create lists to store Sankey diagram data
     source_indices = []
@@ -54,16 +61,20 @@ if selected_maakunnan_nimi == "All":
     
     # Display the Sankey diagram in Streamlit
     st.plotly_chart(fig)
+    st.dataframe(df[['y_tunnus', 'yritys']])
 
 else:
-    emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
-    col1.image(emblem_url, width=100)
+    
     filtered_df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
 
     # Replace None values with "unknown" in 'yhtiömuoto'
     filtered_df['yhtiömuoto'].fillna('unknown', inplace=True)
 
     yhtiömuoto_values = filtered_df['yhtiömuoto'].unique().tolist()
+
+    # Filter by the selected source if it's not "All"
+    if selected_source != "All":
+        sources = [selected_source]
 
     # Prepare data for the Sankey diagram
     source_indices = []
@@ -94,4 +105,5 @@ else:
     
     # Display the Sankey diagram in Streamlit
     st.plotly_chart(fig)
+    st.dataframe(filtered_df[['y_tunnus', 'yritys']])
 
