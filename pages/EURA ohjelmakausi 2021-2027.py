@@ -57,23 +57,12 @@ if selected_maakunnan_nimi == "All":
         )
     ))
     
-    # Display the Sankey diagram in Streamlit and capture click events
-    click_data = st.plotly_chart(fig, use_container_width=True)
-
-    # Check if any flow (link) in the Sankey diagram was clicked
-    if click_data and 'points' in click_data:
-        # Extract source and target labels
-        source_label = sources[click_data['points'][0]['source']]
-        target_label = df['Maakunnan_nimi'].unique()[click_data['points'][0]['target'] - len(sources)]
-        
-        # Filter the dataframe based on source and target
-        filtered_df = df[(df[source_label] > 0) & (df['Maakunnan_nimi'] == target_label)]
-        
-        # Display the filtered dataframe in Streamlit
-        st.write(filtered_df)
+    # Display the Sankey diagram in Streamlit
+    st.plotly_chart(fig)
 
 else:
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
     col1.image(emblem_url, width=100)
     df = df[df['Maakunnan_nimi'] == selected_maakunnan_nimi]
     st.write(df)
+
