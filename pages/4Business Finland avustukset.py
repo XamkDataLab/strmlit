@@ -104,4 +104,5 @@ else:
     # Display the title and the dataframe of innovative companies
     st.title('Uudet innovatiiviset yritykset')
     st.dataframe(innovative_companies[['y_tunnus', 'yritys', 'yrityksen_rekisteröimispäivä', 'Patent_Applications_Count']])
+    st.dataframe(df[['y_tunnus', 'yritys', 'yrityksen_rekisteröimispäivä', 'Patent_Applications_Count']])
 
