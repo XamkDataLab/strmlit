@@ -49,7 +49,7 @@ def visualize_graph(graph):
 
 # Streamlit app
 st.title('Horizon Europe yhteistyöverkostokaavio')
-st.text('Hankekonsortiot joissa mukana vähintään yksi suomalainen yritys. 
+st.text('Hankekonsortiot joissa mukana vähintään yksi suomalainen yritys.') 
 st.text('Konsortioiden yhteenlaskettu rahoitus')
 
 title = st.selectbox('Suodata aiheen mukaan', ['None'] + list(data['euroSciVocTitle'].unique()))
