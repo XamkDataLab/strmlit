@@ -5,13 +5,16 @@ from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import *
 
+import streamlit as st
+
+if st.button('Clear Cache'):
+    st.caching.clear_cache()
+    st.success('Cache cleared!')
 
 data = fetch_collaboration_data()
-unique_titles = pd.DataFrame(data['euroSciVocTitle'].unique(), columns=['Unique euroSciVocTitles'])
-st.dataframe(unique_titles)
+
 
 # Create a NetworkX graph
-@st.cache_data()
 def create_graph():
     G = nx.Graph()
     for idx, row in data.iterrows():
@@ -20,7 +23,6 @@ def create_graph():
 
 G = create_graph()
 
-# Filter functions
 def filter_graph(graph, title=None, country=None, finnish_org=None):
     edges_to_keep = []
     for u, v, d in graph.edges(data=True):
@@ -29,7 +31,6 @@ def filter_graph(graph, title=None, country=None, finnish_org=None):
     filtered_graph = graph.edge_subgraph(edges_to_keep).copy()
     return filtered_graph
 
-# Visualization function
 def visualize_graph(graph):
     if graph.number_of_edges() > 0:
         nt = Network(notebook=False, height="500px", width="100%")
