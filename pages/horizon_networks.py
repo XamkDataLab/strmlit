@@ -9,7 +9,7 @@ from queries import *
 data = fetch_collaboration_data()
 
 # Create a NetworkX graph
-@st.cache_data(allow_output_mutation=True)
+@st.cache_data()
 def create_graph():
     G = nx.Graph()
     for idx, row in data.iterrows():
