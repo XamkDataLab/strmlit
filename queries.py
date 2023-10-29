@@ -162,7 +162,7 @@ def fetch_legal_status_data():
         df = pd.read_sql(query, conn)
     return df
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data()
 def fetch_aggregated_data():
     query = """
     WITH 
@@ -290,7 +290,8 @@ def fetch_aggregated_data():
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn)
     return df
-
+    
+@st.cache_data
 def fetch_collaboration_data():
     query = """
     SELECT 
