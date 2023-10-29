@@ -38,19 +38,20 @@ def visualize_graph(graph):
         st.warning("No edges to display. Please select different filters.")
 
 # Streamlit app
-st.title('Collaboration Network Visualization')
+st.title('Horizon Europe yhteistyöverkostokaavio')
+st.text('Hankekonsortiot joissa mukana vähintään yksi suomalainen yritys. Konsortioiden yhteenlaskettu rahoitus')
 
-title = st.selectbox('Filter by euroSciVocTitle', ['None'] + list(data['euroSciVocTitle'].unique()))
+title = st.selectbox('Suodata aiheen mukaan', ['None'] + list(data['euroSciVocTitle'].unique()))
 filtered_data = filter_data(data, title=title)
 
-finnish_org = st.selectbox('Filter by Finnish Organization', ['None'] + list(filtered_data['FinnishOrgName'].unique()))
+finnish_org = st.selectbox('Suodata organisaation mukaan', ['None'] + list(filtered_data['FinnishOrgName'].unique()))
 filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org)
 
-country = st.selectbox('Filter by CollaboratorCountry', ['None'] + list(filtered_data['CollaboratorCountry'].unique()))
+country = st.selectbox('Suodata maan mukaan', ['None'] + list(filtered_data['CollaboratorCountry'].unique()))
 filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org, country=country)
 
 if title != 'None' or country != 'None' or finnish_org != 'None':
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph)
 else:
-    st.warning('Please select at least one filter to visualize the network.')
+    st.warning('Valitse vähintään yksi suodatin luodaksesi verkostokaavion.')
