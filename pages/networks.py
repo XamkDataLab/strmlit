@@ -3,7 +3,7 @@ import pandas as pd
 import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
-
+from queries import *
 
 data = fetch_collaboration_data()
 
