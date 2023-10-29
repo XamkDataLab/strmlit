@@ -7,6 +7,8 @@ from queries import *
 
 
 data = fetch_collaboration_data()
+unique_titles = pd.DataFrame(data['euroSciVocTitle'].unique(), columns=['Unique euroSciVocTitles'])
+st.dataframe(unique_titles)
 
 # Create a NetworkX graph
 @st.cache_data()
