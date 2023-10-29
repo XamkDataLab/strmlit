@@ -4,6 +4,8 @@ import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import *
+# Load the data
+
 
 data = fetch_collaboration_data()
 
@@ -54,4 +56,5 @@ if title != 'None' or country != 'None' or finnish_org != 'None':
     visualize_graph(filtered_graph)
 else:
     st.warning('Please select at least one filter to visualize the network.')
+
 
