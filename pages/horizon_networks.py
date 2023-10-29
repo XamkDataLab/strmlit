@@ -5,12 +5,7 @@ from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import *
 
-import streamlit as st
-
-if st.button('Clear Cache'):
-    st.legacy_caching.clear_cache()
-    st.success('Cache cleared!')
-
+st.cache_data.clear()
 data = fetch_collaboration_data()
 
 
