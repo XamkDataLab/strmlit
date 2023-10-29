@@ -290,5 +290,26 @@ def fetch_aggregated_data():
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn)
     return df
+i
+def fetch_collaborations_data():
+    query = """
+    SELECT 
+        c.FinnishOrgId, 
+        c.FinnishOrgName, 
+        c.CollaboratorOrgId, 
+        c.CollaboratorOrgName, 
+        c.CollaboratorCountry,
+        c.ProjectId, 
+        c.ProjectTitle,
+        s.euroSciVocTitle
+    FROM 
+        horizon_collaborations c
+    LEFT JOIN 
+        horizon_europe_SciVoc s ON c.ProjectId = s.projectId;
+    """
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn)
+        
+    return df
 
 
