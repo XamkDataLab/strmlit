@@ -6,6 +6,7 @@ import streamlit.components.v1 as components
 from queries import *
 
 st.cache_data.clear()
+st.legacy_caching.clear_cache()
 data = fetch_collaboration_data()
 
 
