@@ -5,12 +5,7 @@ from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import *
 
-# Load the data
-@st.cache
-def load_data():
-    return pd.read_csv('/path/to/your/collab.csv')
-
-data = load_data()
+data = fetch_collaboration_data()
 
 # Create a NetworkX graph
 @st.cache_data()
