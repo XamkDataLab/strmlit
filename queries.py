@@ -291,7 +291,7 @@ def fetch_aggregated_data():
         df = pd.read_sql(query, conn)
     return df
 
-def fetch_collaborations_data():
+def fetch_collaboration_data():
     query = """
     SELECT 
         c.FinnishOrgId, 
