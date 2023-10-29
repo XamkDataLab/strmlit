@@ -8,7 +8,7 @@ from queries import *
 import streamlit as st
 
 if st.button('Clear Cache'):
-    st.caching.clear_cache()
+    st.legacy_caching.clear_cache()
     st.success('Cache cleared!')
 
 data = fetch_collaboration_data()
