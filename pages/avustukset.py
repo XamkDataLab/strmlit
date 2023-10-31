@@ -52,7 +52,6 @@ column_rename_mapping = {
 
 df = df.rename(columns=column_rename_mapping)
 
-st.dataframe(df)
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
