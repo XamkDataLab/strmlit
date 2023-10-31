@@ -41,6 +41,7 @@ def versatile_normalize_registration_date_v2(dataframe):
 df = fetch_aggregated_data()
 df = versatile_normalize_registration_date_v2(df)
 df = df[df['Maakunnan_nimi'].notna()]
+st.dataframe(df)
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
