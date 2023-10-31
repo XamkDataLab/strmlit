@@ -52,7 +52,7 @@ def format_currency(number):
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
     data = fetch_data2(y_tunnus)
-    st.dataframe(data)
+    
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         
