@@ -91,7 +91,7 @@ if y_tunnus:
         <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
         <hr>
         <div class="medium-font">Business Finland tutkimusrahoitus</div>
-        <div class="large-number">{int(data['Tutkimusrahoitus'].iloc[0]):,}</div>
+        <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
