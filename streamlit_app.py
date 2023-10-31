@@ -51,8 +51,8 @@ def format_currency(number):
 
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
-    data = fetch_data(y_tunnus)
-
+    data = fetch_data2(y_tunnus)
+    
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         
@@ -89,6 +89,9 @@ if y_tunnus:
         <hr>
         <div class="medium-font">Mallioikeuksien määrä</div>
         <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
+        <hr>
+        <div class="medium-font">Business Finland tutkimusrahoitus</div>
+        <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
