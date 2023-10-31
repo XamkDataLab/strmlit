@@ -12,7 +12,7 @@ df = fetch_aggregated_data()
 df = df[df['Maakunnan_nimi'].notna()]
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
-
+st.dataframe(df)
 # Create a placeholder for the emblem at the top
 emblem_placeholder = st.empty()
 
