@@ -47,7 +47,7 @@ def generate_project_viz(df, filter_ended=True):
 
 # Retrieve the yritys_basename from session state
 yritys_basename = st.session_state.get('yritys_basename2')
-st.title(f"EU Horizon rahoitus yritykselle {yritys_basename}")
+st.title(f"EU muu rahoitus yritykselle {yritys_basename}")
 
 if yritys_basename:
     data = fetch_horizon_data(yritys_basename)
