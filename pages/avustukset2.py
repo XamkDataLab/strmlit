@@ -10,10 +10,10 @@ def get_emblem_url_from_github(maakunta_name):
 
 df = fetch_aggregated_data()
 df = df[df['Maakunnan_nimi'].notna()]
-st.dataframe(df)
+#st.dataframe(df)
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
-st.dataframe(df)
+#st.dataframe(df)
 # Create a placeholder for the emblem at the top
 emblem_placeholder = st.empty()
 
