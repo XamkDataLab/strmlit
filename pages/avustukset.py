@@ -97,9 +97,9 @@ if selected_maakunnan_nimi == "All":
     
     # Display the Sankey diagram in Streamlit
     st.plotly_chart(fig)
-    st.dataframe(df[['y_tunnus', 'yritys']])
+    #st.dataframe(df[['y_tunnus', 'yritys']])
     
-    # ... [Same code for the "All" Sankey diagram]
+   
 
 else:
     emblem_url = get_emblem_url_from_github(selected_maakunnan_nimi)
