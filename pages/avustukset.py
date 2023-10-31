@@ -41,12 +41,23 @@ def versatile_normalize_registration_date_v2(dataframe):
 df = fetch_aggregated_data()
 df = versatile_normalize_registration_date_v2(df)
 df = df[df['Maakunnan_nimi'].notna()]
+# Define a dictionary with old column names as keys and new column names as values
+column_rename_mapping = {
+    'Total_Funding': 'EURA rahoitukset',
+    'Total_Business_Finland_Funding': 'Business Finland avustukset',
+    'Total_Tutkimusrahoitus': 'Business Finland tutkimusrahoitukset',
+    'Total_EU_Horizon_Funding': 'Muut EU rahoitukset'
+    # Add more columns as needed
+}
+
+df = df.rename(columns=column_rename_mapping)
+
 st.dataframe(df)
 maakunnan_nimi_list = df['Maakunnan_nimi'].unique().tolist()
 maakunnan_nimi_list.insert(0, "All")  
 selected_maakunnan_nimi = st.selectbox('Select Maakunnan_nimi:', maakunnan_nimi_list)
 
-sources = ['Total_Funding', 'Total_EU_Horizon_Funding', 'Total_Business_Finland_Funding', 'Total_Tutkimusrahoitus']
+sources = ['EURA rahoitukset', 'Muut EU rahoitukset', 'Business Finland avustukset', 'Business Finland tutkimusrahoitukset']
 selected_source = st.selectbox('Select Source:', ["All"] + sources)
 
 if selected_maakunnan_nimi == "All":
