@@ -7,7 +7,6 @@ import streamlit.components.v1 as components
 from queries import fetch_collaboration_data
 
 data = fetch_collaboration_data()
-st.dataframe(data)
 
 def create_graph(data):
     G = nx.Graph()
