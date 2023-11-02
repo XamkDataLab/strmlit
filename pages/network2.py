@@ -16,9 +16,16 @@ def create_graph(data):
         project_title = row['ProjectTitle']
         split_title = textwrap.fill(project_title, width=30)
         
-        title_text = f"ProjectId: {row['ProjectId']}\nProjectTitle: {split_title}"
-        G.add_node(row['FinnishOrgName'], color='red', title=title_text)  # Added title for hovering
-        G.add_node(row['CollaboratorOrgName'], color='blue')  # No additional info for these nodes
+        hover_text = (
+            f"ProjectId: {row['ProjectId']}\n"
+            f"ProjectTitle: {split_title}\n"
+            f"FinnishOrgContribution: {row['FinnishOrgContribution']}\n"
+            f"ProjectRole: {row['ProjectRole']}\n"
+            f"StartDate: {row['StartDate']}\n"
+            f"EndDate: {row['EndDate']}"
+        )
+        G.add_node(row['FinnishOrgName'], color='red', title=hover_text)  # Added title for hovering
+        G.add_node(row['CollaboratorOrgName'], color='blue') 
         G.add_edge(row['FinnishOrgName'], row['CollaboratorOrgName'], title=row['euroSciVocTitle'], country=row['CollaboratorCountry'])
     return G
 
@@ -41,7 +48,7 @@ def visualize_graph(graph):
         
         # Add nodes with color and title for hovering
         for node, attr in graph.nodes(data=True):
-            nt.add_node(node, color=attr.get('color', 'blue'), title=attr.get('title', ''))  # Default to blue if no color is set
+            nt.add_node(node, color=attr.get('color', 'blue'), title=attr.get('title', ''))
         
         # Add edges
         for u, v, attr in graph.edges(data=True):
