@@ -302,6 +302,7 @@ def fetch_collaboration_data():
         c.CollaboratorCountry,
         c.ProjectId, 
         c.ProjectTitle,
+        c.FinnishOrgContribution,
         s.euroSciVocTitle
     FROM 
         horizon_collaborations c
