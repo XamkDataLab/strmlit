@@ -53,12 +53,12 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
                 "barnesHut": {
                     "gravitationalConstant": gravitational_constant,
                     "centralGravity": central_gravity,
-                    "springLength": 95,
-                    "springConstant": 0.04,
-                    "damping": 0.09,
+                    "springLength": 100,
+                    "springConstant": 0.05,
+                    "damping": 0.1,
                     "avoidOverlap": 0.1
                 },
-                "maxVelocity": 146,
+                "maxVelocity": 50,
                 "minVelocity": 0.1,
                 "solver": "barnesHut",
                 "stabilization": {
@@ -68,7 +68,7 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
                     "onlyDynamicEdges": False,
                     "fit": True
                 },
-                "timestep": 0.5,
+                "timestep": 0.3,
                 "adaptiveTimestep": True
             }
         }
