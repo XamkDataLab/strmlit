@@ -8,11 +8,15 @@ from queries import fetch_collaboration_data
 data = fetch_collaboration_data()
 st.dataframe(data)
 
-# Create a NetworkX graph
 def create_graph(data):
     G = nx.Graph()
     for idx, row in data.iterrows():
-        G.add_node(row['FinnishOrgName'], color='red', title=f"ProjectId: {row['ProjectId']}\nProjectTitle: {row['ProjectTitle']}")  # Added title for hovering
+        # Split long project titles into multiple lines
+        project_title = row['ProjectTitle']
+        split_title = '\n'.join([project_title[i:i+30] for i in range(0, len(project_title), 30)])
+        
+        title_text = f"ProjectId: {row['ProjectId']}\nProjectTitle: {split_title}"
+        G.add_node(row['FinnishOrgName'], color='red', title=title_text)  # Added title for hovering
         G.add_node(row['CollaboratorOrgName'], color='blue')  # No additional info for these nodes
         G.add_edge(row['FinnishOrgName'], row['CollaboratorOrgName'], title=row['euroSciVocTitle'], country=row['CollaboratorCountry'])
     return G
