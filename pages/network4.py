@@ -97,10 +97,12 @@ filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org)
 country = st.selectbox('Filter by Country', ['None'] + list(filtered_data['CollaboratorCountry'].unique()))
 filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org, country=country)
 
+gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
+central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
+
 if title != 'None' or country != 'None' or finnish_org != 'None':
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph, gravitational_constant, central_gravity)
 else:
     st.warning('Choose at least one filter to create the graph')
-gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
-central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
+
