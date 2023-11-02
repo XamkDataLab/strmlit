@@ -37,6 +37,8 @@ def filter_data(data, title=None, country=None, finnish_org=None):
         filtered_data = filtered_data[filtered_data['FinnishOrgName'] == finnish_org]
     return filtered_data
 
+import json  # Add this import at the beginning of your script
+
 def visualize_graph(graph, gravitational_constant, central_gravity):
     if graph.number_of_edges() > 0:
         nt = Network(notebook=False, height="500px", width="100%")
@@ -71,7 +73,7 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
                 "adaptiveTimestep": True
             }
         }
-        nt.set_options(physics_options)
+        nt.set_options(json.dumps(physics_options))  # Convert to JSON string
         
         nt.save_graph("network.html")
         with open("network.html", "r", encoding="utf-8") as f:
