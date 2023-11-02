@@ -7,15 +7,12 @@ import streamlit.components.v1 as components
 from queries import fetch_collaboration_data
 
 data = fetch_collaboration_data()
-st.dataframe(data)
-
 
 def create_graph(data):
     G = nx.Graph()
     for idx, row in data.iterrows():
         project_title = row['ProjectTitle']
         split_title = textwrap.fill(project_title, width=30)
-        
         hover_text = (
             f"ProjectId: {row['ProjectId']}\n"
             f"ProjectTitle: {split_title}\n"
