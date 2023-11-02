@@ -3,7 +3,7 @@ import pandas as pd
 import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
-from queries import *
+from queries import *  # Make sure to have this module and function defined
 
 data = fetch_collaboration_data()
 
@@ -11,28 +11,32 @@ data = fetch_collaboration_data()
 def create_graph(data):
     G = nx.Graph()
     for idx, row in data.iterrows():
-        G.add_node(row['FinnishOrgName'], color='red', title=f"ProjectId: {row['ProjectId']}\nProjectTitle: {row['ProjectTitle']}")  # Add title attribute
+        G.add_node(row['FinnishOrgName'], color='red', title=f"ProjectId: {row['ProjectId']}\nProjectTitle: {row['ProjectTitle']}")
         G.add_node(row['CollaboratorOrgName'], color='blue')
         G.add_edge(row['FinnishOrgName'], row['CollaboratorOrgName'], title=row['euroSciVocTitle'], country=row['CollaboratorCountry'])
     return G
 
 G = create_graph(data)
 
-# Rest of your code remains the same
+def filter_data(data, title=None, country=None, finnish_org=None):
+    # Filter data based on criteria
+    # ...
+
+# Streamlit app
+st.title('Horizon Europe yhteistyöverkostokaavio')
+st.text('Hankekonsortiot joissa mukana vähintään yksi suomalainen yritys.') 
+
+title = st.selectbox('Suodata aiheen mukaan', ['None'] + list(data['euroSciVocTitle'].unique()))
+filtered_data = filter_data(data, title=title)
+
+finnish_org = st.selectbox('Suodata organisaation mukaan', ['None'] + list(filtered_data['FinnishOrgName'].unique()))
+filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org)
+
+country = st.selectbox('Suodata maan mukaan', ['None'] + list(filtered_data['CollaboratorCountry'].unique()))
+filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org, country=country)
 
 def visualize_graph(graph):
     if graph.number_of_edges() > 0:
-        nt = Network(notebook=False, height="500px", width="100%")
-        
-        # Add nodes with color
-        for node, attr in graph.nodes(data=True):
-            nt.add_node(node, color=attr.get('color', 'blue'), title=attr.get('title', ''))  # Add title attribute
-        
-        # Add edges
-        for u, v, attr in graph.edges(data=True):
-            nt.add_edge(u, v)
-        
-        # Set options to include a callback for node click
         network_options = {
             "interaction": {"hover": True},
             "nodes": {
@@ -48,9 +52,13 @@ def visualize_graph(graph):
                 "color": "lightgray"
             }
         }
-        nt.set_options(network_options)
+        nt = Network(notebook=False, height="500px", width="100%", options=network_options)
         
-        # Save and display the graph
+        for node, attr in graph.nodes(data=True):
+            nt.add_node(node, color=attr.get('color', 'blue'), title=attr.get('title', ''))
+        for u, v, attr in graph.edges(data=True):
+            nt.add_edge(u, v)
+        
         nt.save_graph("network.html")
         with open("network.html", "r", encoding="utf-8") as f:
             html = f.read()
@@ -58,22 +66,10 @@ def visualize_graph(graph):
     else:
         st.warning("No edges to display. Please select different filters.")
 
-# Rest of your Streamlit app remains the same
-st.title('Horizon Europe yhteistyöverkostokaavio')
-st.text('Hankekonsortiot joissa mukana vähintään yksi suomalainen yritys.') 
-
-title = st.selectbox('Suodata aiheen mukaan', ['None'] + list(data['euroSciVocTitle'].unique()))
-filtered_data = filter_data(data, title=title)
-
-finnish_org = st.selectbox('Suodata organisaation mukaan', ['None'] + list(filtered_data['FinnishOrgName'].unique()))
-filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org)
-
-country = st.selectbox('Suodata maan mukaan', ['None'] + list(filtered_data['CollaboratorCountry'].unique()))
-filtered_data = filter_data(filtered_data, title=title, finnish_org=finnish_org, country=country)
-
 if title != 'None' or country != 'None' or finnish_org != 'None':
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph)
 else:
     st.warning('Valitse vähintään yksi suodatin luodaksesi verkostokaavion.')
+
 
