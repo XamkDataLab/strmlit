@@ -8,7 +8,7 @@ from queries import fetch_collaboration_data
 
 data = fetch_collaboration_data()
 
-@st.cache_data
+
 def create_graph(data):
     G = nx.Graph()
     for idx, row in data.iterrows():
@@ -30,7 +30,7 @@ def create_graph(data):
 
 G = create_graph(data)
 
-@st.cache_data
+
 def filter_data(data, title=None, country=None, finnish_org=None):
     filtered_data = data.copy()
     if title and title != 'None':
@@ -41,7 +41,7 @@ def filter_data(data, title=None, country=None, finnish_org=None):
         filtered_data = filtered_data[filtered_data['FinnishOrgName'] == finnish_org]
     return filtered_data
     
-@st.cache_data
+
 def visualize_graph(graph):
     if graph.number_of_edges() > 0:
         nt = Network(notebook=False, height="500px", width="100%")
