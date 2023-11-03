@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import networkx as nx
 import textwrap
+import json  
 from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import fetch_collaboration_data
@@ -35,8 +36,6 @@ def filter_data(data, title=None, country=None, finnish_org=None):
     if finnish_org and finnish_org != 'None':
         filtered_data = filtered_data[filtered_data['FinnishOrgName'] == finnish_org]
     return filtered_data
-
-import json  # Add this import at the beginning of your script
 
 def visualize_graph(graph, gravitational_constant, central_gravity):
     if graph.number_of_edges() > 0:
@@ -84,9 +83,6 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
 # Streamlit app
 st.title('Horizon Europe Finnish Collaboration Network')
 st.text('Projects where at least one participant is from Finland') 
-
-#gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
-#central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
 
 title = st.selectbox('Filter by Field', ['None'] + list(data['euroSciVocTitle'].unique()))
 filtered_data = filter_data(data, title=title)
