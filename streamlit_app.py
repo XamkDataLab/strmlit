@@ -46,6 +46,13 @@ st.title("Innovaatioiden ja hankerahoituksen Suomi")
 st.subheader("Mistä on kysymys")
 st.write(
     """
-    Tämä sovellus kerää yhteen tiedot suomalaisten yritysten IPR-omaisuudesta ja rahoituksesta.  
+    Tämä sovellus kerää yhteen tiedot suomalaisten yritysten IPR-omaisuudesta ja rahoituksesta. Sisältää
+    seuraavat työkalut:
     """
 )
+st.markdown("""
+- Maakuntasivut: tarkastele maakunnan IPR-aktiivisuutta ja vahvuusaloja
+- Yrityshaku: hae yrityksen rahoitustiedot.
+- Verkosto
+- erääntyvät patentit
+""")
