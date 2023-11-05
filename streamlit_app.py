@@ -1,100 +1,38 @@
 import streamlit as st
-from queries import *
 
-small_font_style = """
-<style>
-    .small-font {
-        font-size: 16px;
-    }
-</style>
-"""
-medium_font_style = """
-<style>
-    .medium-font {
-        font-size: 24px;
-        font-weight: bold;
-    }
-</style>
-"""
+# Function to get the URL of an emblem from GitHub
+def get_emblem_url_from_github(maakunta_name):
+    base_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/vaakunat"
+    return f"{base_url}/{maakunta_name}.svg"
 
-large_font_style = """
-<style>
-    .large-font {
-        font-size: 38px;
-    }
-</style>
-"""
+# Function to create a ribbon of emblems
+def create_emblem_ribbon(maakunta_names):
+    # Displaying emblems in a horizontal layout using columns
+    cols = st.columns(len(maakunta_names))
+    for col, maakunta_name in zip(cols, maakunta_names):
+        with col:
+            emblem_url = get_emblem_url_from_github(maakunta_name)
+            st.image(emblem_url, use_column_width='auto', caption=maakunta_name)
 
-large_number_style = """
-<style>
-    .large-number {
-        font-size: 32px;   
-    }
-</style>
-"""
+# List of maakunta names (example names provided, replace with actual names)
+maakunta_names = ["uusimaa", "pirkanmaa", "varsinais-suomi"]
 
+# Title and introduction
+st.title("Welcome to the Regional Emblem App")
+st.write("This application showcases the emblems of various Finnish regions, "
+         "providing a glimpse into the local heritage and symbols.")
 
-st.markdown(small_font_style, unsafe_allow_html=True)
-st.markdown(medium_font_style, unsafe_allow_html=True)
-st.markdown(large_font_style, unsafe_allow_html=True)
-st.markdown(large_number_style, unsafe_allow_html=True)
+# Emblem ribbon
+st.header("Regional Emblems")
+create_emblem_ribbon(maakunta_names)
 
-st.title('Hae yrityksen tiedot')
+# About the App
+st.subheader("About the App")
+st.write(
+    """
+    Explore the rich cultural tapestry of Finland through our collection of regional emblems. 
+    Each emblem has its own story and significance, reflecting the identity and history of its region. 
+    Navigate through the app to learn more about these fascinating symbols.
+    """
+)
 
-# Input for Y_tunnus
-y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
-st.session_state['y_tunnus'] = y_tunnus
-
-# Function to format currency with space as thousands separator and add € symbol
-def format_currency(number):
-    return f"{number:,.0f} €".replace(",", " ")
-
-# If a Y_tunnus is given, fetch and display the data
-if y_tunnus:
-    data = fetch_data2(y_tunnus)
-    
-    if not data.empty:
-        st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
-        
-        yritys_basename = data['yritys_basename2'].iloc[0]
-        st.session_state['yritys_basename2'] = yritys_basename
-        #st.write(st.session_state)
-
-        col1, col2 = st.columns(2)  # Create two columns
-    
-        # Content for the first column
-        card_content1 = f"""
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
-        <div class="large-number">{format_currency(int(data['Total_EU_Horizon_Funding'].iloc[0]))}</div>
-        <hr>
-        <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
-        <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
-        <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
-        <hr>
-        <div class="medium-font">Business Finland avustukset</div>
-        <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
-        </div>
-        """
-        col1.markdown(card_content1, unsafe_allow_html=True)
-
-        # Content for the second column
-        card_content2 = f"""
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">Patenttien määrä</div>
-        <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0]):,}</div>
-        <hr>
-        <div class="medium-font">Tavaramerkkien määrä</div>
-        <div class="large-number">{int(data['Trademarks_Count'].iloc[0]):,}</div>
-        <hr>
-        <div class="medium-font">Mallioikeuksien määrä</div>
-        <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
-        <hr>
-        <div class="medium-font">Business Finland tutkimusrahoitus</div>
-        <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
-        </div>
-        """
-        col2.markdown(card_content2, unsafe_allow_html=True)
-
-    else:
-        st.write("Dataa ei löytynyt :(")
