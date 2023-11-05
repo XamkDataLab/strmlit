@@ -38,7 +38,7 @@ for idx, maakunta_name in enumerate(maakunta_names):
     with cols[idx]:
         emblem_url = get_emblem_url_from_github(maakunta_name)
         # Set a fixed width for the images to make them smaller
-        st.image(emblem_url, width=50, caption=maakunta_name)  # Adjust the width as needed
+        st.image(emblem_url, width=50)  # Adjust the width as needed
 
 # Main title and introduction
 st.title("Welcome to the Regional Emblem App")
