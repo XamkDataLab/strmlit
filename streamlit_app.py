@@ -41,13 +41,11 @@ for idx, maakunta_name in enumerate(maakunta_names):
         st.image(emblem_url, width=50)  # Adjust the width as needed
 
 # Main title and introduction
-st.title("Welcome to the Regional Emblem App")
+st.title("Innovaatioiden ja hankerahoituksen Suomi")
 
-st.subheader("About the App")
+st.subheader("Mistä on kysymys")
 st.write(
     """
-    Explore the rich cultural tapestry of Finland through our collection of regional emblems. 
-    Each emblem has its own story and significance, reflecting the identity and history of its region. 
-    Navigate through the app to learn more about these fascinating symbols.
+    Tämä sovellus kerää yhteen tiedot suomalaisten yritysten IPR-omaisuudesta ja rahoituksesta.  
     """
 )
