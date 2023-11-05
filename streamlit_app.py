@@ -1,32 +1,45 @@
 import streamlit as st
+import urllib.parse
 
-# Function to get the URL of an emblem from GitHub
+# Function to get the URL of an emblem from GitHub, encoding the filename to handle special characters
 def get_emblem_url_from_github(maakunta_name):
     base_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/vaakunat"
-    return f"{base_url}/{maakunta_name}.svg"
+    # Ensure the filename is properly encoded to handle special characters like ä or ö
+    encoded_maakunta_name = urllib.parse.quote(maakunta_name)
+    return f"{base_url}/{encoded_maakunta_name}.svg"
 
-# Function to create a ribbon of emblems
-def create_emblem_ribbon(maakunta_names):
-    # Displaying emblems in a horizontal layout using columns
-    cols = st.columns(len(maakunta_names))
-    for col, maakunta_name in zip(cols, maakunta_names):
-        with col:
-            emblem_url = get_emblem_url_from_github(maakunta_name)
-            st.image(emblem_url, use_column_width='auto', caption=maakunta_name)
+# List of actual maakunta names
+maakunta_names = [
+    "Ahvenanmaa",
+    "Etelä-Karjala",
+    "Etelä-Pohjanmaa",
+    "Etelä-Savo",
+    "Kainuu",
+    "Kanta-Häme",
+    "Keski-Pohjanmaa",
+    "Keski-Suomi",
+    "Kymenlaakso",
+    "Lappi",
+    "Pirkanmaa",
+    "Pohjanmaa",
+    "Pohjois-Karjala",
+    "Pohjois-Pohjanmaa",
+    "Pohjois-Savo",
+    "Päijät-Häme",
+    "Satakunta",
+    "Uusimaa",
+    "Varsinais-Suomi"
+]
 
-# List of maakunta names (example names provided, replace with actual names)
-maakunta_names = ["uusimaa", "pirkanmaa", "varsinais-suomi"]
-
-# Title and introduction
+# Display the emblem ribbon
 st.title("Welcome to the Regional Emblem App")
-st.write("This application showcases the emblems of various Finnish regions, "
-         "providing a glimpse into the local heritage and symbols.")
-
-# Emblem ribbon
 st.header("Regional Emblems")
-create_emblem_ribbon(maakunta_names)
+cols = st.columns(3)  # Adjust the number of columns as needed for layout
+for idx, maakunta_name in enumerate(maakunta_names):
+    with cols[idx % 3]:  # This will cycle through the columns
+        emblem_url = get_emblem_url_from_github(maakunta_name)
+        st.image(emblem_url, use_column_width=True, caption=maakunta_name)
 
-# About the App
 st.subheader("About the App")
 st.write(
     """
@@ -35,4 +48,3 @@ st.write(
     Navigate through the app to learn more about these fascinating symbols.
     """
 )
-
