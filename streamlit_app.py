@@ -35,7 +35,7 @@ for idx, maakunta_name in enumerate(maakunta_names):
         st.image(emblem_url, width=50) 
 
 
-st.title("Ipr-Suomi")
+st.title("IPR-Suomi")
 
 st.subheader("Maakuntien innovaatiotilastot")
 st.write(
@@ -45,7 +45,7 @@ st.write(
     """
 )
 st.markdown("""
-- Maakuntasivut: tarkastele maakunnan vahvuusaloja ja yrityksiä 
+- Maakuntasivut: tarkastele maakunnan vahvuusaloja ja yritysten innovaatioita 
 - Yrityshaku: hae yrityskohtaiset tiedot ja organisaatioiden hankesalkut
 - Verkosto: tarkastele yhteishankkeita maakuntien välillä
 - Erääntyvät patentit :)
