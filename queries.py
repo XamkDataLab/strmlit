@@ -9,7 +9,6 @@ username = st.secrets["username"]
 password = st.secrets["password"]
 
 def fetch_data(y_tunnus):
-    # Define the SQL query
     query = """
     WITH Funding AS (
         SELECT 
@@ -117,7 +116,6 @@ def fetch_data(y_tunnus):
     y.y_tunnus = ?;
     """
     
-    # Connect to the database and fetch the data into a Pandas DataFrame
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
         
@@ -428,7 +426,6 @@ def fetch_data2(y_tunnus):
         y.y_tunnus = ?;
     """
     
-    # Connect to the database and fetch the data into a Pandas DataFrame
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
            df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
         
