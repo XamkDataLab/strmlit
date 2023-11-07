@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 from queries import * 
 
-y_tunnus = st.session_state['y_tunnus]
+y_tunnus = st.session_state['y_tunnus']
 st.title(f"Otsikko yritykselle {y_tunnus}")
 
 if y_tunnus:
