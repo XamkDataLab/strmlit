@@ -9,6 +9,6 @@ selected_company = st.selectbox('Valitse yritys', company_names)
 
 # When a company is selected, fetch and display the data
 if selected_company:
-    data = fetch_data_by_company_name(selected_company)
+    data = fetch_data3(selected_company)
     st.write(data)
 
