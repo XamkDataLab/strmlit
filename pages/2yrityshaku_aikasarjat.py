@@ -7,7 +7,7 @@ from queries import *
 y_tunnus = st.session_state.get('y_tunnus')
 st.title(f"Otsikko yritykselle {y_tunnus}")
 
-if ytunnus:
+if y_tunnus:
     data = fetch_individual_data(y_tunnus)
 else:
     st.write("Invalid or missing parameters.")
