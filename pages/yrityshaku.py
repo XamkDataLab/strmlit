@@ -52,7 +52,7 @@ def format_currency(number):
 # If a Y_tunnus is given, fetch and display the data
 if y_tunnus:
     data = fetch_data2(y_tunnus)
-    data2 = fetch_individual_data(y_tunnus)
+    #data2 = fetch_individual_data(y_tunnus)
     
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
@@ -100,9 +100,9 @@ if y_tunnus:
     else:
         st.write("Dataa ei löytynyt :(")
 
-    if not data2.empty:
-        st.write("Individual Data")
-        st.dataframe(individual_data)  # Display the individual data as a table
+    #if not data2.empty:
+     #   st.write("Individual Data")
+      #  st.dataframe(individual_data)  # Display the individual data as a table
 
-    else:
-        st.write("Individual data not found :(")
+    #else:
+     #   st.write("Individual data not found :(")
