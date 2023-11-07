@@ -88,9 +88,6 @@ if y_tunnus:
         <div class="medium-font">Tavaramerkkien määrä</div>
         <div class="large-number">{int(data['Trademarks_Count'].iloc[0]):,}</div>
         <hr>
-        <div class="medium-font">Mallioikeuksien määrä</div>
-        <div class="large-number">{int(data['Design_Rights_Count'].iloc[0]):,}</div>
-        <hr>
         <div class="medium-font">Business Finland tutkimusrahoitus</div>
         <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
         </div>
