@@ -463,7 +463,8 @@ def fetch_individual_data(y_tunnus):
         df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
         
     return df
-
+    
+@st.cache_data
 def get_company_names():
     query = "SELECT DISTINCT yritys FROM yritykset ORDER BY yritys;"
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
