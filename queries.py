@@ -589,7 +589,12 @@ def fetch_data3(yritys_name):
 
 def fetch_company_data(y_tunnus):
     query = """
-    SELECT y.*, a.*, p.*, t.*
+    SELECT y.y_tunnus,
+    y.yritys,
+    p.date_published,
+    p.publication_type,
+    p.legal_status_patent_status,
+    t.applicationDate
     FROM yritykset y
     LEFT JOIN applicants a ON y.yritys_basename = a.applicant_basename
     LEFT JOIN patents p ON a.lens_id = p.lens_id
