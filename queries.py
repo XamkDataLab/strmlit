@@ -469,3 +469,120 @@ def get_company_names():
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn)
     return df['yritys'].tolist()
+
+def fetch_data3(yritys_name):
+    # Define the SQL query
+    query = """
+    WITH Funding AS (
+        SELECT 
+            y.yritys,
+            SUM(Toteutunut_EU_ja_valtion_rahoitus) as Total_Funding
+        FROM 
+            eura2020
+        JOIN 
+            yritykset y ON y.y_tunnus = eura2020.Y_tunnus
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    ),
+    DesignRights AS (
+        SELECT 
+            y.yritys,
+            COUNT(DISTINCT m.applicationNumber) as Design_Rights_Count
+        FROM 
+            mallioikeudet m
+        JOIN 
+            yritykset y ON y.yritys_basename = m.applicant_basename
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    ),
+    Trademarks AS (
+        SELECT 
+            y.yritys,
+            COUNT(DISTINCT t.applicationNumber) as Trademarks_Count
+        FROM 
+            tavaramerkit t
+        JOIN 
+            yritykset y ON y.yritys_basename = t.applicant_basename
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    ),
+    Patents AS (
+        SELECT 
+            y.yritys,
+            COUNT(DISTINCT p.lens_id) as Patent_Applications_Count
+        FROM 
+            applicants p
+        JOIN 
+            yritykset y ON y.yritys_basename2 = p.applicant_basename
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    ),
+    EUHorizon AS (
+        SELECT 
+            y.yritys,
+            SUM([Beneficiary’s contracted amount (EUR)]) as Total_EU_Horizon_Funding
+        FROM 
+            EU_Horizon
+        JOIN yritykset y on y.yritys_basename2 = EU_Horizon.beneficiary_basename
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    ),
+    BusinessFinland AS (
+        SELECT 
+            y.yritys,
+            SUM(CAST(Avustus as FLOAT)) as Total_Business_Finland_Funding,
+            SUM(CAST(Tutkimusrahoitus as FLOAT)) as Total_Tutkimusrahoitus
+        FROM 
+            Business_Finland
+        JOIN yritykset y on y.y_tunnus = Business_Finland.Y_tunnus
+        WHERE 
+            y.yritys = ?
+        GROUP BY 
+            y.yritys
+    )
+
+    SELECT 
+        y.y_tunnus,
+        y.yritys,
+        y.yritys_basename2,
+        COALESCE(f.Total_Funding, 0) as Total_Funding,
+        COALESCE(d.Design_Rights_Count, 0) as Design_Rights_Count,
+        COALESCE(t.Trademarks_Count, 0) as Trademarks_Count,
+        COALESCE(p.Patent_Applications_Count, 0) as Patent_Applications_Count,
+        COALESCE(eh.Total_EU_Horizon_Funding, 0) as Total_EU_Horizon_Funding,
+        COALESCE(bf.Total_Business_Finland_Funding, 0) as Total_Business_Finland_Funding,
+        COALESCE(bf.Total_Tutkimusrahoitus, 0) as Total_Tutkimusrahoitus
+    FROM 
+        yritykset y
+    LEFT JOIN 
+        Funding f ON y.yritys = f.yritys
+    LEFT JOIN 
+        DesignRights d ON y.yritys = d.yritys
+    LEFT JOIN 
+        Trademarks t ON y.yritys = t.yritys
+    LEFT JOIN 
+        Patents p ON y.yritys = p.yritys
+    LEFT JOIN 
+        EUHorizon eh ON y.yritys = eh.yritys
+    LEFT JOIN 
+        BusinessFinland bf ON y.yritys = bf.yritys
+    WHERE 
+        y.yritys = ?;
+    """
+    
+    # Assuming pyodbc and pandas have been imported and database connection details are defined
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn, params=(yritys_name,)*7)  # Adjust the number of parameters as needed
+        
+    return df
+
