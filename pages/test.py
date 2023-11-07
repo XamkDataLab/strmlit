@@ -1,19 +1,27 @@
 import streamlit as st
-from queries import *
+from queries import get_company_names, fetch_data3
 
 st.title('Hae yrityksen tiedot')
 
-# Fetch the company names for the selectbox
-company_names = get_company_names()
+# Fetch all company names
+all_company_names = get_company_names()
 
-# Use a placeholder for the company data to display it later
-company_data_placeholder = st.empty()
+# Text input for search query
+search_query = st.text_input('Hae yritystä')
 
-# Create a selectbox for user to choose the company
-selected_company = st.selectbox('Valitse yritys', company_names)
+# Filter company names based on the search query
+filtered_company_names = [name for name in all_company_names if search_query.lower() in name.lower()]
+
+# If the search query is empty, don't display any options or display a limited number of companies
+if search_query:
+    selected_company = st.selectbox('Valitse yritys', filtered_company_names)
+else:
+    selected_company = st.selectbox('Valitse yritys', all_company_names[:50])  # Show only the first 50 names or some limited number
 
 # Button to trigger the data fetching
 if st.button('Hae tiedot'):
     # When the button is clicked, fetch and display the data for the selected company
-    data = fetch_data3(selected_company)
-    company_data_placeholder.write(data)
+    if selected_company:
+        data = fetch_data3(selected_company)
+        st.write(data)
+
