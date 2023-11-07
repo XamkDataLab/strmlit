@@ -1,5 +1,5 @@
 import streamlit as st
-from queries import get_company_names, fetch_data_by_company_name
+from queries import *
 
 st.title('Hae yrityksen tiedot')
 
