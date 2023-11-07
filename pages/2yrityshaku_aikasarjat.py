@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from queries import * 
 
-st.session_state['y_tunnus'] = y_tunnus
+y_tunnus = st.session_state.get('y_tunnus')
 
 st.title(f"Otsikko yritykselle {y_tunnus}")
 
