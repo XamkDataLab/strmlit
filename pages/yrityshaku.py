@@ -100,7 +100,7 @@ if y_tunnus:
     else:
         st.write("Dataa ei löytynyt :(")
 
-     if not data2.empty:
+    if not data2.empty:
         st.write("Individual Data")
         st.dataframe(individual_data)  # Display the individual data as a table
 
