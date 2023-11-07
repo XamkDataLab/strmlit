@@ -613,7 +613,7 @@ def fetch_time_series_data(y_tunnus):
            p.publication_type,
            p.legal_status_patent_status
     FROM yritykset y
-    LEFT JOIN applicants a ON y.yritys_basename = a.applicant_basename
+    LEFT JOIN applicants a ON y.yritys_basename2 = a.applicant_basename
     LEFT JOIN patents p ON a.lens_id = p.lens_id
     WHERE y.y_tunnus = ? AND p.date_published IS NOT NULL
     """
