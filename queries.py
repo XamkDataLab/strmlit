@@ -430,3 +430,38 @@ def fetch_data2(y_tunnus):
            df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
         
     return df
+    
+def fetch_individual_data(y_tunnus):
+    query = """
+    SELECT 
+        y.y_tunnus,
+        y.yritys,
+        y.yritys_basename2,
+        e.Toteutunut_EU_ja_valtion_rahoitus,
+        m.applicationNumber AS DesignRights_ApplicationNumber,
+        t.applicationNumber AS Trademarks_ApplicationNumber,
+        p.lens_id AS Patent_Applications_Lens_Id,
+        EU_Horizon.[Beneficiary’s contracted amount (EUR)],
+        CAST(Business_Finland.Avustus as FLOAT) as Business_Finland_Funding
+    FROM 
+        yritykset y
+    LEFT JOIN 
+        eura2020 e ON y.y_tunnus = e.Y_tunnus AND y.y_tunnus = ?
+    LEFT JOIN 
+        mallioikeudet m ON y.yritys_basename = m.applicant_basename AND y.y_tunnus = ?
+    LEFT JOIN 
+        tavaramerkit t ON y.yritys_basename = t.applicant_basename AND y.y_tunnus = ?
+    LEFT JOIN 
+        applicants p ON y.yritys_basename2 = p.applicant_basename AND y.y_tunnus = ?
+    LEFT JOIN 
+        EU_Horizon ON y.yritys_basename2 = EU_Horizon.beneficiary_basename AND y.y_tunnus = ?
+    LEFT JOIN 
+        Business_Finland ON y.y_tunnus = Business_Finland.Y_tunnus AND y.y_tunnus = ?
+    """
+    
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn, params=(y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus, y_tunnus))
+        
+    return df
+
+
