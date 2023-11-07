@@ -63,7 +63,7 @@ if y_tunnus:
         st.session_state['yritys_basename2'] = yritys_basename
         #st.write(st.session_state)
 
-        col1, col2 = st.columns(2)  # Create two columns
+        col1, col2, col3 = st.columns(3)  # Create two columns
     
         # Content for the first column
         card_content1 = f"""
@@ -95,7 +95,19 @@ if y_tunnus:
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
+        
 
+    card_content3 = f"""
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+        <div class="medium-font">Business Finland avustukset</div>
+        <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
+        <hr>
+        <div class="medium-font">Business Finland tutkimusrahoitus</div>
+        <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
+        </div>
+        """
+        col3.markdown(card_content3, unsafe_allow_html=True)
+    
     else:
         st.write("Dataa ei löytynyt :(")
 
