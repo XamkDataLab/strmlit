@@ -12,5 +12,5 @@ if y_tunnus:
 else:
     st.write("Invalid or missing parameters.")
     
-st.DataFrame(data)
+st.dataframe(data)
 
