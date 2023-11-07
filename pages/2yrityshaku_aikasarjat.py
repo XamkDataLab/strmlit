@@ -4,8 +4,7 @@ import plotly.express as px
 import datetime
 from queries import *
 
-
-ytunnus = st.session_state.get('y_tunnus')
+y_tunnus = st.session_state.get('y_tunnus')
 st.title(f"Otsikko yritykselle {y_tunnus}")
 
 if ytunnus:
