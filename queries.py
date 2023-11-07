@@ -587,3 +587,16 @@ def fetch_data3(yritys_name):
         
     return df
 
+def fetch_company_data(y_tunnus):
+    query = """
+    SELECT y.*, a.*, p.*, t.*
+    FROM yritykset y
+    LEFT JOIN applicants a ON y.yritys_basename = a.applicant_basename
+    LEFT JOIN patents p ON a.lens_id = p.lens_id
+    LEFT JOIN tavaramerkit t ON y.yritys_basename = t.applicant_basename
+    WHERE y.y_tunnus = ?
+    """
+     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn, params=(y_tunnus,))
+    return df
+  
