@@ -1,12 +1,14 @@
 import streamlit as st
-from queries import *
+from queries import get_company_names, fetch_data_by_company_name
 
 st.title('Hae yrityksen tiedot')
 
+# Fetch and display the selectbox with company names
 company_names = get_company_names()
-selected_company = st.selectbox('Select a company', company_names)
+selected_company = st.selectbox('Valitse yritys', company_names)
 
+# When a company is selected, fetch and display the data
 if selected_company:
-        data = fetch_data_by_company_name(selected_company)
-        st.write(data)
+    data = fetch_data_by_company_name(selected_company)
+    st.write(data)
 
