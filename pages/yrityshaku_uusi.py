@@ -107,27 +107,20 @@ if y_tunnus:
 
     if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
+        
+        # Create a 'year' column for both patents and trademarks even if they might be empty
+        patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
+        trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
     
-    # Initialize empty DataFrames for patents and trademarks yearly data
-        patents_by_year = pd.DataFrame()
-        trademarks_by_year = pd.DataFrame()
-
-    # Process patents data if not empty
-        if not patents_df.empty:
-            patents_df['year'] = patents_df['date_published'].dt.year
-            patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents')
-
-    # Process trademarks data if not empty
-        if not trademarks_df.empty:
-            trademarks_df['year'] = trademarks_df['applicationDate'].dt.year
-            trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks')
-
-    # Check if any of the DataFrames has data and proceed with plotting
-        if not patents_by_year.empty or not trademarks_by_year.empty:
-        # Merge the yearly data using an outer join to include all years from both DataFrames
-            combined_df = pd.merge(patents_by_year, trademarks_by_year, on='year', how='outer').fillna(0)
-
-        # Plot the combined data
+        # Group by year and count if not empty
+        patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents') if not patents_df.empty else pd.DataFrame({'year':[], 'Patents':[]})
+        trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks') if not trademarks_df.empty else pd.DataFrame({'year':[], 'Trademarks':[]})
+    
+        # Proceed with merging. The 'year' column will exist even if there are no records.
+        combined_df = pd.merge(patents_by_year, trademarks_by_year, on='year', how='outer').fillna(0)
+    
+        # If the combined_df is not empty after the merge (i.e., at least one DataFrame had data)
+        if not combined_df.empty:
             fig = px.bar(
                 combined_df,
                 x='year',
@@ -135,7 +128,7 @@ if y_tunnus:
                 barmode='group',
                 title='Number of Patents and Trademarks by Year'
             )
-
+    
             st.plotly_chart(fig)
         else:
             st.write("No data available for the provided Y-Tunnus.")
