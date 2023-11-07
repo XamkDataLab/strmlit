@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import datetime
 from queries import *
 
@@ -18,27 +19,45 @@ if y_tunnus:
     st.subheader("Trademark Data")
     st.dataframe(trademarks_data)
 
-    # You can also plot the data if they have a time component
-    # Assuming the dates are in 'event_date' column for both patents and trademarks
-    # and you want to plot the counts of patents and trademarks over time
+    patents_df['date_published'] = pd.to_datetime(patents_df['date_published'])
+    trademarks_df['applicationDate'] = pd.to_datetime(trademarks_df['applicationDate'])
 
-    # Combine the dataframes for plotting
-    combined_data = pd.concat([
-        patents_data.assign(type='Patent'),
-        trademarks_data.assign(type='Trademark')
-    ])
+    patents_df = patents_df.sort_values(by='date_published')
+    trademarks_df = trademarks_df.sort_values(by='applicationDate')
 
-    # Plotting
-    if not combined_data.empty:
-        # Convert event_date to datetime if not already
-        combined_data['event_date'] = pd.to_datetime(combined_data['event_date'])
-        combined_data = combined_data.sort_values('event_date')
+    patents_dtypes = patents_df.dtypes
+    trademarks_dtypes = trademarks_df.dtypes
 
-        # Create a plot with Plotly Express
-        fig = px.line(combined_data, x='event_date', color='type', markers=True,
-                      title='Patents and Trademarks Over Time')
+    patents_count = patents_df['date_published'].dt.date.value_counts().sort_index()
+    trademarks_count = trademarks_df['applicationDate'].dt.date.value_counts().sort_index()
 
-        # Display the plot
-        st.plotly_chart(fig)
-else:
-    st.write("Invalid or missing parameters.")
+# Create traces for the plot
+    trace_patents = go.Scatter(
+        x=patents_count.index,
+        y=patents_count.values,
+        mode='lines+markers',
+        name='Patents'
+    )
+
+    trace_trademarks = go.Scatter(
+        x=trademarks_count.index,
+        y=trademarks_count.values,
+        mode='lines+markers',
+        name='Trademarks'
+    )
+
+    # Layout for the plot
+    layout = go.Layout(
+        title='Patents and Trademarks Over Time',
+        xaxis=dict(title='Date'),
+        yaxis=dict(title='Count'),
+        hovermode='closest'
+    )
+
+    # Create the figure
+    fig = go.Figure(data=[trace_patents, trace_trademarks], layout=layout)
+
+    # Show the figure
+    fig.show()
+    
+
