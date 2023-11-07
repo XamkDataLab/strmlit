@@ -1,39 +1,41 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from queries import *  
+from queries import * 
 
-y_tunnus = st.session_state.get('y_tunnus', '')
+st.session_state['y_tunnus'] = y_tunnus
+
 st.title(f"Otsikko yritykselle {y_tunnus}")
 
 if y_tunnus:
     patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
 
-    # Display the patents data
-    st.subheader("Patent Data")
-    st.dataframe(patents_df)
+    if not patents_df.empty:
+        # Display the patents data
+        st.subheader("Patent Data")
+        st.dataframe(patents_df)
 
-    # Display the trademarks data
-    st.subheader("Trademark Data")
-    st.dataframe(trademarks_df)
-
-    if not patents_df.empty and not trademarks_df.empty:
+        # Process patents data
         patents_df['date_published'] = pd.to_datetime(patents_df['date_published'])
-        trademarks_df['applicationDate'] = pd.to_datetime(trademarks_df['applicationDate'])
-
         patents_df = patents_df.sort_values(by='date_published')
-        trademarks_df = trademarks_df.sort_values(by='applicationDate')
-
         patents_count = patents_df['date_published'].dt.date.value_counts().sort_index()
-        trademarks_count = trademarks_df['applicationDate'].dt.date.value_counts().sort_index()
 
-        
+        # Plot patents data
         trace_patents = go.Scatter(
             x=patents_count.index,
             y=patents_count.values,
             mode='lines+markers',
             name='Patents'
         )
+
+    if not trademarks_df.empty:
+        # Display the trademarks data
+        st.subheader("Trademark Data")
+        st.dataframe(trademarks_df)
+
+        trademarks_df['applicationDate'] = pd.to_datetime(trademarks_df['applicationDate'])
+        trademarks_df = trademarks_df.sort_values(by='applicationDate')
+        trademarks_count = trademarks_df['applicationDate'].dt.date.value_counts().sort_index()
 
         trace_trademarks = go.Scatter(
             x=trademarks_count.index,
@@ -42,18 +44,26 @@ if y_tunnus:
             name='Trademarks'
         )
 
-        # Layout for the plot
+    if not patents_df.empty and not trademarks_df.empty:
         layout = go.Layout(
             title='Patents and Trademarks Over Time',
-            xaxis=dict(title='Date'),
-            yaxis=dict(title='Count'),
+            xaxis=dict(
+                title='Date',
+                dtick="M2",  # Ticks every two months
+                tickformat="%b %Y"  # Formatting the tick labels to show abbreviated month and full year
+            ),
+            yaxis=dict(
+                title='Count',
+                range=[0, max(patents_count.max(), trademarks_count.max()) + 1]
+            ),
             hovermode='closest'
         )
 
-        # Create the figure
         fig = go.Figure(data=[trace_patents, trace_trademarks], layout=layout)
 
-        # Show the figure in Streamlit
         st.plotly_chart(fig)
+    elif patents_df.empty and trademarks_df.empty:
+        st.write("No data available for the provided Y-Tunnus.")
+
 
 
