@@ -108,25 +108,35 @@ if y_tunnus:
     if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
     
-    if not patents_df.empty:
-        patents_df['year'] = patents_df['date_published'].dt.year
-        patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents')
+    # Initialize empty DataFrames for patents and trademarks yearly data
+        patents_by_year = pd.DataFrame()
+        trademarks_by_year = pd.DataFrame()
 
-    if not trademarks_df.empty:
-        trademarks_df['year'] = trademarks_df['applicationDate'].dt.year
-        trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks')
+    # Process patents data if not empty
+        if not patents_df.empty:
+            patents_df['year'] = patents_df['date_published'].dt.year
+            patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents')
 
-    if not patents_df.empty and not trademarks_df.empty:
-        combined_df = pd.merge(patents_by_year, trademarks_by_year, on='year', how='outer').fillna(0)
+    # Process trademarks data if not empty
+        if not trademarks_df.empty:
+            trademarks_df['year'] = trademarks_df['applicationDate'].dt.year
+            trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks')
 
-        fig = px.bar(
-            combined_df,
-            x='year',
-            y=['Patents', 'Trademarks'],
-            barmode='group',
-            title='Number of Patents and Trademarks by Year'
-        )
+    # Check if any of the DataFrames has data and proceed with plotting
+        if not patents_by_year.empty or not trademarks_by_year.empty:
+        # Merge the yearly data using an outer join to include all years from both DataFrames
+            combined_df = pd.merge(patents_by_year, trademarks_by_year, on='year', how='outer').fillna(0)
 
-        st.plotly_chart(fig)
-    else:
-        st.write("No data available for the provided Y-Tunnus.")
+        # Plot the combined data
+            fig = px.bar(
+                combined_df,
+                x='year',
+                y=['Patents', 'Trademarks'],
+                barmode='group',
+                title='Number of Patents and Trademarks by Year'
+            )
+
+            st.plotly_chart(fig)
+        else:
+            st.write("No data available for the provided Y-Tunnus.")
+
