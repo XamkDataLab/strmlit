@@ -97,7 +97,7 @@ if y_tunnus:
         col2.markdown(card_content2, unsafe_allow_html=True)
         
 
-    card_content3 = f"""
+        card_content3 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
         <div class="medium-font">Business Finland avustukset</div>
         <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
