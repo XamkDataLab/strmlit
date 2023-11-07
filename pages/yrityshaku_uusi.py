@@ -74,9 +74,6 @@ if y_tunnus:
         <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
         <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
         <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
-        <hr>
-        <div class="medium-font">Business Finland avustukset</div>
-        <div class="large-number">{format_currency(int(data['Total_Business_Finland_Funding'].iloc[0]))}</div>
         </div>
         """
         col1.markdown(card_content1, unsafe_allow_html=True)
@@ -89,9 +86,6 @@ if y_tunnus:
         <hr>
         <div class="medium-font">Tavaramerkkien määrä</div>
         <div class="large-number">{int(data['Trademarks_Count'].iloc[0]):,}</div>
-        <hr>
-        <div class="medium-font">Business Finland tutkimusrahoitus</div>
-        <div class="large-number">{int(data['Total_Tutkimusrahoitus'].iloc[0]):,}</div>
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
