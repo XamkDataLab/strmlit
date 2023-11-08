@@ -146,7 +146,12 @@ if y_tunnus:
         st.dataframe(BF_df)
         st.dataframe(EURA2_df)
         st.dataframe(EUmuu_df)
-    
+         
+        BF_df['Myöntämisvuosi'] = pd.to_datetime(BF_df['Myöntämisvuosi'], format='%Y', errors='coerce')
+        EURA2_df['Start_date'] = pd.to_datetime(EURA2_df['Start_date'], errors='coerce')
+        EUmuu_df['Year'] = pd.to_datetime(EUmuu_df['Year'], format='%Y', errors='coerce')
+        EURA_df['Aloituspvm'] = pd.to_datetime(EURA_df['Aloituspvm'], errors='coerce')
+        
         dataframes = {
         'EURA_df': EURA_df,     # Assuming this has a single money column
         'BF_df': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
@@ -154,31 +159,31 @@ if y_tunnus:
         'EUmuu_df': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
         }
 
-    # Dropdown to select the dataframe
-    selected_df_name = st.sidebar.selectbox('Select the dataframe:', list(dataframes.keys()))
+        # Dropdown to select the dataframe
+        selected_df_name = st.sidebar.selectbox('Select the dataframe:', list(dataframes.keys()))
     
-    # Preprocessing the selected dataframe
-    df = dataframes[selected_df_name].copy()
+        # Preprocessing the selected dataframe
+        df = dataframes[selected_df_name].copy()
     
-    # Setting up the date columns and money columns based on the selected dataframe
-    if selected_df_name == 'BF_df':
-        df['Myöntämisvuosi'] = pd.to_datetime(df['Myöntämisvuosi'], format='%Y')
-        date_col = 'Myöntämisvuosi'
-        money_cols = ['Tutkimusrahoitus', 'Avustus']  # Both money columns will be plotted
-    elif selected_df_name == 'EURA2_df':
-        df['Start_date'] = pd.to_datetime(df['Start_date'])
-        date_col = 'Start_date'
-        money_cols = ['Planned_EU_and_state_funding']
-    elif selected_df_name == 'EUmuu_df':
-        df['Year'] = pd.to_datetime(df['Year'], format='%Y')
-        date_col = 'Year'
-        money_cols = ['Commitment contracted amount (EUR)']
-    elif selected_df_name == 'EURA_df':
-        # Assuming 'Aloituspvm' is the date column and 'Toteutunut_EU_ja_valtion_rahoitus' is the money column
-        df['Aloituspvm'] = pd.to_datetime(df['Aloituspvm'])
-        date_col = 'Aloituspvm'
-        money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
+        # Setting up the date columns and money columns based on the selected dataframe
+        date_col = None
+        money_cols = []
+        if selected_df_name == 'BF_df':
+            date_col = 'Myöntämisvuosi'
+            money_cols = ['Tutkimusrahoitus', 'Avustus']
+        elif selected_df_name == 'EURA2_df':
+            date_col = 'Start_date'
+            money_cols = ['Planned_EU_and_state_funding']
+        elif selected_df_name == 'EUmuu_df':
+            date_col = 'Year'
+            money_cols = ['Commitment contracted amount (EUR)']
+        elif selected_df_name == 'EURA_df':
+            date_col = 'Aloituspvm'
+            money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
     
-    # Plotting the time series data
-    fig = plot_time_series(df, f'Time-Series for {selected_df_name}', date_col, money_cols)
-    st.plotly_chart(fig)
+        # Plotting the time series data
+        if date_col and money_cols:
+            fig = plot_time_series(df, f'Time-Series for {selected_df_name}', date_col, money_cols)
+            st.plotly_chart(fig)
+        else:
+            st.error("Error: Date or money columns not set correctly.")
