@@ -6,7 +6,7 @@ import streamlit.components.v1 as components
 from queries import *
 
 data = fetch_collaboration_data()
-st.dataframe(data)
+#st.dataframe(data)
 # Create a NetworkX graph
 def create_graph(data):
     G = nx.Graph()
