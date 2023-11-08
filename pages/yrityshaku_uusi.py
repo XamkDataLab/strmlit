@@ -136,3 +136,5 @@ if y_tunnus:
         EURA_df, BF_df = fetch_time_series_data_funding(y_tunnus)
         st.dataframe(EURA_df)
         st.dataframe(BF_df)
+        st.dataframe(EURA2_df)
+        st.dataframe(EUmuu_df)
