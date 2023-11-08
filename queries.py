@@ -122,7 +122,7 @@ def fetch_data(y_tunnus):
     return df
 
 
-def fetch_horizon_data(yritys_basename):
+def fetch_horizon_data(y_tunnus):
     query = """SELECT * FROM EU_Horizon2 WHERE y_tunnus = ?;"""
     
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
