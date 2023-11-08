@@ -373,15 +373,14 @@ def fetch_data2(y_tunnus):
     ),
     EUHorizon AS (
         SELECT 
-            beneficiary_basename,
+            y_tunnus,
             SUM([Beneficiary’s contracted amount (EUR)]) as Total_EU_Horizon_Funding
         FROM 
-            EU_Horizon
-        JOIN yritykset y on y.yritys_basename2 = EU_Horizon.beneficiary_basename
+            EU_Horizon2
         WHERE 
-            y.y_tunnus = ?
+            y_tunnus = ?
         GROUP BY 
-            EU_Horizon.beneficiary_basename
+            y_tunnus
     ),
     BusinessFinland AS (
         SELECT 
@@ -419,7 +418,7 @@ def fetch_data2(y_tunnus):
     LEFT JOIN 
         Patents p ON y.yritys_basename2 = p.applicant_basename
     LEFT JOIN 
-        EUHorizon eh ON y.yritys_basename2 = eh.beneficiary_basename
+        EUHorizon eh ON y.y_tunnus = eh.y_tunnus
     LEFT JOIN 
         BusinessFinland bf ON y.y_tunnus = bf.Y_tunnus
     WHERE 
