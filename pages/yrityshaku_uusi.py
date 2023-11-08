@@ -107,7 +107,6 @@ if y_tunnus:
 
     if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
-        st.dataframe(patents_df)
         # Create a 'year' column for both patents and trademarks even if they might be empty
         patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
         trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
