@@ -185,7 +185,7 @@ if y_tunnus:
             money_cols = ['Planned_EU_and_state_funding']
         elif selected_df_name == 'EUmuu_df':
             date_col = 'Year'
-            money_cols = ['Beneficiary's contracted amount (EUR)']
+            money_cols = ["Beneficiary's contracted amount (EUR)"]
         elif selected_df_name == 'EURA_df':
             date_col = 'Aloituspvm'
             money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
