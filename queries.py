@@ -527,12 +527,9 @@ def fetch_time_series_data_funding(y_tunnus):
     SELECT y.y_tunnus,
            y.yritys,
            e1.Aloituspvm,
-           e1.Toteutunut_EU_ja_valtion_rahoitus,
-           e2.Start_date,
-           e2.Planned_EU_and_state_funding
+           e1.Toteutunut_EU_ja_valtion_rahoitus
     FROM yritykset y
     LEFT JOIN EURA2020 e1 ON y.y_tunnus = e1.Y_tunnus
-    LEFT JOIN EURA2027 e2 ON y.y_tunnus = e2.Business_ID_of_the_implementing_organisation
     WHERE y.y_tunnus = ?
     """
 
@@ -540,14 +537,36 @@ def fetch_time_series_data_funding(y_tunnus):
     SELECT y.y_tunnus,
            y.yritys,
            bf.Myöntämisvuosi,
-           bf.Avustus
+           bf.Avustus,
+           bf.Tutkimusrahoitus
     FROM yritykset y
-    LEFT JOIN business_finland bf ON y.yritys_basename = bf.Y_tunnus
+    LEFT JOIN business_finland bf ON y.y_tunnus = bf.Y_tunnus
+    WHERE y.y_tunnus = ?
+    
+    """
+    EURA2_query = """
+    SELECT y.y_tunnus,
+           y.yritys,
+           e2.Start_date,
+           e2.Planned_EU_and_state_funding
+    FROM yritykset y
+    LEFT JOIN EURA2027 e2 ON y.y_tunnus = e2.Business_ID_of_the_implementing_organisation
     WHERE y.y_tunnus = ?
     """
+
+    EUmuu_query = """
+    SELECT y.y_tunnus,
+           y.yritys,
+           e3.Year,
+           e3.[Commitment contracted amount (EUR)]
+    FROM yritykset y
+    LEFT JOIN EU_Horizon2 e3 ON y.y_tunnus = e3.y_tunnus
+    WHERE y.y_tunnus = ?
     
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         EURA_df = pd.read_sql_query(EURA_query, conn, params=(y_tunnus,))
         BF_df = pd.read_sql_query(BF_query, conn, params=(y_tunnus,))
+        EURA2_df = pd.read_sql_query(EURA2_query, conn, params=(y_tunnus,))
+        EUmuu_df = pd.read_sql_query(EUmuu_query,conn,params=(y_tunnus,))
 
-    return EURA_df, BF_df
+    return EURA_df, BF_df, EURA2_df,EUmuu_df
