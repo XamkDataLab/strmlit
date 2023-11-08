@@ -133,7 +133,7 @@ if y_tunnus:
             st.write("No data available for the provided Y-Tunnus.")
         
     if y_tunnus:
-        EURA_df, BF_df = fetch_time_series_data_funding(y_tunnus)
+        EURA_df, BF_df, EURA2_df,EUmuu_df = fetch_time_series_data_funding(y_tunnus)
         st.dataframe(EURA_df)
         st.dataframe(BF_df)
         st.dataframe(EURA2_df)
