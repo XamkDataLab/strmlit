@@ -132,3 +132,5 @@ if y_tunnus:
         else:
             st.write("No data available for the provided Y-Tunnus.")
 
+     if y_tunnus:
+        EURA_df, BF_df = fetch_time_series_data_funding(y_tunnus)
