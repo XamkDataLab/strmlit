@@ -558,7 +558,7 @@ def fetch_time_series_data_funding(y_tunnus):
     SELECT y.y_tunnus,
            y.yritys,
            e3.Year,
-           e3.[Beneficiary's contracted amount (EUR)]
+           e3.[Beneficiary’s contracted amount (EUR)]
     FROM yritykset y
     LEFT JOIN EU_Horizon2 e3 ON y.y_tunnus = e3.y_tunnus
     WHERE y.y_tunnus = ?
