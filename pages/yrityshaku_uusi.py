@@ -2,6 +2,7 @@ import streamlit as st
 from queries import *
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objs as go
 
 small_font_style = """
 <style>
