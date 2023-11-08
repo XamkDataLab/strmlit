@@ -123,7 +123,7 @@ def fetch_data(y_tunnus):
 
 
 def fetch_horizon_data(yritys_basename):
-    query = """SELECT * FROM EU_Horizon WHERE beneficiary_basename = ?;"""
+    query = """SELECT * FROM EU_Horizon2 WHERE y_tunnus = ?;"""
     
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(yritys_basename,))
@@ -581,7 +581,6 @@ def fetch_data3(yritys_name):
         y.yritys = ?;
     """
     
-    # Assuming pyodbc and pandas have been imported and database connection details are defined
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         df = pd.read_sql(query, conn, params=(yritys_name,)*7)  # Adjust the number of parameters as needed
         
