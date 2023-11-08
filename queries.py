@@ -562,7 +562,7 @@ def fetch_time_series_data_funding(y_tunnus):
     FROM yritykset y
     LEFT JOIN EU_Horizon2 e3 ON y.y_tunnus = e3.y_tunnus
     WHERE y.y_tunnus = ?
-    
+    """
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
         EURA_df = pd.read_sql_query(EURA_query, conn, params=(y_tunnus,))
         BF_df = pd.read_sql_query(BF_query, conn, params=(y_tunnus,))
