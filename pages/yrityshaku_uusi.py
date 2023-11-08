@@ -53,13 +53,21 @@ def format_currency(number):
     return f"{number:,.0f} €".replace(",", " ")
     
 def plot_time_series(df, title, date_col, money_cols):
+    # Convert date column to just the year part
+    df['year'] = df[date_col].dt.year
+
+    # Group by year and sum the money columns
+    df_grouped = df.groupby('year')[money_cols].sum().reset_index()
+
     fig = go.Figure()
 
     for money_col in money_cols:
-        fig.add_trace(go.Scatter(x=df[date_col], y=df[money_col], mode='lines', name=money_col))
+        fig.add_trace(go.Scatter(x=df_grouped['year'], y=df_grouped[money_col], mode='lines', name=money_col))
 
     fig.update_layout(title=title, xaxis_title='Year', yaxis_title='Money', hovermode='closest')
+
     return fig
+
 
 if y_tunnus:
     data = fetch_data2(y_tunnus)
