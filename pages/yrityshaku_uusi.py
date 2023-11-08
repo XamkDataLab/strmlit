@@ -50,8 +50,16 @@ st.session_state['y_tunnus'] = y_tunnus
 # Function to format currency with space as thousands separator and add € symbol
 def format_currency(number):
     return f"{number:,.0f} €".replace(",", " ")
+    
+def plot_time_series(df, title, date_col, money_cols):
+    fig = go.Figure()
 
-# If a Y_tunnus is given, fetch and display the data
+    for money_col in money_cols:
+        fig.add_trace(go.Scatter(x=df[date_col], y=df[money_col], mode='lines', name=money_col))
+
+    fig.update_layout(title=title, xaxis_title='Year', yaxis_title='Money', hovermode='closest')
+    return fig
+
 if y_tunnus:
     data = fetch_data2(y_tunnus)
     #data2 = fetch_individual_data(y_tunnus)
@@ -138,3 +146,39 @@ if y_tunnus:
         st.dataframe(BF_df)
         st.dataframe(EURA2_df)
         st.dataframe(EUmuu_df)
+    
+        dataframes = {
+        'EURA_df': EURA_df,     # Assuming this has a single money column
+        'BF_df': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
+        'EURA2_df': EURA2_df,   # This has 'Start_date' and 'Planned_EU_and_state_funding'
+        'EUmuu_df': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
+        }
+
+    # Dropdown to select the dataframe
+    selected_df_name = st.sidebar.selectbox('Select the dataframe:', list(dataframes.keys()))
+    
+    # Preprocessing the selected dataframe
+    df = dataframes[selected_df_name].copy()
+    
+    # Setting up the date columns and money columns based on the selected dataframe
+    if selected_df_name == 'BF_df':
+        df['Myöntämisvuosi'] = pd.to_datetime(df['Myöntämisvuosi'], format='%Y')
+        date_col = 'Myöntämisvuosi'
+        money_cols = ['Tutkimusrahoitus', 'Avustus']  # Both money columns will be plotted
+    elif selected_df_name == 'EURA2_df':
+        df['Start_date'] = pd.to_datetime(df['Start_date'])
+        date_col = 'Start_date'
+        money_cols = ['Planned_EU_and_state_funding']
+    elif selected_df_name == 'EUmuu_df':
+        df['Year'] = pd.to_datetime(df['Year'], format='%Y')
+        date_col = 'Year'
+        money_cols = ['Commitment contracted amount (EUR)']
+    elif selected_df_name == 'EURA_df':
+        # Assuming 'Aloituspvm' is the date column and 'Toteutunut_EU_ja_valtion_rahoitus' is the money column
+        df['Aloituspvm'] = pd.to_datetime(df['Aloituspvm'])
+        date_col = 'Aloituspvm'
+        money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
+    
+    # Plotting the time series data
+    fig = plot_time_series(df, f'Time-Series for {selected_df_name}', date_col, money_cols)
+    st.plotly_chart(fig)
