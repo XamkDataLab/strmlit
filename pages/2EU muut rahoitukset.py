@@ -46,11 +46,12 @@ def generate_project_viz(df, filter_ended=True):
 
 
 # Retrieve the yritys_basename from session state
+y_tunnus = st.session_state.get('y_tunnus')
 yritys_basename = st.session_state.get('yritys_basename2')
 st.title(f"EU muu rahoitus yritykselle {yritys_basename}")
 
 if yritys_basename:
-    data = fetch_horizon_data(yritys_basename)
+    data = fetch_horizon_data(y_tunnus)
 else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
