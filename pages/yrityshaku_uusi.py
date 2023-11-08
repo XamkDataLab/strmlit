@@ -169,7 +169,7 @@ if y_tunnus:
         }
 
         # Dropdown to select the dataframe
-        selected_df_name = st.sidebar.selectbox('Select the dataframe:', list(dataframes.keys()))
+        selected_df_name = st.selectbox('Select the dataframe:', list(dataframes.keys()))
     
         # Preprocessing the selected dataframe
         df = dataframes[selected_df_name].copy()
