@@ -283,7 +283,7 @@ def fetch_data2(y_tunnus):
         GROUP BY 
             Y_tunnus
     ),
-    EURA2027 AS (
+    EURAuusi AS (
         SELECT 
             Business_ID_of_the_implementing_organisation,
             SUM(Planned_public_funding) as EURA2027_planned_funding
@@ -322,7 +322,7 @@ def fetch_data2(y_tunnus):
     LEFT JOIN 
         BusinessFinland bf ON y.y_tunnus = bf.Y_tunnus
     LEFT JOIN
-        EURA2027 as eur ON y.y_tunnus = eur.Business_ID_of_the_implementing_organisation
+        EURAuusi as eur ON y.y_tunnus = eur.Business_ID_of_the_implementing_organisation
     WHERE 
         y.y_tunnus = ?;
     """
