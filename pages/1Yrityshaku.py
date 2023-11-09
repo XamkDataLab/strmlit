@@ -180,3 +180,4 @@ if y_tunnus:
             st.plotly_chart(fig)
         else:
             st.error("Error: Date or money columns not set correctly.")
+    st.dataframe(patents_df)
