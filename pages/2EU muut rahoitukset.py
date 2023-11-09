@@ -9,8 +9,8 @@ def truncate_text(text, max_length):
 
 def generate_project_viz(df, filter_ended=True):
     # Convert the start and end date columns to datetime format
-    df['Project start date'] = pd.to_datetime(df['Project start date'])
-    df['Project end date'] = pd.to_datetime(df['Project end date'])
+    df['Project start date'] = pd.to_datetime(df['Project start date'], errors='coerce')
+    df['Project end date'] = pd.to_datetime(df['Project end date'], errors='coerce')
 
     # Filter only ongoing projects if required
     if filter_ended:
