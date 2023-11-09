@@ -141,8 +141,8 @@ if y_tunnus:
         if not combined_df.empty:
             fig = px.bar(
                 combined_df,
-                x='year',
-                y=['Patenttidokumentit', 'Tavaramerkit'],
+                x='vuosi',
+                y=['Patents', 'Trademarks'],
                 barmode='group',
                 title='Patenttidokumenttien ja tavaramerkkien määrä'
             )
@@ -164,7 +164,7 @@ if y_tunnus:
         EURA_df['Aloituspvm'] = pd.to_datetime(EURA_df['Aloituspvm'], errors='coerce')
         
         dataframes = {
-        'EURA2020': EURA_df,     # Assuming this has a single money column
+        'EURA2027': EURA_df,     # Assuming this has a single money column
         'Business Finland': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
         'EURA2027': EURA2_df,   # This has 'Start_date' and 'Planned_EU_and_state_funding'
         'EU other': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
