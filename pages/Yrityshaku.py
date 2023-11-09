@@ -125,19 +125,19 @@ if y_tunnus:
         st.write("Dataa ei löytynyt :(")
 
    if y_tunnus:
-    patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
-
-    # Ensure 'year' columns are present even if dataframes are empty
-    patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
-    trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
+        patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
     
-    # Group by year and count if not empty
-    patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents') if not patents_df.empty else pd.DataFrame({'year':[], 'Patents':[]})
-    trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks') if not trademarks_df.empty else pd.DataFrame({'year':[], 'Trademarks':[]})
-    
-    # Merge and fill missing years
-    combined_years = set(patents_by_year['year']).union(set(trademarks_by_year['year']))
-    combined_df = pd.DataFrame({'year': list(combined_years)}).merge(patents_by_year, on='year', how='outer').merge(trademarks_by_year, on='year', how='outer').fillna(0)
+        # Ensure 'year' columns are present even if dataframes are empty
+        patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
+        trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
+        
+        # Group by year and count if not empty
+        patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents') if not patents_df.empty else pd.DataFrame({'year':[], 'Patents':[]})
+        trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks') if not trademarks_df.empty else pd.DataFrame({'year':[], 'Trademarks':[]})
+        
+        # Merge and fill missing years
+        combined_years = set(patents_by_year['year']).union(set(trademarks_by_year['year']))
+        combined_df = pd.DataFrame({'year': list(combined_years)}).merge(patents_by_year, on='year', how='outer').merge(trademarks_by_year, on='year', how='outer').fillna(0)
 
     if not combined_df.empty:
         fig = px.bar(
