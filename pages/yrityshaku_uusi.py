@@ -85,12 +85,14 @@ if y_tunnus:
         # Content for the first column
         card_content1 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">EU Horizon rahoitus 2013-2030</div>
+        <div class="medium-font">EU rahoitus 2013-2030</div>
         <div class="large-number">{format_currency(int(data['Total_EU_Horizon_Funding'].iloc[0]))}</div>
         <hr>
         <div class="medium-font">EURA-rahoitus 2014-2020 ohjelmakausi</div>
         <div class="large-number">{format_currency(int(data['Total_Funding'].iloc[0]))}</div>
-        <div class="small-font">2021-2027 ohjelmakauden tietolähde julkaistaan lokakuun alussa</div>
+        <hr>
+        <div class="medium-font">EURA-rahoitus 2021-2027 ohjelmakausi</div>
+        <div class="large-number">{format_currency(int(data['Total_EURA2027_planned_funding'].iloc[0]))}</div>
         </div>
         """
         col1.markdown(card_content1, unsafe_allow_html=True)
@@ -98,7 +100,7 @@ if y_tunnus:
         # Content for the second column
         card_content2 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-        <div class="medium-font">Patenttien määrä</div>
+        <div class="medium-font">Patenttidokumenttien määrä</div>
         <div class="large-number">{int(data['Patent_Applications_Count'].iloc[0]):,}</div>
         <hr>
         <div class="medium-font">Tavaramerkkien määrä</div>
@@ -124,6 +126,7 @@ if y_tunnus:
 
     if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
+        st.dataframe(patents_df)
         # Create a 'year' column for both patents and trademarks even if they might be empty
         patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
         trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
