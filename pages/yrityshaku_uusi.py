@@ -179,16 +179,16 @@ if y_tunnus:
         # Setting up the date columns and money columns based on the selected dataframe
         date_col = None
         money_cols = []
-        if selected_df_name == 'BF_df':
+        if selected_df_name == 'Business Finland':
             date_col = 'Myöntämisvuosi'
             money_cols = ['Tutkimusrahoitus', 'Avustus']
-        elif selected_df_name == 'EURA2_df':
+        elif selected_df_name == 'EURA2027':
             date_col = 'Start_date'
             money_cols = ['Planned_EU_and_state_funding']
-        elif selected_df_name == 'EUmuu_df':
+        elif selected_df_name == 'EU other':
             date_col = 'Year'
             money_cols = ['Beneficiary’s contracted amount (EUR)']
-        elif selected_df_name == 'EURA_df':
+        elif selected_df_name == 'EURA2020':
             date_col = 'Aloituspvm'
             money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
     
