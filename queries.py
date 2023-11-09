@@ -273,18 +273,28 @@ def fetch_data2(y_tunnus):
     ),
     BusinessFinland AS (
         SELECT 
-            Business_Finland.Y_tunnus,
+            Y_tunnus,
             SUM(CAST(Avustus as FLOAT)) as Total_Business_Finland_Funding,
             SUM(CAST(Tutkimusrahoitus as FLOAT)) as Total_Tutkimusrahoitus  -- Sum the Tutkimusrahoitus column
         FROM 
             Business_Finland
-        JOIN yritykset y on y.y_tunnus = Business_Finland.Y_tunnus
         WHERE 
-            y.y_tunnus = ?
+            Y_tunnus = ?
         GROUP BY 
-            Business_Finland.Y_tunnus
+            Y_tunnus
+    ),
+    EURA2027 AS (
+        SELECT 
+            Business_ID_of_the_implementing_organisation,
+            SUM(Planned_public_funding) as EURA2027_planned_funding
+        FROM 
+            EURA2027
+        WHERE
+            Business_ID_of_the_implementing_organisation = ?
+        GROUP BY
+            Business_ID_of_the_implementing_organisation
     )
-
+            
     SELECT 
         y.y_tunnus,
         y.yritys,
@@ -295,7 +305,8 @@ def fetch_data2(y_tunnus):
         COALESCE(p.Patent_Applications_Count, 0) as Patent_Applications_Count,
         COALESCE(eh.Total_EU_Horizon_Funding, 0) as Total_EU_Horizon_Funding,
         COALESCE(bf.Total_Business_Finland_Funding, 0) as Total_Business_Finland_Funding,
-        COALESCE(bf.Total_Tutkimusrahoitus, 0) as Total_Tutkimusrahoitus  -- Add Total_Tutkimusrahoitus to the SELECT
+        COALESCE(bf.Total_Tutkimusrahoitus, 0) as Total_Tutkimusrahoitus,
+        COALESCE(eur.EURA2027_planned_funding,0) as Total_EURA2027_funding
     FROM 
         yritykset y
     LEFT JOIN 
@@ -310,6 +321,8 @@ def fetch_data2(y_tunnus):
         EUHorizon eh ON y.y_tunnus = eh.y_tunnus
     LEFT JOIN 
         BusinessFinland bf ON y.y_tunnus = bf.Y_tunnus
+    LEFT JOIN
+        EURA2027 as eur ON y.y_tunnus = eur.Business_ID_of_the_implementing_organisation
     WHERE 
         y.y_tunnus = ?;
     """
