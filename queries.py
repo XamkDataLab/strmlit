@@ -306,7 +306,7 @@ def fetch_data2(y_tunnus):
         COALESCE(eh.Total_EU_Horizon_Funding, 0) as Total_EU_Horizon_Funding,
         COALESCE(bf.Total_Business_Finland_Funding, 0) as Total_Business_Finland_Funding,
         COALESCE(bf.Total_Tutkimusrahoitus, 0) as Total_Tutkimusrahoitus,
-        COALESCE(eur.EURA2027_planned_funding,0) as Total_EURA2027_funding
+        COALESCE(eur.EURA2027_planned_funding,0) as Total_EURA2027_planned_funding
     FROM 
         yritykset y
     LEFT JOIN 
