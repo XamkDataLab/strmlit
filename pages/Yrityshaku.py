@@ -150,7 +150,7 @@ if y_tunnus:
         EURA_df['Aloituspvm'] = pd.to_datetime(EURA_df['Aloituspvm'], errors='coerce')
         
         dataframes = {
-            'EURA2027': EURA_df,
+            'EURA2020': EURA_df,
             'Business Finland': BF_df,
             'EURA2027': EURA2_df,
             'EU other': EUmuu_df
