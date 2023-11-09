@@ -72,7 +72,7 @@ def plot_time_series(df, title, date_col, money_cols):
 if y_tunnus:
     data = fetch_data2(y_tunnus)
     #data2 = fetch_individual_data(y_tunnus)
-    
+    st.dataframe(data)
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         
