@@ -11,31 +11,31 @@ def truncate_text(text, max_length):
 
 def generate_eura_project_viz(df, filter_ended=True):
    
-    df['Aloituspvm'] = pd.to_datetime(df['Aloituspvm'])
-    df['Päättymispvm'] = pd.to_datetime(df['Päättymispvm'])
+    df['Start_date'] = pd.to_datetime(df['Start_date'])
+    df['End_date'] = pd.to_datetime(df['End_date'])
 
     # Filter only ongoing projects if required
     if filter_ended:
         today = pd.Timestamp(datetime.date.today())
-        df = df[df['Päättymispvm'] > today]
+        df = df[df['End_date'] > today]
 
     # Add a truncated name column
     max_length = 60
-    df['Truncated Name'] = df['Hankkeen_nimi'].apply(lambda x: truncate_text(x, max_length))
+    df['Truncated Name'] = df['Project_name'].apply(lambda x: truncate_text(x, max_length))
 
     # Create a custom column for the hover information
-    df['Hover Info'] = 'Budget: ' + df['Myönnetty_EU_ja_valtion_rahoitus'].astype(str)
+    df['Hover Info'] = 'Budget: ' + df['Planned_public_funding'].astype(str)
 
     # Create the Gantt chart using plotly
-    fig = px.timeline(df, x_start="Aloituspvm", x_end="Päättymispvm", y="Truncated Name",
+    fig = px.timeline(df, x_start="Start_date", x_end="End_date", y="Truncated Name",
                       color="Truncated Name",
-                      hover_name="Hankkeen_nimi",
+                      hover_name="Project_name",
                       hover_data=["Hover Info"],
-                      title="EURA2020 Projects")
+                      title="EURA2027 Projects")
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     # Set line width based on budget
-    fig.update_traces(marker_line_width=df['Myönnetty_EU_ja_valtion_rahoitus']/500000)
+    fig.update_traces(marker_line_width=df['Planned_public_funding']/500000)
 
     # Remove the color legend
     fig.update_layout(showlegend=False)
@@ -60,12 +60,12 @@ else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
 
-toimintalinja_options = ["All"] + sorted(data["Toimintalinja"].unique().tolist())
-selected_toimintalinja = st.selectbox("Valitse toimintalinja", toimintalinja_options)
+toimintalinja_options = ["All"] + sorted(data["Tukimuoto"].unique().tolist())
+selected_toimintalinja = st.selectbox("Valitse tukimuoto", toimintalinja_options)
 
 # Filter Data based on selected programme
 if selected_toimintalinja != "All":
-    data = data[data["Toimintalinja"] == selected_toimintalinja]
+    data = data[data["Tukimuoto"] == selected_toimintalinja]
 
 # Check if 'filter_ended' is in session state, if not initialize it
 if 'filter_ended' not in st.session_state:
