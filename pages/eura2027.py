@@ -51,10 +51,11 @@ def generate_eura_project_viz(df, filter_ended=True):
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_basename = st.session_state.get('yritys_basename2')
 #st.write(st.session_state)
-st.title(f"EURA rahoitus yritykselle {yritys_basename}")
+st.title(f"EURA2027 rahoitus yritykselle {yritys_basename}")
 
 if y_tunnus:
-    data = fetch_eura_data(y_tunnus)
+    data = fetch_new_eura_data(y_tunnus)
+    st.dataframe(data)
 else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
