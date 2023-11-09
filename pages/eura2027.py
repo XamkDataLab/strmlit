@@ -55,7 +55,7 @@ st.title(f"EURA2027 rahoitus yritykselle {yritys_basename}")
 
 if y_tunnus:
     data = fetch_new_eura_data(y_tunnus)
-    st.dataframe(data)
+    #st.dataframe(data)
 else:
     st.write("Invalid or missing parameters.")
     data = pd.DataFrame()
