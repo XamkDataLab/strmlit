@@ -72,7 +72,7 @@ def plot_time_series(df, title, date_col, money_cols):
 if y_tunnus:
     data = fetch_data2(y_tunnus)
     #data2 = fetch_individual_data(y_tunnus)
-    st.dataframe(data)
+    #st.dataframe(data)
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         
@@ -126,7 +126,6 @@ if y_tunnus:
 
     if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
-        st.dataframe(patents_df)
         # Create a 'year' column for both patents and trademarks even if they might be empty
         patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
         trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
@@ -143,9 +142,9 @@ if y_tunnus:
             fig = px.bar(
                 combined_df,
                 x='year',
-                y=['Patents', 'Trademarks'],
+                y=['Patenttidokumentit', 'Tavaramerkit'],
                 barmode='group',
-                title='Number of Patents and Trademarks by Year'
+                title='Patenttidokumenttien ja tavaramerkkien määrä'
             )
     
             st.plotly_chart(fig)
@@ -154,10 +153,10 @@ if y_tunnus:
         
     if y_tunnus:
         EURA_df, BF_df, EURA2_df,EUmuu_df = fetch_time_series_data_funding(y_tunnus)
-        st.dataframe(EURA_df)
-        st.dataframe(BF_df)
-        st.dataframe(EURA2_df)
-        st.dataframe(EUmuu_df)
+        #st.dataframe(EURA_df)
+        #st.dataframe(BF_df)
+        #st.dataframe(EURA2_df)
+        #st.dataframe(EUmuu_df)
          
         BF_df['Myöntämisvuosi'] = pd.to_datetime(BF_df['Myöntämisvuosi'], format='%Y', errors='coerce')
         EURA2_df['Start_date'] = pd.to_datetime(EURA2_df['Start_date'], errors='coerce')
@@ -165,10 +164,10 @@ if y_tunnus:
         EURA_df['Aloituspvm'] = pd.to_datetime(EURA_df['Aloituspvm'], errors='coerce')
         
         dataframes = {
-        'EURA_df': EURA_df,     # Assuming this has a single money column
-        'BF_df': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
-        'EURA2_df': EURA2_df,   # This has 'Start_date' and 'Planned_EU_and_state_funding'
-        'EUmuu_df': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
+        'EURA2020': EURA_df,     # Assuming this has a single money column
+        'Business Finland': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
+        'EURA2027': EURA2_df,   # This has 'Start_date' and 'Planned_EU_and_state_funding'
+        'EU other': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
         }
 
         # Dropdown to select the dataframe
