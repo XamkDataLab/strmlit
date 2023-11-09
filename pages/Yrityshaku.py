@@ -36,7 +36,6 @@ large_number_style = """
 </style>
 """
 
-
 st.markdown(small_font_style, unsafe_allow_html=True)
 st.markdown(medium_font_style, unsafe_allow_html=True)
 st.markdown(large_font_style, unsafe_allow_html=True)
@@ -68,20 +67,15 @@ def plot_time_series(df, title, date_col, money_cols):
 
     return fig
 
-
 if y_tunnus:
     data = fetch_data2(y_tunnus)
-    #data2 = fetch_individual_data(y_tunnus)
-    #st.dataframe(data)
     if not data.empty:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
-        
         yritys_basename = data['yritys_basename2'].iloc[0]
         st.session_state['yritys_basename2'] = yritys_basename
-        #st.write(st.session_state)
 
-        col1, col2, col3 = st.columns(3)  # Create two columns
-    
+        col1, col2, col3 = st.columns(3)  # Create three columns
+
         # Content for the first column
         card_content1 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
@@ -108,8 +102,8 @@ if y_tunnus:
         </div>
         """
         col2.markdown(card_content2, unsafe_allow_html=True)
-        
 
+        # Content for the third column
         card_content3 = f"""
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
         <div class="medium-font">Business Finland avustukset</div>
@@ -120,64 +114,52 @@ if y_tunnus:
         </div>
         """
         col3.markdown(card_content3, unsafe_allow_html=True)
-    
     else:
         st.write("Dataa ei löytynyt :(")
 
-   if y_tunnus:
+    if y_tunnus:
         patents_df, trademarks_df = fetch_time_series_data(y_tunnus)
-    
-        # Ensure 'year' columns are present even if dataframes are empty
+
         patents_df['year'] = patents_df['date_published'].dt.year if not patents_df.empty else pd.Series(dtype=int)
         trademarks_df['year'] = trademarks_df['applicationDate'].dt.year if not trademarks_df.empty else pd.Series(dtype=int)
-        
-        # Group by year and count if not empty
+
         patents_by_year = patents_df.groupby('year').size().reset_index(name='Patents') if not patents_df.empty else pd.DataFrame({'year':[], 'Patents':[]})
         trademarks_by_year = trademarks_df.groupby('year').size().reset_index(name='Trademarks') if not trademarks_df.empty else pd.DataFrame({'year':[], 'Trademarks':[]})
-        
-        # Merge and fill missing years
+
         combined_years = set(patents_by_year['year']).union(set(trademarks_by_year['year']))
         combined_df = pd.DataFrame({'year': list(combined_years)}).merge(patents_by_year, on='year', how='outer').merge(trademarks_by_year, on='year', how='outer').fillna(0)
 
-    if not combined_df.empty:
-        fig = px.bar(
-            combined_df,
-            x='year',
-            y=['Patents', 'Trademarks'],
-            barmode='group',
-            title='Patenttidokumenttien ja tavaramerkkien määrä'
-        )
-        st.plotly_chart(fig)
-    else:
-        st.write("No data available for the provided Y-Tunnus.")
+        if not combined_df.empty:
+            fig = px.bar(
+                combined_df,
+                x='year',
+                y=['Patents', 'Trademarks'],
+                barmode='group',
+                title='Patenttidokumenttien ja tavaramerkkien määrä'
+            )
+            st.plotly_chart(fig)
+        else:
+            st.write("No data available for the provided Y-Tunnus.")
 
-        
     if y_tunnus:
-        EURA_df, BF_df, EURA2_df,EUmuu_df = fetch_time_series_data_funding(y_tunnus)
-        #st.dataframe(EURA_df)
-        #st.dataframe(BF_df)
-        #st.dataframe(EURA2_df)
-        #st.dataframe(EUmuu_df)
-         
+        EURA_df, BF_df, EURA2_df, EUmuu_df = fetch_time_series_data_funding(y_tunnus)
+
         BF_df['Myöntämisvuosi'] = pd.to_datetime(BF_df['Myöntämisvuosi'], format='%Y', errors='coerce')
         EURA2_df['Start_date'] = pd.to_datetime(EURA2_df['Start_date'], errors='coerce')
         EUmuu_df['Year'] = pd.to_datetime(EUmuu_df['Year'], format='%Y', errors='coerce')
         EURA_df['Aloituspvm'] = pd.to_datetime(EURA_df['Aloituspvm'], errors='coerce')
         
         dataframes = {
-        'EURA2027': EURA_df,     # Assuming this has a single money column
-        'Business Finland': BF_df,         # This has 'Myöntämisvuosi' and both 'Tutkimusrahoitus' & 'Avustus'
-        'EURA2027': EURA2_df,   # This has 'Start_date' and 'Planned_EU_and_state_funding'
-        'EU other': EUmuu_df    # This has 'Year' and 'Commitment contracted amount (EUR)'
+            'EURA2027': EURA_df,
+            'Business Finland': BF_df,
+            'EURA2027': EURA2_df,
+            'EU other': EUmuu_df
         }
 
-        # Dropdown to select the dataframe
         selected_df_name = st.selectbox('Select the dataframe:', list(dataframes.keys()))
-    
-        # Preprocessing the selected dataframe
+
         df = dataframes[selected_df_name].copy()
-    
-        # Setting up the date columns and money columns based on the selected dataframe
+
         date_col = None
         money_cols = []
         if selected_df_name == 'Business Finland':
@@ -192,8 +174,7 @@ if y_tunnus:
         elif selected_df_name == 'EURA2020':
             date_col = 'Aloituspvm'
             money_cols = ['Toteutunut_EU_ja_valtion_rahoitus']
-    
-        # Plotting the time series data
+
         if date_col and money_cols:
             fig = plot_time_series(df, f'Time-Series for {selected_df_name}', date_col, money_cols)
             st.plotly_chart(fig)
