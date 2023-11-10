@@ -40,13 +40,13 @@ st.title("IPR-Suomi")
 st.subheader("Maakuntien innovaatiotilastot")
 st.write(
     """
-    Tämä sovellus kerää yhteen tiedot suomalaisten yritysten IPR-omaisuudesta ja rahoituksesta. Sisältää
+    Tämä sivu kerää yhteen tiedot suomalaisten yritysten IPR-omaisuudesta ja rahoituksesta. Sisältää
     seuraavat työkalut:
     """
 )
 st.markdown("""
-- Maakuntasivut: tarkastele maakunnan vahvuusaloja ja yritysten innovaatioita 
 - Yrityshaku: hae yrityskohtaiset tiedot ja organisaatioiden hankesalkut
+- Maakuntasivut: tarkastele maakunnan vahvuusaloja ja yritysten innovaatioita 
 - Verkosto: tarkastele yhteishankkeita maakuntien välillä
 - Erääntyvät patentit :)
 """)
