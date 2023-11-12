@@ -208,4 +208,27 @@ if y_tunnus:
         
         # In a Streamlit app, use st.plotly_chart() to display the plot
         st.plotly_chart(fig)
-               
+        
+        title_counts = cpc_data['title'].value_counts()
+        
+        # Create a vertical bar chart using Plotly
+        fig = px.bar(title_counts, 
+                     x=title_counts.values, 
+                     y=title_counts.index,
+                     orientation='h',  # Horizontal bar chart
+                     labels={'x': 'Number of Patents', 'y': 'Title'},
+                     title='Distribution of Patents Across Different Titles')
+        
+        # Improve layout for long strings
+        fig.update_layout(
+            xaxis_title="Number of Patents",
+            yaxis_title="Title",
+            yaxis=dict(automargin=True),  # Adjust margin to fit long labels
+            height=600,  # You can adjust this to fit your layout
+            hovermode='closest'  # Enable hovering for readability
+        )
+        
+        # In a Streamlit app, use st.plotly_chart() to display the plot
+        st.plotly_chart(fig)
+        
+                       
