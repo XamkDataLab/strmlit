@@ -650,6 +650,6 @@ def fetch_eura2027_collab():
         p1.Planned_public_funding, p1.Tukimuoto,p1.Tukitoimen_ala
         """
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
-        collab_df = pd.read_sql_query(collab_query, conn, params=(y_tunnus,))
+        collab_df = pd.read_sql_query(collab_query, conn)
     return collab_df
     
