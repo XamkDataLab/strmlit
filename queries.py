@@ -627,3 +627,29 @@ def fetch_time_series_data_funding(y_tunnus):
         EUmuu_df = pd.read_sql_query(EUmuu_query,conn,params=(y_tunnus,))
 
     return EURA_df, BF_df, EURA2_df,EUmuu_df
+
+def fetch_eura2027_collab():
+    collab_query = """
+            SELECT
+        p1.Name_of_implementing_organisation AS Organization1,
+        p2.Name_of_implementing_organisation AS Organization2,
+        p1.Group_Project_code,
+        p1.Rahasto,
+        p1.Rahoittava_viranomainen,
+        p1.Planned_public_funding,
+        p1.Tukimuoto,
+        p1.Tukitoimen_ala
+    FROM
+        EURA2027 p1
+    INNER JOIN
+        EURA2027 p2 ON p1.Group_Project_code = p2.Group_Project_code AND p1.Name_of_implementing_organisation < p2.Name_of_implementing_organisation
+    WHERE
+        p1.Group_Project_code IS NOT NULL
+    GROUP BY
+        p1.Group_Project_code, p1.Name_of_implementing_organisation, p2.Name_of_implementing_organisation, p1.Rahasto, p1.Rahoittava_viranomainen,
+        p1.Planned_public_funding, p1.Tukimuoto,p1.Tukitoimen_ala
+        """
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        collab_df = pd.read_sql_query(collab_query, conn, params=(y_tunnus,))
+    return collab_df
+    
