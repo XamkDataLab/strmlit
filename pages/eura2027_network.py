@@ -8,6 +8,7 @@ import streamlit.components.v1 as components
 from queries import fetch_eura2027_collab
 
 data = fetch_eura2027_collab()
+
 def create_graph(data):
     G = nx.Graph()
     for idx, row in data.iterrows():
@@ -16,14 +17,16 @@ def create_graph(data):
         G.add_edge(row['Organization1'], row['Organization2'], title=row['Group_Project_code'])
     return G
 
-def filter_data(data, project_code=None, rahasto=None):
+def filter_data(data, tukimuoto=None, tukitoimen_ala=None, rahoittava_viranomainen=None):
     filtered_data = data.copy()
-    if project_code and project_code != 'None':
-        filtered_data = filtered_data[filtered_data['Group_Project_code'] == project_code]
-    if rahasto and rahasto != 'None':
-        filtered_data = filtered_data[filtered_data['Rahasto'] == rahasto]
+    if tukimuoto and tukimuoto != 'None':
+        filtered_data = filtered_data[filtered_data['Tukimuoto'] == tukimuoto]
+    if tukitoimen_ala and tukitoimen_ala != 'None':
+        filtered_data = filtered_data[filtered_data['Tukitoimen_ala'] == tukitoimen_ala]
+    if rahoittava_viranomainen and rahoittava_viranomainen != 'None':
+        filtered_data = filtered_data[filtered_data['Rahoittava_viranomainen'] == rahoittava_viranomainen]
     return filtered_data
-
+    
 def visualize_graph(graph, gravitational_constant, central_gravity):
     if graph.number_of_edges() > 0:
         nt = Network(notebook=False, height="500px", width="100%")
@@ -68,21 +71,20 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
         st.warning("No edges to display. Please select different filters.")
 
 # Streamlit app
-st.title('Organizational Collaboration Network')
-st.text('Visualizing collaborations based on project codes and funding sources') 
+st.title('EURA2027 collab network')
+st.text('tekstiä tähän')
 
-project_code = st.selectbox('Filter by Project Code', ['None'] + list(data['Group_Project_code'].unique()))
-filtered_data = filter_data(data, project_code=project_code)
+tukimuoto = st.selectbox('Filter by Tukimuoto', ['None'] + list(data['Tukimuoto'].unique()))
+tukitoimen_ala = st.selectbox('Filter by Tukitoimen_ala', ['None'] + list(data['Tukitoimen_ala'].unique()))
+rahoittava_viranomainen = st.selectbox('Filter by Rahoittava_viranomainen', ['None'] + list(data['Rahoittava_viranomainen'].unique()))
 
-rahasto = st.selectbox('Filter by Rahasto', ['None'] + list(filtered_data['Rahasto'].unique()))
-filtered_data = filter_data(filtered_data, project_code=project_code, rahasto=rahasto)
+filtered_data = filter_data(data, tukimuoto=tukimuoto, tukitoimen_ala=tukitoimen_ala, rahoittava_viranomainen=rahoittava_viranomainen)
 
 gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
 central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
 
-if project_code != 'None' or rahasto != 'None':
+if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen != 'None':
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph, gravitational_constant, central_gravity)
 else:
     st.warning('Choose at least one filter to create the graph')
-
