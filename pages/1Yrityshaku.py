@@ -203,7 +203,7 @@ if y_tunnus:
         fig = px.bar(cpc_class_counts, 
                      x=cpc_class_counts.index, 
                      y=cpc_class_counts.values,
-                     labels={'x': 'CPC Patent Class', 'y': 'Number of Patents'},
+                     labels={'x': 'CPC Patent Class', 'y': 'Number of Classifications'},
                      title='Distribution of Patents Across CPC Classes')
         
         # In a Streamlit app, use st.plotly_chart() to display the plot
