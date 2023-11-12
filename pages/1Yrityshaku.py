@@ -184,4 +184,17 @@ if y_tunnus:
     
     if y_tunnus:
         cpc_data = fetch_company_cpc_data(y_tunnus)
-    st.dataframe(cpc_data)
+        cpc_class_mapping = {
+        'A': 'HUMAN NECESSITIES',
+        'B': 'PERFORMING OPERATIONS; TRANSPORTING',
+        'C': 'CHEMISTRY; METALLURGY',
+        'D': 'TEXTILES; PAPER',
+        'E': 'FIXED CONSTRUCTIONS',
+        'F': 'MECHANICAL ENGINEERING; LIGHTING; HEATING; WEAPONS; BLASTING',
+        'G': 'PHYSICS',
+        'H': 'ELECTRICITY',
+        'Y': 'GENERAL TAGGING OF NEW TECHNOLOGICAL DEVELOPMENTS'
+        }
+    
+        cpc_data['cpc_class'] = cpc_data['cpc_code'].str[0].map(cpc_class_mapping)
+        st.dataframe(cpc_data)
