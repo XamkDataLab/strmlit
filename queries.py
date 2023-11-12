@@ -534,6 +534,50 @@ def fetch_time_series_data(y_tunnus):
 
     return patents_df, trademarks_df
 
+def fetch_company_cpc_data(y_tunnus):
+    cpc_query = """
+    SELECT DISTINCT y.y_tunnus,
+       y.yritys,
+       p.lens_id, 
+       p.date_published,
+       p.publication_type,
+       p.legal_status_patent_status,
+       invention_title,
+       c.cpc_code,
+       c.cpc_classification,
+       d.class,
+       d.title
+    FROM yritykset y
+    LEFT JOIN applicants a ON y.yritys_basename2 = a.applicant_basename
+    LEFT JOIN patents p ON a.lens_id = p.lens_id
+    LEFT JOIN cpc_classifications c ON c.lens_id = p.lens_id
+    LEFT JOIN cpc_descriptions d ON d.cpc_code = c.cpc_code
+    WHERE p.date_published IS NOT NULL AND y.y_tunnus = ?
+    """
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        cpc_df = pd.read_sql_query(cpc_query, conn, params=(y_tunnus,))
+    return cpc_df
+
+def fetch_maakunta_cpc(maakunta):
+    maakunta_cpc_query = """
+    select y.y_tunnus,p.lens_id,p.invention_title,c.class, c.cpc_classification,d.title,pi.Postinumeroalue, pi.Maakunnan_nimi,pi.Kunnan_nimi, y.yritys,y.postinumero
+    from yritykset y 
+    left join applicants a on a.applicant_basename = y.yritys_basename2
+    left join patents p on p.lens_id = a.lens_id
+    left join cpc_classifications c on c.lens_id = p.lens_id
+    left join cpc_descriptions d on d.cpc_code = c.cpc_code
+    LEFT JOIN 
+            Postinumeroalueet pi ON 
+            CASE 
+                WHEN RIGHT(y.postinumero, 1) = '1' THEN LEFT(y.postinumero, LEN(y.postinumero) - 1) + '0'
+                ELSE y.postinumero
+            END 
+            = pi.Postinumeroalue
+    where  is not null and pi.Maakunnan_nimi = ?
+        """
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        maakunta_cpc_df = pd.read_sql_query(maakunta_cpc_query, conn, params=(y_tunnus,))
+    return maakunta_cpc_df
 
 def fetch_time_series_data_funding(y_tunnus):
     EURA_query = """
