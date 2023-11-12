@@ -183,5 +183,5 @@ if y_tunnus:
     st.dataframe(patents_df)
     
     if y_tunnus:
-        cpc_data = fetch_cpc_data(y_tunnus)
+        cpc_data = fetch_company_cpc_data(y_tunnus)
     st.dataframe(cpc_data)
