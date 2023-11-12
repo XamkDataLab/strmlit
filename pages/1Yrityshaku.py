@@ -197,4 +197,15 @@ if y_tunnus:
         }
     
         cpc_data['cpc_class'] = cpc_data['cpc_code'].str[0].map(cpc_class_mapping)
-        st.dataframe(cpc_data)
+        cpc_class_counts = cpc_data['cpc_class'].value_counts()
+
+        # Create a bar chart using Plotly
+        fig = px.bar(cpc_class_counts, 
+                     x=cpc_class_counts.index, 
+                     y=cpc_class_counts.values,
+                     labels={'x': 'CPC Patent Class', 'y': 'Number of Patents'},
+                     title='Distribution of Patents Across CPC Classes')
+        
+        # In a Streamlit app, use st.plotly_chart() to display the plot
+        st.plotly_chart(fig)
+               
