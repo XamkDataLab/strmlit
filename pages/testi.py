@@ -28,7 +28,32 @@ def make_cpc(df):
     df['Group Description'] = df['Group'].map(cpc.set_index('Code')['Description'])
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
     return df
+    
+def create_sunburst_chart(df):
+    # Preparing data for the sunburst chart
+    df['id'] = df['Subgroup']
+    df['parent'] = df['Group']
+    df['label'] = df['Subgroup Description']
 
+    # Adding root node
+    root_df = pd.DataFrame({
+        'id': [''],
+        'parent': [None],
+        'label': ['CPC Classifications']
+    })
+    df = pd.concat([root_df, df])
+
+    # Creating the sunburst chart
+    fig = go.Figure(go.Sunburst(
+        ids=df['id'],
+        labels=df['label'],
+        parents=df['parent'],
+        branchvalues="total"
+    ))
+
+    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
+
+    return fig
    
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
@@ -39,29 +64,8 @@ if y_tunnus:
     st.dataframe(cpc_data)
     
 
-    dot = gv.Digraph(comment='CPC Classification', format='png')
-
-    # Add nodes and edges based on the CPC classification hierarchy
-    # The following is an example based on assuming unique identifiers per classification level
-    for _, row in cpc_data.iterrows():
-        # Add nodes
-        dot.node(row['Section'])
-        dot.node(row['Class'])
-        dot.node(row['Subclass'])
-        dot.node(row['Group'])
-        dot.node(row['Subgroup'])
-        
-        # Add edges
-        dot.edge(row['Section'], row['Class'])
-        dot.edge(row['Class'], row['Subclass'])
-        dot.edge(row['Subclass'], row['Group'])
-        dot.edge(row['Group'], row['Subgroup'])
-    
-        # Render the graph to a file (this will save the file in the current directory)
-        dot.render('cpc_classification_tree')
-        
-        # Display the graph using Streamlit
-        st.graphviz_chart(dot)
+     sunburst_chart = create_sunburst_chart(cpc_data)
+    st.plotly_chart(sunburst_chart)
         
      
 
