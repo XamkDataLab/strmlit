@@ -64,7 +64,7 @@ if y_tunnus:
     st.dataframe(cpc_data)
     
 
-     sunburst_chart = create_sunburst_chart(cpc_data)
+    sunburst_chart = create_sunburst_chart(cpc_data)
     st.plotly_chart(sunburst_chart)
         
      
