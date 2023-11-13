@@ -36,15 +36,16 @@ def prepare_network_data(df):
     df['Group_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass'] + '-' + df['Group']
     df['Subgroup_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass'] + '-' + df['Group'] + '-' + df['Subgroup']
 
-    # Create nodes and edges
+    # Create nodes DataFrame
     nodes = pd.concat([
         df['Section_ID'].drop_duplicates(),
         df['Class_ID'].drop_duplicates(),
         df['Subclass_ID'].drop_duplicates(),
         df['Group_ID'].drop_duplicates(),
         df['Subgroup_ID'].drop_duplicates()
-    ]).reset_index(drop=True)
+    ]).reset_index(drop=True).reset_index().rename(columns={0: 'Node', 'index': 'ID'})
 
+    # Create edges DataFrame
     edges = pd.concat([
         df[['Section_ID', 'Class_ID']].drop_duplicates(),
         df[['Class_ID', 'Subclass_ID']].drop_duplicates(),
@@ -52,38 +53,39 @@ def prepare_network_data(df):
         df[['Group_ID', 'Subgroup_ID']].drop_duplicates()
     ])
 
+    # Map edges to node IDs
+    edges = edges.applymap(lambda x: nodes[nodes['Node'] == x]['ID'].values[0])
+
     return nodes, edges
 
 # Function to create the network graph
 def create_network_graph(nodes, edges):
-    edge_x = []
-    edge_y = []
-    for edge in edges.values:
-        x0, y0 = nodes.get_loc(edge[0]), nodes.get_loc(edge[1])
-        edge_x.extend([x0, y0, None])
-        edge_y.extend([y0, y0, None])
-
-    node_x = list(range(len(nodes)))
-
     fig = go.Figure()
+
+    # Add edges
+    for _, edge in edges.iterrows():
+        fig.add_trace(go.Scatter(
+            x=[nodes.loc[edge[0], 'ID'], nodes.loc[edge[1], 'ID']],
+            y=[nodes.loc[edge[0], 'ID'], nodes.loc[edge[1], 'ID']],
+            mode='lines',
+            line=dict(width=1, color='grey'),
+            hoverinfo='none'
+        ))
+
+    # Add nodes
     fig.add_trace(go.Scatter(
-        x=node_x, y=node_x,
-        mode='markers',
-        text=nodes,
+        x=nodes['ID'],
+        y=nodes['ID'],
+        mode='markers+text',
+        text=nodes['Node'],
+        textposition='bottom center',
         marker=dict(size=10, color='LightSkyBlue')
     ))
 
-    fig.add_trace(go.Scatter(
-        x=edge_x, y=edge_y,
-        line=dict(width=1, color='grey'),
-        hoverinfo='none',
-        mode='lines'))
-
-    fig.update_layout(plot_bgcolor='white')
+    fig.update_layout(plot_bgcolor='white', xaxis={'visible': False}, yaxis={'visible': False})
 
     return fig
 
-    
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
 
