@@ -30,6 +30,11 @@ def make_cpc(df):
     return df
     
 def create_sunburst_chart(df):
+    # Diagnostic check for NaNs
+    if df[['Subgroup', 'Group', 'Subgroup Description']].isna().any().any():
+        st.warning("NaN values detected in critical columns. Please check your data.")
+        return None
+
     # Preparing data for the sunburst chart
     df['id'] = df['Subgroup']
     df['parent'] = df['Group']
@@ -37,11 +42,16 @@ def create_sunburst_chart(df):
 
     # Adding root node
     root_df = pd.DataFrame({
-        'id': [''],
+        'id': ['root'],
         'parent': [None],
         'label': ['CPC Classifications']
     })
     df = pd.concat([root_df, df])
+
+    # Check for duplicates
+    if df['id'].duplicated().any():
+        st.warning("Duplicate IDs detected. Each ID must be unique.")
+        return None
 
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
@@ -54,19 +64,19 @@ def create_sunburst_chart(df):
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
     return fig
-   
-y_tunnus = st.session_state.get('y_tunnus')
-yritys_nimi = st.session_state.get('yritys')
 
+# Create and display the sunburst chart
 if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
-    
 
+    # Create the sunburst chart
     sunburst_chart = create_sunburst_chart(cpc_data)
-    st.plotly_chart(sunburst_chart)
-        
+    if sunburst_chart:
+        st.plotly_chart(sunburst_chart)
+    else:
+        st.error("There was an issue creating the sunburst chart.")
      
 
 
