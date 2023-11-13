@@ -36,13 +36,17 @@ if y_tunnus:
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
   
-    path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
-    df_sunburst = cpc_data.groupby(path).size().reset_index(name='Counts')
-    st.dataframe(df_sunburst)
+        # Concatenating hierarchical levels to create unique labels for each level
+    df_sunburst['Label'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group'] + ' - ' + df_sunburst['Subgroup']
+    df_sunburst['Parent'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group']
+    
+    # For the top level (Section), setting the parent as ''
+    df_sunburst.loc[df_sunburst['Class'] == df_sunburst['Section'], 'Parent'] = ''
+    
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
-        labels=df_sunburst['Subgroup'],
-        parents=df_sunburst['Group'],
+        labels=df_sunburst['Label'],
+        parents=df_sunburst['Parent'],
         values=df_sunburst['Counts'],
         branchvalues="total",
     ))
@@ -51,4 +55,5 @@ if y_tunnus:
     
     # Displaying the chart in Streamlit
     st.plotly_chart(fig)
+
             
