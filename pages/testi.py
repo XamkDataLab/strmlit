@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 from queries import *
 import plotly.express as px
+import graphviz as gv
 
 json_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/cpc_ultimate_titles.json"
 
@@ -28,69 +29,7 @@ def make_cpc(df):
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
     return df
 
-
-# Function to prepare data for the network graph
-def prepare_network_data(df):
-    # Unique identifiers for each level to serve as nodes
-    df['Section_ID'] = df['Section']
-    df['Class_ID'] = df['Section'] + '-' + df['Class']
-    df['Subclass_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass']
-    df['Group_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass'] + '-' + df['Group']
-    df['Subgroup_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass'] + '-' + df['Group'] + '-' + df['Subgroup']
-
-    # Create nodes DataFrame
-    nodes = pd.concat([
-        df['Section_ID'].drop_duplicates(),
-        df['Class_ID'].drop_duplicates(),
-        df['Subclass_ID'].drop_duplicates(),
-        df['Group_ID'].drop_duplicates(),
-        df['Subgroup_ID'].drop_duplicates()
-    ]).reset_index(drop=True).reset_index().rename(columns={0: 'Node', 'index': 'ID'})
-
-    # Create edges DataFrame
-    edges = pd.concat([
-        df[['Section_ID', 'Class_ID']].drop_duplicates(),
-        df[['Class_ID', 'Subclass_ID']].drop_duplicates(),
-        df[['Subclass_ID', 'Group_ID']].drop_duplicates(),
-        df[['Group_ID', 'Subgroup_ID']].drop_duplicates()
-    ])
-
-    # Safeguarded mapping of edges to node IDs
-    edges = edges.applymap(lambda x: nodes[nodes['Node'] == x]['ID'].iat[0] if not nodes[nodes['Node'] == x].empty else None)
-
-    # Remove any rows with None values (indicating missing nodes)
-    edges.dropna(inplace=True)
-
-    return nodes, edges
-
-# Function to create the network graph
-def create_network_graph(nodes, edges):
-    fig = go.Figure()
-
-    # Add edges
-    for _, edge in edges.iterrows():
-        fig.add_trace(go.Scatter(
-            x=[nodes.loc[edge[0], 'ID'], nodes.loc[edge[1], 'ID']],
-            y=[nodes.loc[edge[0], 'ID'], nodes.loc[edge[1], 'ID']],
-            mode='lines',
-            line=dict(width=1, color='grey'),
-            hoverinfo='none'
-        ))
-
-    # Add nodes
-    fig.add_trace(go.Scatter(
-        x=nodes['ID'],
-        y=nodes['ID'],
-        mode='markers+text',
-        text=nodes['Node'],
-        textposition='bottom center',
-        marker=dict(size=10, color='LightSkyBlue')
-    ))
-
-    fig.update_layout(plot_bgcolor='white', xaxis={'visible': False}, yaxis={'visible': False})
-
-    return fig
-
+   
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
 
@@ -102,6 +41,34 @@ if y_tunnus:
     fig = create_network_graph(nodes, edges)
     st.plotly_chart(fig)
     
+
+dot = gv.Digraph(comment='CPC Classification', format='png')
+
+    # Add nodes and edges based on the CPC classification hierarchy
+    # The following is an example based on assuming unique identifiers per classification level
+    for _, row in df.iterrows():
+        # Add nodes
+        dot.node(row['Section'])
+        dot.node(row['Class'])
+        dot.node(row['Subclass'])
+        dot.node(row['Group'])
+        dot.node(row['Subgroup'])
+        
+        # Add edges
+        dot.edge(row['Section'], row['Class'])
+        dot.edge(row['Class'], row['Subclass'])
+        dot.edge(row['Subclass'], row['Group'])
+        dot.edge(row['Group'], row['Subgroup'])
+    
+    # Render the graph to a file (this will save the file in the current directory)
+    dot.render('cpc_classification_tree')
+    
+    # Display the graph using Streamlit
+    st.graphviz_chart(dot)
+    
+ 
+
+
 
 
 
