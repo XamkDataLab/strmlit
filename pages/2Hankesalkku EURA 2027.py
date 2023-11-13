@@ -31,7 +31,7 @@ def generate_eura_project_viz(df, filter_ended=True):
                       color="Truncated Name",
                       hover_name="Project_name",
                       hover_data=["Hover Info"],
-                      title="EURA2027 Projects")
+                      title="EURA 2021-2027 Projects")
 
     fig.update_yaxes(categoryorder="total ascending")  # Sort projects based on start date
     # Set line width based on budget
@@ -49,9 +49,10 @@ def generate_eura_project_viz(df, filter_ended=True):
 
 # Retrieve the yritys_basename from session state
 y_tunnus = st.session_state.get('y_tunnus')
-yritys_basename = st.session_state.get('yritys_basename2')
+yritys_nimi = st.session_state.get('yritys')
+
 #st.write(st.session_state)
-st.title(f"EURA2027 rahoitus yritykselle {yritys_basename}")
+st.title(f"EURA 2021-2027 rahoitus yritykselle {yritys_nimi}")
 
 if y_tunnus:
     data = fetch_new_eura_data(y_tunnus)
