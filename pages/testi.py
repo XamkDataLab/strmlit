@@ -55,10 +55,20 @@ def create_sunburst_chart(y_tunnus):
 
     st.plotly_chart(fig)
 
+def create_treemap(df):
+    fig = px.treemap(df, path=['Section', 'Class', 'Subclass', 'Group', 'Subgroup'],
+                     values='Counts',
+                     title="CPC Classification Treemap")
+    st.plotly_chart(fig)
+    
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
 
 if y_tunnus:
-    create_sunburst_chart(y_tunnus)
+    cpc_data = fetch_company_cpc_data(y_tunnus)
+    cpc_data = make_cpc(cpc_data)
+    create_treemap(cpc_data)
+
+
 
             
