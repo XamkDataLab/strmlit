@@ -28,39 +28,6 @@ def make_cpc(df):
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
     return df
 
-def create_sunburst_chart(y_tunnus):
-    cpc_data = fetch_company_cpc_data(y_tunnus)
-    cpc_data = make_cpc(cpc_data)
-    st.dataframe(cpc_data)
-
-    # Grouping and counting for sunburst chart
-    path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
-    df_sunburst = cpc_data.groupby(path).size().reset_index(name='Counts')
-
-    # Creating unique labels and parents for each level
-    df_sunburst['Label'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group'] + ' - ' + df_sunburst['Subgroup']
-    df_sunburst['Parent'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group']
-    
-    # Setting parents for the top level (Section) to ''
-    df_sunburst.loc[df_sunburst['Class'] == df_sunburst['Section'], 'Parent'] = ''
-
-    # Creating the sunburst chart
-    fig = go.Figure(go.Sunburst(
-        labels=df_sunburst['Label'],
-        parents=df_sunburst['Parent'],
-        values=df_sunburst['Counts'],
-        branchvalues="total",
-    ))
-
-    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
-
-    st.plotly_chart(fig)
-
-def create_treemap(df):
-    fig = px.treemap(df, path=['Section', 'Class', 'Subclass', 'Group', 'Subgroup'],
-                     values='Counts',
-                     title="CPC Classification Treemap")
-    st.plotly_chart(fig)
     
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
@@ -68,7 +35,7 @@ yritys_nimi = st.session_state.get('yritys')
 if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
-    create_treemap(cpc_data)
+    st.dataframe(cpc_data)
 
 
 
