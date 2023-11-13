@@ -27,7 +27,15 @@ def make_cpc(df):
     df['Group Description'] = df['Group'].map(cpc.set_index('Code')['Description'])
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
     return df
+    
+def create_treemap(df):
+    # Grouping and counting for treemap
+    path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
+    df_treemap = df.groupby(path).size().reset_index(name='Counts')
 
+    # Creating the treemap
+    fig = px.treemap(df_treemap, path=path, values='Counts', title="CPC Classification Treemap")
+    st.plotly_chart(fig)
     
 y_tunnus = st.session_state.get('y_tunnus')
 yritys_nimi = st.session_state.get('yritys')
@@ -36,6 +44,7 @@ if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
+    create_treemap(cpc_data)
 
 
 
