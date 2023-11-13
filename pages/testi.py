@@ -46,6 +46,9 @@ def create_sunburst_chart(df):
     })
     df = pd.concat([root_df, df])
 
+    # Print the DataFrame for inspection
+    print(df[['id', 'label', 'parent']].head())
+
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
         ids=df['id'],
@@ -56,6 +59,10 @@ def create_sunburst_chart(df):
 
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
     return fig
+
+# Inspect the DataFrame and create the chart
+clean_sunburst_chart = create_clean_sunburst_chart(actual_data)
+
 
 
 def create_test_sunburst_chart():
