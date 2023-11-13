@@ -30,15 +30,13 @@ def make_cpc(df):
     return df
     
 def create_sunburst_chart(df):
-    # Diagnostic check for NaNs
-    if df[['Subgroup', 'Group', 'Subgroup Description']].isna().any().any():
-        st.warning("NaN values detected in critical columns. Please check your data.")
-        return None
-
-    # Preparing data for the sunburst chart
-    df['id'] = df['Subgroup']
+    # Creating unique IDs by concatenating 'Group' and 'Subgroup'
+    df['id'] = df['Group'] + '-' + df['Subgroup']
     df['parent'] = df['Group']
     df['label'] = df['Subgroup Description']
+
+    # Handling NaN values by replacing them with a placeholder
+    df.fillna('Unknown', inplace=True)
 
     # Adding root node
     root_df = pd.DataFrame({
@@ -47,11 +45,6 @@ def create_sunburst_chart(df):
         'label': ['CPC Classifications']
     })
     df = pd.concat([root_df, df])
-
-    # Check for duplicates
-    if df['id'].duplicated().any():
-        st.warning("Duplicate IDs detected. Each ID must be unique.")
-        return None
 
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
@@ -62,8 +55,8 @@ def create_sunburst_chart(df):
     ))
 
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
-
     return fig
+
 
 def create_test_sunburst_chart():
     # Hard-coded simple example
