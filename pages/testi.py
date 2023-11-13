@@ -46,7 +46,7 @@ dot = gv.Digraph(comment='CPC Classification', format='png')
 
     # Add nodes and edges based on the CPC classification hierarchy
     # The following is an example based on assuming unique identifiers per classification level
-    for _, row in df.iterrows():
+    for _, row in cpc_data.iterrows():
         # Add nodes
         dot.node(row['Section'])
         dot.node(row['Class'])
@@ -60,13 +60,13 @@ dot = gv.Digraph(comment='CPC Classification', format='png')
         dot.edge(row['Subclass'], row['Group'])
         dot.edge(row['Group'], row['Subgroup'])
     
-    # Render the graph to a file (this will save the file in the current directory)
-    dot.render('cpc_classification_tree')
-    
-    # Display the graph using Streamlit
-    st.graphviz_chart(dot)
-    
- 
+        # Render the graph to a file (this will save the file in the current directory)
+        dot.render('cpc_classification_tree')
+        
+        # Display the graph using Streamlit
+        st.graphviz_chart(dot)
+        
+     
 
 
 
