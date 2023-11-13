@@ -108,7 +108,8 @@ def create_sunburst_chart(df):
 # Testing with a simple example
 test_chart = create_test_sunburst_chart()
 st.plotly_chart(test_chart)
-
+y_tunnus = st.session_state.get('y_tunnus')
+yritys_nimi = st.session_state.get('yritys')
 # Create and display the sunburst chart from data
 if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
