@@ -34,6 +34,6 @@ yritys_nimi = st.session_state.get('yritys')
 if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
-    
+    st.dataframe(cpc_data)
   
         
