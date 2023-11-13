@@ -36,4 +36,19 @@ if y_tunnus:
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
   
-        
+    path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
+    df_sunburst = cpc_data.groupby(path).size().reset_index(name='Counts')
+    
+    # Creating the sunburst chart
+    fig = go.Figure(go.Sunburst(
+        labels=df_sunburst['Subgroup'],
+        parents=df_sunburst['Group'],
+        values=df_sunburst['Counts'],
+        branchvalues="total",
+    ))
+    
+    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
+    
+    # Displaying the chart in Streamlit
+    st.plotly_chart(fig)
+            
