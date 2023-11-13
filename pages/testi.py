@@ -61,7 +61,7 @@ def create_sunburst_chart(df):
     return fig
 
 # Inspect the DataFrame and create the chart
-clean_sunburst_chart = create_clean_sunburst_chart(actual_data)
+clean_sunburst_chart = create_sunburst_chart(cpc_data)
 
 
 
