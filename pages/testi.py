@@ -28,8 +28,10 @@ def make_cpc(df):
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
     return df
 
+
+# Function to prepare data for the network graph
 def prepare_network_data(df):
-    # Creating unique identifiers for each level to serve as nodes
+    # Unique identifiers for each level to serve as nodes
     df['Section_ID'] = df['Section']
     df['Class_ID'] = df['Section'] + '-' + df['Class']
     df['Subclass_ID'] = df['Section'] + '-' + df['Class'] + '-' + df['Subclass']
@@ -53,8 +55,11 @@ def prepare_network_data(df):
         df[['Group_ID', 'Subgroup_ID']].drop_duplicates()
     ])
 
-    # Map edges to node IDs
-    edges = edges.applymap(lambda x: nodes[nodes['Node'] == x]['ID'].values[0])
+    # Safeguarded mapping of edges to node IDs
+    edges = edges.applymap(lambda x: nodes[nodes['Node'] == x]['ID'].iat[0] if not nodes[nodes['Node'] == x].empty else None)
+
+    # Remove any rows with None values (indicating missing nodes)
+    edges.dropna(inplace=True)
 
     return nodes, edges
 
