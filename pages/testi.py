@@ -25,24 +25,24 @@ def make_cpc(df):
     df['Subclass Description'] = df['Subclass'].map(cpc.set_index('Code')['Description'])
     df['Group Description'] = df['Group'].map(cpc.set_index('Code')['Description'])
     df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
-
     return df
 
-y_tunnus = st.session_state.get('y_tunnus')
-yritys_nimi = st.session_state.get('yritys')
-
-if y_tunnus:
+def create_sunburst_chart(y_tunnus):
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
-  
-        # Concatenating hierarchical levels to create unique labels for each level
+
+    # Grouping and counting for sunburst chart
+    path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
+    df_sunburst = cpc_data.groupby(path).size().reset_index(name='Counts')
+
+    # Creating unique labels and parents for each level
     df_sunburst['Label'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group'] + ' - ' + df_sunburst['Subgroup']
     df_sunburst['Parent'] = df_sunburst['Section'] + ' - ' + df_sunburst['Class'] + ' - ' + df_sunburst['Subclass'] + ' - ' + df_sunburst['Group']
     
-    # For the top level (Section), setting the parent as ''
+    # Setting parents for the top level (Section) to ''
     df_sunburst.loc[df_sunburst['Class'] == df_sunburst['Section'], 'Parent'] = ''
-    
+
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
         labels=df_sunburst['Label'],
@@ -50,10 +50,15 @@ if y_tunnus:
         values=df_sunburst['Counts'],
         branchvalues="total",
     ))
-    
+
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
-    
-    # Displaying the chart in Streamlit
+
     st.plotly_chart(fig)
+
+y_tunnus = st.session_state.get('y_tunnus')
+yritys_nimi = st.session_state.get('yritys')
+
+if y_tunnus:
+    create_sunburst_chart(y_tunnus)
 
             
