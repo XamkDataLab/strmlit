@@ -2,3 +2,4 @@ pyodbc
 plotly
 pyvis
 networkx
+graphviz
