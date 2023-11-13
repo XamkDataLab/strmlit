@@ -38,7 +38,7 @@ if y_tunnus:
   
     path = ['Section', 'Class', 'Subclass', 'Group', 'Subgroup']
     df_sunburst = cpc_data.groupby(path).size().reset_index(name='Counts')
-    
+    st.dataframe(df_sunburst)
     # Creating the sunburst chart
     fig = go.Figure(go.Sunburst(
         labels=df_sunburst['Subgroup'],
