@@ -4,3 +4,4 @@ pyvis
 networkx
 graphviz
 matplotlib
+pygraphviz
