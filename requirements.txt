@@ -5,3 +5,4 @@ networkx
 graphviz
 matplotlib
 pygraphviz
+pydot
