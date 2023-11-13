@@ -37,8 +37,6 @@ if y_tunnus:
     cpc_data = fetch_company_cpc_data(y_tunnus)
     cpc_data = make_cpc(cpc_data)
     st.dataframe(cpc_data)
-    fig = create_network_graph(nodes, edges)
-    st.plotly_chart(fig)
     
 
     dot = gv.Digraph(comment='CPC Classification', format='png')
