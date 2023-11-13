@@ -73,6 +73,8 @@ if y_tunnus:
         st.markdown(f"<div class='large-font'>{data['yritys'].iloc[0]}</div>", unsafe_allow_html=True)
         yritys_basename = data['yritys_basename2'].iloc[0]
         st.session_state['yritys_basename2'] = yritys_basename
+        ynimi = data['yritys'].iloc[0]
+        st.session_state['yritys] = ynimi
 
         col1, col2, col3 = st.columns(3)  # Create three columns
 
