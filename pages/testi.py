@@ -42,7 +42,7 @@ if y_tunnus:
     st.plotly_chart(fig)
     
 
-dot = gv.Digraph(comment='CPC Classification', format='png')
+    dot = gv.Digraph(comment='CPC Classification', format='png')
 
     # Add nodes and edges based on the CPC classification hierarchy
     # The following is an example based on assuming unique identifiers per classification level
