@@ -2,7 +2,4 @@ pyodbc
 plotly
 pyvis
 networkx
-graphviz
-matplotlib
-pygraphviz
-pydot
+
