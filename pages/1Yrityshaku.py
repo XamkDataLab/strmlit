@@ -246,5 +246,10 @@ if y_tunnus:
         # In a Streamlit app, use st.plotly_chart() to display the plot
         st.plotly_chart(fig)
 
+        cpc_data2 = make_cpc(cpc_data)
+        st.dataframe(cpc_data2)
+
+    
+
  
         
