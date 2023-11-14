@@ -52,12 +52,21 @@ def create_bar_chart(data, column, title, xaxis_title):
     counts = data[column].value_counts().reset_index()
 
     # Rename the columns for clarity
-    counts.columns = [xaxis_title, 'Frequency']
+    counts.columns = ['Frequency', xaxis_title]
 
-    # Create the bar chart
-    fig = px.bar(counts, x=xaxis_title, y='Frequency', labels={xaxis_title: xaxis_title, 'Frequency': 'Frequency'})
-    fig.update_layout(title=title, xaxis_title=xaxis_title, yaxis_title='Frequency', template='plotly_white')
+    # Create the bar chart (now horizontal)
+    fig = px.bar(counts, x='Frequency', y=xaxis_title, orientation='h')
+
+    # Update layout: remove axis labels and update hover label font size
+    fig.update_layout(
+        title=title,
+        xaxis_title='',  # Removing x-axis label
+        yaxis_title='',  # Removing y-axis label
+        hoverlabel=dict(font_size=16),  # Enlarging hover label font size
+        template='plotly_white'
+    )
     return fig
+
 
 
 def format_currency(number):
