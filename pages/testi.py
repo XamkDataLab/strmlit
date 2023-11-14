@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from queries import *
 import networkx as nx
-import matplotlib.pyplot as plt
 
 json_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/cpc_ultimate_titles.json"
 
