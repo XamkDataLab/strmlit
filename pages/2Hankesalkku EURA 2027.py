@@ -58,7 +58,7 @@ if y_tunnus:
     data = fetch_new_eura_data(y_tunnus)
     #st.dataframe(data)
 else:
-    st.write("Invalid or missing parameters.")
+    st.write("Anna Y-tunnus yrityshakuun!")
     data = pd.DataFrame()
 
 toimintalinja_options = ["All"] + sorted(data["Tukimuoto"].unique().tolist())
