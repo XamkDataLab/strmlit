@@ -52,20 +52,24 @@ def create_bar_chart(data, column, title, xaxis_title):
     counts = data[column].value_counts().reset_index()
 
     # Rename the columns for clarity
-    counts.columns = ['Frequency', xaxis_title]
+    counts.columns = [xaxis_title, 'Frequency']
 
-    # Create the bar chart (now horizontal)
-    fig = px.bar(counts, x='Frequency', y=xaxis_title, orientation='h')
+    # Create the bar chart with descriptions on y-axis and frequencies on x-axis
+    fig = px.bar(counts, y=xaxis_title, x='Frequency', orientation='h')
 
-    # Update layout: remove axis labels and update hover label font size
+    # Update layout: remove axis labels
     fig.update_layout(
         title=title,
         xaxis_title='',  # Removing x-axis label
         yaxis_title='',  # Removing y-axis label
-        hoverlabel=dict(font_size=16),  # Enlarging hover label font size
         template='plotly_white'
     )
+
+    # Update hover label font size for better visibility
+    fig.update_traces(hovertemplate='%{x}')
+
     return fig
+
 
 
 
