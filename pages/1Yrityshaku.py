@@ -47,7 +47,12 @@ st.title('Hae yrityksen tiedot')
 y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
 st.session_state['y_tunnus'] = y_tunnus
 
-# Function to format currency with space as thousands separator and add € symbol
+def create_bar_chart(data, column, title, xaxis_title):
+    counts = data[column].value_counts().reset_index()
+    fig = px.bar(counts, x='index', y=column, labels={'index': xaxis_title, column: 'Frequency'})
+    fig.update_layout(title=title, xaxis_title=xaxis_title, yaxis_title='Frequency', template='plotly_white')
+    return fig
+
 def format_currency(number):
     return f"{number:,.0f} €".replace(",", " ")
     
@@ -248,8 +253,19 @@ if y_tunnus:
 
         cpc_data2 = make_cpc(cpc_data)
         st.dataframe(cpc_data2)
-
-    
-
- 
+        fig_class = create_bar_chart(cpc_data2, 'Class Description', 'Frequency of Class Descriptions', 'Class Description')
+        fig_subclass = create_bar_chart(cpc_data2, 'Subclass Description', 'Frequency of Subclass Descriptions', 'Subclass Description')
         
+        # Streamlit application
+        st.title('Data Visualizations')
+        
+        st.write("## Frequency of Class Descriptions")
+        st.plotly_chart(fig_class)
+        
+        st.write("## Frequency of Subclass Descriptions")
+        st.plotly_chart(fig_subclass)
+        
+            
+        
+         
+                
