@@ -75,7 +75,7 @@ st.text('tekstiä tähän')
 
 
 # New Filter UI elements for Sijainti and Organization
-sijainti = st.selectbox('Filter by Sijainti', ['None'] + list(data['Sijainti1'].unique()) + list(data['Sijainti2'].unique()))
+sijainti = st.selectbox('Filter by Sijainti', ['None'] + list(data['Sijainti'].unique()))
 organization = st.selectbox('Filter by Organization', ['None'] + list(data['Organization1'].unique()) + list(data['Organization2'].unique()))
 tukimuoto = st.selectbox('Filter by Tukimuoto', ['None'] + list(data['Tukimuoto'].unique()))
 tukitoimen_ala = st.selectbox('Filter by Tukitoimen_ala', ['None'] + list(data['Tukitoimen_ala'].unique()))
