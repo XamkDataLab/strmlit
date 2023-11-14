@@ -21,7 +21,7 @@ def filter_data(data, tukimuoto=None, tukitoimen_ala=None, rahoittava_viranomain
     filtered_data = data.copy()
     # ... [Existing filters]
     if sijainti and sijainti != 'None':
-        filtered_data = filtered_data[(filtered_data['Sijainti1'] == sijainti) | (filtered_data['Sijainti2'] == sijainti)]
+        filtered_data = filtered_data[(filtered_data['Sijainti'] == sijainti)]
     if organization and organization != 'None':
         filtered_data = filtered_data[(filtered_data['Organization1'] == organization) | (filtered_data['Organization2'] == organization)]
     return filtered_data
