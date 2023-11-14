@@ -48,10 +48,17 @@ y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
 st.session_state['y_tunnus'] = y_tunnus
 
 def create_bar_chart(data, column, title, xaxis_title):
+    # Compute value counts and reset index
     counts = data[column].value_counts().reset_index()
-    fig = px.bar(counts, x='index', y=column, labels={'index': xaxis_title, column: 'Frequency'})
+
+    # Rename the columns for clarity
+    counts.columns = [xaxis_title, 'Frequency']
+
+    # Create the bar chart
+    fig = px.bar(counts, x=xaxis_title, y='Frequency', labels={xaxis_title: xaxis_title, 'Frequency': 'Frequency'})
     fig.update_layout(title=title, xaxis_title=xaxis_title, yaxis_title='Frequency', template='plotly_white')
     return fig
+
 
 def format_currency(number):
     return f"{number:,.0f} €".replace(",", " ")
