@@ -3,7 +3,9 @@ import pandas as pd
 import plotly.express as px
 import datetime
 from queries import *
+import warnings
 
+warnings.filterwarnings('ignore')
 
 def truncate_text(text, max_length):
     return text if len(text) <= max_length else text[:max_length] + "..."
