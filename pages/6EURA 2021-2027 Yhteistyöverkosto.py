@@ -8,6 +8,7 @@ import streamlit.components.v1 as components
 from queries import fetch_eura2027_collab
 
 data = fetch_eura2027_collab()
+st.dataframe(data)
 
 def create_graph(data):
     G = nx.Graph()
