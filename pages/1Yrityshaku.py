@@ -54,8 +54,8 @@ def create_bar_chart(data, column, title, xaxis_title):
     # Rename the columns for clarity
     counts.columns = [xaxis_title, 'Frequency']
 
-    # Sort the dataframe so that the highest frequency is on top
-    counts.sort_values(by='Frequency', ascending=False, inplace=True)
+    # Sort the dataframe so that the highest frequency is at the bottom (for horizontal bar chart)
+    counts.sort_values(by='Frequency', ascending=True, inplace=True)
 
     # Create the bar chart with descriptions on y-axis and frequencies on x-axis
     fig = px.bar(counts, y=xaxis_title, x='Frequency', orientation='h')
@@ -65,16 +65,15 @@ def create_bar_chart(data, column, title, xaxis_title):
         title=title,
         xaxis_title='',  # Removing x-axis label
         yaxis_title='',  # Removing y-axis label
-        template='plotly_white'
+        template='plotly_white',
+        hoverlabel=dict(font_size=16)  # Enlarge hover label font size
     )
 
-    # Update hover label font size for better visibility
-    fig.update_traces(
-        hovertemplate='%{y}: %{x}',
-        hoverlabel=dict(font_size=16, namelength=-1)  # Enlarge font and show full label
-    )
+    # Update hover information
+    fig.update_traces(hovertemplate='%{y}: %{x}<extra></extra>')
 
     return fig
+
 
 
 
