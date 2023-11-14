@@ -57,6 +57,18 @@ def plot_time_series(df, title, date_col, money_cols):
 
     # Group by year and sum the money columns
     df_grouped = df.groupby('year')[money_cols].sum().reset_index()
+
+    # Create a Plotly figure
+    fig = px.line(df_grouped, x='year', y=money_cols, title=title)
+
+    # Customize the layout if needed
+    fig.update_layout(
+        xaxis_title='Year',
+        yaxis_title='Funding',
+        legend_title='Funding Type'
+    )
+
+    return fig
     
 def breakdown_cpc(code):
     section = code[0]
