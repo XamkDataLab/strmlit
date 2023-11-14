@@ -233,6 +233,7 @@ if y_tunnus:
         
         # In a Streamlit app, use st.plotly_chart() to display the plot
         st.plotly_chart(fig)
+        
         cpc_data2 = cpc_data(make_cpc)
         cpc2_class_counts = cpc_data2['Class description'].value_counts()
 
@@ -241,4 +242,5 @@ if y_tunnus:
                      y=cpc2_class_counts.values,
                      labels={'x': 'Class', 'y': 'Number of Classifications'},
                      title='Distribution of Patents Across CPC Classes')
+         st.plotly_chart(fig2)
         
