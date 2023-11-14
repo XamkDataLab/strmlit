@@ -273,7 +273,7 @@ if y_tunnus:
         # In a Streamlit app, use st.plotly_chart() to display the plot
         st.plotly_chart(fig)
         st.dataframe(cpc_data)
-        cpc_data = cpc_data[cpc_data['cpc_classification'].isna() | df['cpc_classification'].str.len() >= 4]
+        cpc_data = cpc_data[cpc_data['cpc_classification'].isna() | cpc_data['cpc_classification'].str.len() >= 4]
         cpc_data2 = make_cpc(cpc_data)
         st.dataframe(cpc_data2)
         fig_class = create_bar_chart(cpc_data2, 'Class Description', 'Frequency of Class Descriptions', 'Class Description')
