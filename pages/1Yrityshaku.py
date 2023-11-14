@@ -242,5 +242,5 @@ if y_tunnus:
                      y=cpc2_class_counts.values,
                      labels={'x': 'Class', 'y': 'Number of Classifications'},
                      title='Distribution of Patents Across CPC Classes')
-         st.plotly_chart(fig2)
+                     st.plotly_chart(fig2)
         
