@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
 import networkx as nx
-import textwrap
 import json  
 from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import fetch_eura2027_collab
 
 data = fetch_eura2027_collab()
+st.dataframe(data)
 
 def create_graph(data):
     G = nx.Graph()
@@ -19,9 +19,14 @@ def create_graph(data):
 
 def filter_data(data, tukimuoto=None, tukitoimen_ala=None, rahoittava_viranomainen=None, sijainti=None, organization=None):
     filtered_data = data.copy()
-    # ... [Existing filters]
+    if tukimuoto and tukimuoto != 'None':
+        filtered_data = filtered_data[filtered_data['Tukimuoto'] == tukimuoto]
+    if tukitoimen_ala and tukitoimen_ala != 'None':
+        filtered_data = filtered_data[filtered_data['Tukitoimen_ala'] == tukitoimen_ala]
+    if rahoittava_viranomainen and rahoittava_viranomainen != 'None':
+        filtered_data = filtered_data[filtered_data['Rahoittava_viranomainen'] == rahoittava_viranomainen]
     if sijainti and sijainti != 'None':
-        filtered_data = filtered_data[(filtered_data['Sijainti'] == sijainti)]
+        filtered_data = filtered_data[filtered_data['Sijainti'] == sijainti]
     if organization and organization != 'None':
         filtered_data = filtered_data[(filtered_data['Organization1'] == organization) | (filtered_data['Organization2'] == organization)]
     return filtered_data
@@ -73,22 +78,18 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
 st.title('EURA2027 collab network')
 st.text('tekstiä tähän')
 
-
-# New Filter UI elements for Sijainti and Organization
-sijainti = st.selectbox('Filter by Sijainti', ['None'] + list(data['Sijainti'].unique()))
-organization = st.selectbox('Filter by Organization', ['None'] + list(data['Organization1'].unique()) + list(data['Organization2'].unique()))
 tukimuoto = st.selectbox('Filter by Tukimuoto', ['None'] + list(data['Tukimuoto'].unique()))
 tukitoimen_ala = st.selectbox('Filter by Tukitoimen_ala', ['None'] + list(data['Tukitoimen_ala'].unique()))
 rahoittava_viranomainen = st.selectbox('Filter by Rahoittava_viranomainen', ['None'] + list(data['Rahoittava_viranomainen'].unique()))
+sijainti = st.selectbox('Filter by Sijainti', ['None'] + list(data['Sijainti'].unique()))
+organization = st.selectbox('Filter by Organization', ['None'] + list(data['Organization1'].unique()) + list(data['Organization2'].unique()))
 
-# Modify this line to include the new filters
 filtered_data = filter_data(data, tukimuoto=tukimuoto, tukitoimen_ala=tukitoimen_ala, rahoittava_viranomainen=rahoittava_viranomainen, sijainti=sijainti, organization=organization)
-
 
 gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
 central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
 
-if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen != 'None':
+if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen != 'None' or sijainti != 'None' or organization != 'None':
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph, gravitational_constant, central_gravity)
 else:
