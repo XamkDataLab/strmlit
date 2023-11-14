@@ -57,6 +57,29 @@ def plot_time_series(df, title, date_col, money_cols):
 
     # Group by year and sum the money columns
     df_grouped = df.groupby('year')[money_cols].sum().reset_index()
+    
+def breakdown_cpc(code):
+    section = code[0]
+    c_class = code[:3]
+    subclass = code[:4]
+    group = code.split('/')[0]
+    subgroup = code
+    return pd.Series([section, c_class, subclass, group, subgroup])
+    
+json_url = "https://raw.githubusercontent.com/XamkDataLab/strmlit/main/cpc_ultimate_titles.json"
+
+def make_cpc(df):
+    
+    cpc = pd.read_json(json_url)
+    df[['Section', 'Class', 'Subclass', 'Group', 'Subgroup']] = df['cpc_classification'].apply(breakdown_cpc)
+    df['Group'] = df['Group'].apply(lambda x: x + "/00")
+    #df.drop(['cpc_code_split', 'class'], axis=1, inplace=True)
+    df['Section Description'] = df['Section'].map(cpc.set_index('Code')['Description'])
+    df['Class Description'] = df['Class'].map(cpc.set_index('Code')['Description'])
+    df['Subclass Description'] = df['Subclass'].map(cpc.set_index('Code')['Description'])
+    df['Group Description'] = df['Group'].map(cpc.set_index('Code')['Description'])
+    df['Subgroup Description'] = df['Subgroup'].map(cpc.set_index('Code')['Description'])
+    return df
 
     fig = go.Figure()
 
@@ -205,39 +228,17 @@ if y_tunnus:
         fig = px.bar(cpc_class_counts, 
                      x=cpc_class_counts.index, 
                      y=cpc_class_counts.values,
-                     labels={'x': 'CPC Patent Class', 'y': 'Number of Classifications'},
+                     labels={'x': 'CPC Patent Section', 'y': 'Number of Classifications'},
+                     title='Distribution of Patents Across CPC Sections')
+        
+        # In a Streamlit app, use st.plotly_chart() to display the plot
+        st.plotly_chart(fig)
+        cpc_data2 = cpc_data(make_cpc)
+        cpc2_class_counts = cpc_data2['Class description'].value_counts()
+
+        fig2 = px.bar(cpc2_class_counts, 
+                     x=cpc2_class_counts.index, 
+                     y=cpc2_class_counts.values,
+                     labels={'x': 'Class', 'y': 'Number of Classifications'},
                      title='Distribution of Patents Across CPC Classes')
         
-        # In a Streamlit app, use st.plotly_chart() to display the plot
-        st.plotly_chart(fig)
-        import plotly.express as px
-
-        title_counts = cpc_data['title'].value_counts().sort_values(ascending=True)
-        
-        # Create a horizontal bar chart using Plotly
-        fig = px.bar(title_counts, 
-                     x=title_counts.values, 
-                     y=title_counts.index,
-                     orientation='h',  # Horizontal bar chart
-                     title='Distribution of Titles')
-        
-        # Update layout
-        fig.update_layout(
-            xaxis_title="",  # Remove x-axis label
-            yaxis_title="",  # Remove y-axis label
-            yaxis=dict(automargin=True),  # Adjust margin to fit long labels
-            height=600,  # Adjust height as needed
-            hovermode='closest',  # Enable hovering for readability
-            plot_bgcolor='rgba(0,0,0,0)'  # Transparent background
-        )
-        
-        # Update hover label style
-        fig.update_traces(hoverinfo='x+y', 
-                          marker=dict(color='lightgrey'),
-                          hoverlabel=dict(bgcolor='black', font=dict(color='white')))
-        
-        # In a Streamlit app, use st.plotly_chart() to display the plot
-        st.plotly_chart(fig)
-        
-                
-                               
