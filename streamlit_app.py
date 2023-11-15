@@ -45,7 +45,7 @@ st.write(
     """
 )
 st.markdown("""
-- Yrityshaku: hae yrityskohtaiset tiedot ja organisaatioiden hankesalkut
+- Yrityshaku: hae yrityskohtaiset tiedot ja organisaatioiden hanke- ja patenttisalkut
 - Maakuntasivut: tarkastele maakunnan vahvuusaloja ja yritysten innovaatioita 
 - Verkosto: tarkastele yhteishankkeita maakuntien välillä
 - Erääntyvät patentit :)
