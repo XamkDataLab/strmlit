@@ -7,7 +7,7 @@ from queries import fetch_eura2027_collab
 import json
 
 data = fetch_eura2027_collab()
-#st.dataframe(data)
+st.dataframe(data)
 
 def create_graph(data):
     G = nx.Graph()
