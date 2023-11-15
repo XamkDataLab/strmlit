@@ -89,8 +89,12 @@ organization = st.multiselect('Filter by Organization', ['None'] + list(set(data
 
 filtered_data = filter_data(data, tukimuoto=tukimuoto, tukitoimen_ala=tukitoimen_ala, rahoittava_viranomainen=rahoittava_viranomainen, sijainti=sijainti, organization=organization)
 
+gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
+central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
+
 if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen != 'None' or sijainti != 'None' or organization:
     filtered_graph = create_graph(filtered_data)
     visualize_graph(filtered_graph, gravitational_constant, central_gravity)
 else:
     st.warning('Choose at least one filter to create the graph')
+
