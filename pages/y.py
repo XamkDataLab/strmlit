@@ -34,7 +34,7 @@ def filter_data(data, tukimuoto=None, tukitoimen_ala=None, rahoittava_viranomain
             filtered_data = filtered_data[(filtered_data['Organization1'].isin(organization)) | (filtered_data['Organization2'].isin(organization))]
     return filtered_data
     
-def visualize_graph(graph, gravitational_constant, central_gravity):
+def visualize_graph(graph):
     if graph.number_of_edges() > 0:
         nt = Network(notebook=False, height="500px", width="100%")
         
@@ -44,33 +44,7 @@ def visualize_graph(graph, gravitational_constant, central_gravity):
         for u, v, attr in graph.edges(data=True):
             nt.add_edge(u, v, title=attr.get('title', ''))
         
-        physics_options = {
-            "physics": {
-                "barnesHut": {
-                    "gravitationalConstant": gravitational_constant,
-                    "centralGravity": central_gravity,
-                    "springLength": 100,
-                    "springConstant": 0.05,
-                    "damping": 0.1,
-                    "avoidOverlap": 0.1
-                },
-                "maxVelocity": 50,
-                "minVelocity": 0.1,
-                "solver": "barnesHut",
-                "stabilization": {
-                    "enabled": True,
-                    "iterations": 1000,
-                    "updateInterval": 25,
-                    "onlyDynamicEdges": False,
-                    "fit": True
-                },
-                "timestep": 0.3,
-                "adaptiveTimestep": True
-            }
-        }
-        nt.set_options(json.dumps(physics_options))  # Convert to JSON string
-        
-        nt.save_graph("network.html")
+        nt.show("network.html")
         with open("network.html", "r", encoding="utf-8") as f:
             html = f.read()
         components.html(html, height=500)
@@ -89,12 +63,8 @@ organization = st.multiselect('Filter by Organization', ['None'] + list(set(data
 
 filtered_data = filter_data(data, tukimuoto=tukimuoto, tukitoimen_ala=tukitoimen_ala, rahoittava_viranomainen=rahoittava_viranomainen, sijainti=sijainti, organization=organization)
 
-gravitational_constant = st.slider('Gravitational Constant', min_value=-10000, max_value=0, value=-8000, step=100)
-central_gravity = st.slider('Central Gravity', min_value=0.0, max_value=1.0, value=0.3, step=0.1)
-
 if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen != 'None' or sijainti != 'None' or organization:
     filtered_graph = create_graph(filtered_data)
-    visualize_graph(filtered_graph, gravitational_constant, central_gravity)
+    visualize_graph(filtered_graph)
 else:
     st.warning('Choose at least one filter to create the graph')
-
