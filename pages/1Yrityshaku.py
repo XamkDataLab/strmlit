@@ -276,6 +276,7 @@ if y_tunnus:
         cpc_data = cpc_data[cpc_data['cpc_classification'].notna() & cpc_data['cpc_classification'].apply(lambda x: isinstance(x, str))]
 
         cpc_data2 = make_cpc(cpc_data)
+        st.dataframe(cpc_data2)
     
         fig_class = create_bar_chart(cpc_data2, 'Class Description', 'Frequency of Class Descriptions', 'Class Description')
         fig_subclass = create_bar_chart(cpc_data2, 'Subclass Description', 'Frequency of Subclass Descriptions', 'Subclass Description')
