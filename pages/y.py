@@ -42,6 +42,33 @@ def visualize_graph(graph):
 
         for u, v, attr in graph.edges(data=True):
             nt.add_edge(u, v, title=attr.get('title', ''))
+
+        # Increased springLength to move nodes farther apart
+        physics_options = {
+            "physics": {
+                "barnesHut": {
+                    "gravitationalConstant": -8000,
+                    "centralGravity": 0.3,
+                    "springLength": 300,  # Increased spring length
+                    "springConstant": 0.05,
+                    "damping": 0.1,
+                    "avoidOverlap": 0.1
+                },
+                "maxVelocity": 50,
+                "minVelocity": 0.1,
+                "solver": "barnesHut",
+                "stabilization": {
+                    "enabled": True,
+                    "iterations": 1000,
+                    "updateInterval": 25,
+                    "onlyDynamicEdges": False,
+                    "fit": True
+                },
+                "timestep": 0.3,
+                "adaptiveTimestep": True
+            }
+        }
+        nt.set_options(json.dumps(physics_options))  # Convert to JSON string
         
         nt.save_graph("network.html")
         with open("network.html", "r", encoding="utf-8") as f:
@@ -49,6 +76,7 @@ def visualize_graph(graph):
         components.html(html, height=500)
     else:
         st.warning("No edges to display. Please select different filters.")
+
 
 # Streamlit app
 st.title('EURA2027 Collaboration Network')
