@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import networkx as nx
-import json  
 from pyvis.network import Network
 import streamlit.components.v1 as components
 from queries import fetch_eura2027_collab
@@ -44,7 +43,7 @@ def visualize_graph(graph):
         for u, v, attr in graph.edges(data=True):
             nt.add_edge(u, v, title=attr.get('title', ''))
         
-        nt.show("network.html")
+        nt.save_graph("network.html")
         with open("network.html", "r", encoding="utf-8") as f:
             html = f.read()
         components.html(html, height=500)
@@ -52,8 +51,8 @@ def visualize_graph(graph):
         st.warning("No edges to display. Please select different filters.")
 
 # Streamlit app
-st.title('EURA2027 collab network')
-st.text('tekstiä tähän')
+st.title('EURA2027 Collaboration Network')
+st.text('Select filters to visualize the network graph.')
 
 tukimuoto = st.selectbox('Filter by Tukimuoto', ['None'] + list(data['Tukimuoto'].unique()))
 tukitoimen_ala = st.selectbox('Filter by Tukitoimen_ala', ['None'] + list(data['Tukitoimen_ala'].unique()))
@@ -68,4 +67,5 @@ if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen !=
     visualize_graph(filtered_graph)
 else:
     st.warning('Choose at least one filter to create the graph')
+
 
