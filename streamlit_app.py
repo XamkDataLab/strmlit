@@ -35,8 +35,8 @@ for idx, maakunta_name in enumerate(maakunta_names):
         st.image(emblem_url, width=50) 
 
 
-st.title("IPR-Suomi")
-
+st.title("IPR-Haku")
+st.subheader('IPR-haku on osa IPR Suomi -tietopalvelukokonaisuutta')
 st.subheader("Maakuntien innovaatiotilastot")
 st.write(
     """
