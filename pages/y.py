@@ -68,3 +68,4 @@ if tukimuoto != 'None' or tukitoimen_ala != 'None' or rahoittava_viranomainen !=
     visualize_graph(filtered_graph)
 else:
     st.warning('Choose at least one filter to create the graph')
+
