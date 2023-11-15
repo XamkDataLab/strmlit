@@ -282,12 +282,12 @@ if y_tunnus:
         fig_subclass = create_bar_chart(cpc_data2, 'Subclass Description', 'Frequency of Subclass Descriptions', 'Subclass Description')
         
         # Streamlit application
-        st.title('Data Visualizations')
+        st.title('Patenttien luokitukset')
         
-        st.write("## Frequency of Class Descriptions")
+        st.write("## Luokkien kuvaukset")
         st.plotly_chart(fig_class)
         
-        st.write("## Frequency of Subclass Descriptions")
+        st.write("## Alaluokkien kuvaukset")
         st.plotly_chart(fig_subclass)
         
             
