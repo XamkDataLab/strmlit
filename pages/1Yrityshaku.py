@@ -4,6 +4,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 
+if st.button("Clear All"):
+    # Clear values from *all* all in-memory and on-disk data caches:
+    # i.e. clear values from both square and cube
+    st.cache_data.clear()
+    
 small_font_style = """
 <style>
     .small-font {
