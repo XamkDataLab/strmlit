@@ -58,13 +58,23 @@ if st.button('Hae tiedot'):
     if selected_company:
         data = fetch_individual_data(selected_company)
         st.write(data)
-        # If the data includes Y-tunnus, you can set it here
-        y_tunnus = data.get('y_tunnus', '')  # Assuming 'y_tunnus' is a key in your data
-        st.session_state['y_tunnus'] = y_tunnus
+
+        # Assuming 'y_tunnus' is a key in your data
+        y_tunnus = data.get('y_tunnus', '')  
+        if y_tunnus:
+            st.session_state['y_tunnus'] = y_tunnus
+            # Now use y_tunnus to fetch and display other data
+            additional_data = fetch_data2(y_tunnus)
+            if not additional_data.empty:
+                # Display additional data
+                display_additional_data(additional_data)
+        else:
+            st.error("Y-tunnus not found for the selected company.")
 else:
-    # Original Y-tunnus Input Section
     y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
     st.session_state['y_tunnus'] = y_tunnus
+
+# Existing code to fetch data using y_tunnus continues here...
 
 if y_tunnus:
     def create_bar_chart(data, column, title, xaxis_title):
