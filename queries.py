@@ -35,7 +35,6 @@ def fetch_new_eura_data(y_tunnus):
         df = pd.read_sql(query, conn, params=(y_tunnus,))
     return df
     
-@st.cache_data
 def fetch_legal_status_data():
     query = """
     SELECT 
@@ -59,7 +58,6 @@ def fetch_legal_status_data():
         df = pd.read_sql(query, conn)
     return df
 
-@st.cache_data()
 def fetch_aggregated_data():
     query = """
     WITH 
@@ -186,7 +184,6 @@ def fetch_aggregated_data():
         df = pd.read_sql(query, conn)
     return df
     
-@st.cache_data
 def fetch_collaboration_data():
     query = """
     SELECT 
@@ -370,7 +367,6 @@ def fetch_individual_data(y_tunnus):
         
     return df
     
-@st.cache_data
 def get_company_names():
     query = "SELECT DISTINCT yritys FROM yritykset ORDER BY yritys;"
     with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
