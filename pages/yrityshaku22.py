@@ -59,20 +59,30 @@ if st.button('Hae tiedot'):
         data = fetch_individual_data(selected_company)
         st.write(data)
 
-        # Assuming 'y_tunnus' is a key in your data
-        y_tunnus = data.get('y_tunnus', '')  
+        # Ensure y_tunnus is a single value, not a Series
+        y_tunnus = data.get('y_tunnus', '')
+        
+        if isinstance(y_tunnus, pd.Series):
+            if not y_tunnus.empty:
+                y_tunnus = y_tunnus.iloc[0]  # Take the first value if multiple exist
+        elif isinstance(y_tunnus, pd.DataFrame):
+            if not y_tunnus.empty:
+                y_tunnus = y_tunnus.iloc[0, 0]  # Take the first value from the first column
+
+        # Now y_tunnus should be a single value, proceed with the rest of your logic
         if y_tunnus:
             st.session_state['y_tunnus'] = y_tunnus
-            # Now use y_tunnus to fetch and display other data
             additional_data = fetch_data2(y_tunnus)
             if not additional_data.empty:
-                # Display additional data
                 display_additional_data(additional_data)
         else:
             st.error("Y-tunnus not found for the selected company.")
 else:
     y_tunnus = st.text_input("Anna Y-tunnus (ja paina enter)")
     st.session_state['y_tunnus'] = y_tunnus
+
+# Existing code to fetch data using y_tunnus continues here...
+
 
 # Existing code to fetch data using y_tunnus continues here...
 
