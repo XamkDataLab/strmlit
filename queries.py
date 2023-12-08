@@ -8,6 +8,12 @@ database = st.secrets["database"]
 username = st.secrets["username"]
 password = st.secrets["password"]
 
+@st.cache
+def get_company_names2():
+    query = "SELECT DISTINCT yritys, y_tunnus FROM yritykset ORDER BY yritys;"
+    with pyodbc.connect(f'DRIVER={driver};SERVER={server};PORT=1433;DATABASE={database};UID={username};PWD={password}') as conn:
+        df = pd.read_sql(query, conn)
+    return df
 
 def fetch_horizon_data(y_tunnus):
     query = """SELECT * FROM EU_Horizon2 WHERE y_tunnus = ?;"""
