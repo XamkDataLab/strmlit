@@ -43,7 +43,7 @@ st.markdown(large_number_style, unsafe_allow_html=True)
 
 st.title('Hae yrityksen tiedot')
 
-all_company_names = get_company_names()
+all_company_names = get_company_names2()
 
 search_query = st.text_input('Hae yritystä')
 
