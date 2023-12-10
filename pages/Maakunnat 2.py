@@ -113,5 +113,6 @@ else:
     
     # Display the Sankey diagram in Streamlit
     st.plotly_chart(fig)
+    st.dataframe(filtered_df)
     st.dataframe(filtered_df[['y_tunnus', 'yritys', 'yrityksen_rekisteröimispäivä', 'Maakunnan_nimi', 'Total_Business_Finland_Funding', 'Patent_Applications_Count', 'Total_Funding', 'Total_EU_Horizon_Funding', 'Total_Tutkimusrahoitus']])
 
