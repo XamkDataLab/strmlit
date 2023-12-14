@@ -264,7 +264,9 @@ if y_tunnus:
         'H': 'ELECTRICITY',
         'Y': 'GENERAL TAGGING OF NEW TECHNOLOGICAL DEVELOPMENTS'
         }
-    
+        
+        st.dataframe(cpc_data)
+        
         cpc_data['cpc_class'] = cpc_data['cpc_code'].str[0].map(cpc_class_mapping)
         cpc_class_counts = cpc_data['cpc_class'].value_counts()
 
